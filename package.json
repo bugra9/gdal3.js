@@ -1,0 +1,35 @@
+{
+    "name": "gdal3.js",
+    "version": "1.0.0",
+    "description": "gdal3.js is a port of Gdal to Webassembly, by compiling the Gdal C code with Emscripten",
+    "license": "GPL-3.0-or-later",
+    "homepage": "https://github.com/bugra9/gdal3.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/bugra9/gdal3.js.git"
+    },
+    "main": "./src/worker.js",
+    "scripts": {
+        "lint": "eslint .",
+        "build": "webpack src/index.js -o dist/gdal3.js && webpack src/worker.js -o dist/gdal3-worker.js",
+        "build-dev": "webpack src/index.js -o dist/gdal3.js --mode development && webpack src/worker.js -o dist/gdal3-worker.js --mode development",
+        "compile": "make",
+        "build-GdalWeb": "cd GdalWeb && yarn build"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.9.6",
+        "@babel/preset-env": "^7.9.6",
+        "@types/detect-node": "^2.0.0",
+        "babel-eslint": "^10.1.0",
+        "babel-loader": "^8.1.0",
+        "babel-polyfill": "^6.26.0",
+        "eslint": "^7.0.0",
+        "eslint-config-airbnb-base": "^14.1.0",
+        "eslint-plugin-import": "^2.20.2",
+        "webpack": "^4.43.0",
+        "webpack-cli": "^3.3.11"
+    },
+    "dependencies": {
+        "detect-node": "^2.0.4"
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "root": true,
+    "parserOptions":  {
+        "parser": "babel-eslint",
+        "sourceType": "module"
+    },
+    "env": {
+        "browser": true
+    },
+    "extends": [
+        "airbnb-base"
+    ],
+    "ignorePatterns": ["**", "!src", "!src/**"],
+    "rules": {
+        "max-len": [2, {
+            "code": 125,
+            "tabWidth": 4,
+            "ignoreUrls": true,
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true
+        }],
+        "import/extensions": ["error", "always", {
+            "js": "never",
+            "vue": "never"
+        }],
+        "indent": [2, 4, {
+            "SwitchCase": 1
+        }],
+        "no-console": ["error", {
+            "allow": ["warn", "error"]
+        }],
+        "no-param-reassign": ["error", {
+            "props": false
+        }],
+        "no-mixed-operators": ["error", {
+            "allowSamePrecedence": true
+        }],
+        "no-return-assign": ["error", "except-parens"],
+        "import/no-cycle": 0,
+        "prefer-destructuring": ["error", { "object": false, "array": false }],
+        "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+        "no-unused-expressions": ["error", {
+            "allowShortCircuit": true,
+            "allowTernary": true
+        }]
+    },
+    "globals": {
+        "window": false
+    }
+}
