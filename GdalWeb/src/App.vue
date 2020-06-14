@@ -186,27 +186,27 @@ export default {
             return this.gdalProgram;
         },
         gdalParams() {
-            let parameters = '';
+            const parameters = [];
             switch(this.gdalProgram) {
                 case 'ogr2ogr':
-                    if (this.translateFormat !== null) parameters += '-f ' + this.translateFormat.value;
-                    if (this.translateProj !== null) parameters += ' -t_srs ' + this.translateProj.value;
-                    if (this.translateQuery !== '') parameters += ' -sql ' + this.translateQuery;
+                    if (this.translateFormat !== null) parameters.push('-f', this.translateFormat.value);
+                    if (this.translateProj !== null) parameters.push('-t_srs', this.translateProj.value);
+                    if (this.translateQuery !== '') parameters.push('-sql', this.translateQuery);
                     break;
                 case 'gdal_translate':
-                    if (this.translateFormat !== null) parameters += '-of ' + this.translateFormat.value;
+                    if (this.translateFormat !== null) parameters.push('-of', this.translateFormat.value);
                     break;
                 case 'gdal_rasterize':
-                    parameters = '-of GTiff';
+                    parameters.push('-of', 'GTiff');
                     break
             }
 
-            if (this.translateOptions !== '') parameters += ' ' + this.translateOptions;
+            if (this.translateOptions !== '') parameters.push(...this.translateOptions.split(' '));
             
-            return parameters.trim();
+            return parameters;
         },
         preview() {
-            return this.gdalProgram + ' ' + this.gdalParams;
+            return this.gdalProgram + ' ' + this.gdalParams.join(' ');
         },
     },
     watch: {
@@ -219,7 +219,7 @@ export default {
         translate() {
             this.isLoading = true;
             let promises = [];
-            let options = this.gdalParams.split(' ');
+            let options = this.gdalParams;
             this.datasets.forEach(d => promises.push(gdal[this.gdalFunction](d, options)));
             Promise.allSettled(promises).then((results) => {
                 gdal.getOutputFiles().then(files => {
@@ -247,7 +247,7 @@ export default {
                     Promise.all(promises).then(() => {
                         this.datasets = this.datasets.concat(datasets);
 
-                        var drivers = [];
+                        let drivers = [];
                         let type = this.datasets.reduce((out, obj) =>  (out === obj.type) ? out : '', this.datasets[0].type);
                         if (type !== '') {
                             drivers = Object.values(gdal.drivers[type]).filter(d => d.isWritable);
@@ -296,15 +296,15 @@ export default {
             this.translateOptions = '';
         },
         downloadFile(path) {
-            var temp = path.split('/');
-            var filename = temp[temp.length-1];
+            const temp = path.split('/');
+            const filename = temp[temp.length-1];
             gdal.getFileBytes(path).then(bytes => {
-                var blob = new Blob([bytes]);
+                const blob = new Blob([bytes]);
                 this.saveAs(blob, filename);
             }).catch(e => console.error(e));
         },
         saveAs(blob, fileName) {
-            var link = document.createElement('a');
+            const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = fileName;
             link.click();
