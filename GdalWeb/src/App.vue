@@ -1,14 +1,15 @@
 <template>
     <div id="app">
-        <Tab :options="['Input', 'Translate', 'Output']" default="Input" ref="tab">
+        <Header />
+        <Tab :options="['Input', 'Convert', 'Output']" default="Input" ref="tab">
             <template slot="Input">
                 <TabRadio :options="['File', 'Folder']" default="File">
                     <InputFiles slot="File" :datasets="datasets" :datasetsInfo="datasetsInfo" :onFileChange="onFileChange" :deleteDataset="deleteDataset" />
                     <InputFiles slot="Folder" isFolder :datasets="datasets" :datasetsInfo="datasetsInfo" :onFileChange="onFileChange" :deleteDataset="deleteDataset" />
                 </TabRadio>
-                <div class="center"><button @click="$refs.tab.value = 'Translate'">Translate Options ⮞</button></div>
+                <div class="center"><button @click="$refs.tab.value = 'Convert'">Convert Options ⮞</button></div>
             </template>
-            <template slot="Translate">
+            <template slot="Convert">
                 <div>
                     <label>Format (Required)</label>
                     <multiselect
@@ -37,20 +38,20 @@
                     <label>Command Preview</label>
                     <p class="preview">{{ preview }}</p>
                 </div>
-                <div class="center"><button @click="translate()">Translate ⮞</button></div>
+                <div class="center"><button @click="translate()">Convert ⮞</button></div>
             </template>
             <template slot="Output">
                 <OutputFiles :files="files" :downloadFile="downloadFile" />
             </template>
         </Tab>
         <ul class="appinfo">
-            <li><a href="https://github.com/bugra9/gdal3.js" target="_blank">Github</a></li>
+            <li><a href="https://github.com/trylab-net/gdal3.js" target="_blank"><img src="github.png" /></a></li>
             <li @click="$modal.show('about')">About</li>
             <li @click="$modal.show('supporteddrivers')">Formats</li>
-            <li @click="$modal.show('releasenotes')">v1.0.0</li>
+            <li @click="$modal.show('releasenotes')">v1.0.1</li>
         </ul>
         <modal name="about" adaptive scrollable height="auto">
-            <h2>GdalWeb <span> v1.0.0</span></h2>
+            <h2>GdalWeb <span> v1.0.1</span></h2>
             <p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.</p>
             <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
             <p>You should have received a copy of the GNU General Public License along with this program. If not, see: https://www.gnu.org/licenses/</p>
@@ -82,9 +83,35 @@
                 </div>
             </div>
         </modal>
-        <modal name="releasenotes" adaptive scrollable height="auto">
+        <modal name="releasenotes" adaptive scrollable height="auto" width="1000">
             <h2>Release Notes</h2>
-            <p>v1.0.0</p>
+            <h3>v1.0.1</h3>
+            <ul>
+                <li>
+                    Fixed a conversion issue for formats containing spaces.
+                    <span class="right grid-list">
+                        <a class="hash link" href="https://github.com/trylab-net/gdal3.js/commit/53cddf4df1ee3ea1d046e30bf2c6b004bd023d17">53cddf4</a>
+                        <a class="user link" href="https://github.com/bugra9">@bugra9</a>
+                    </span>
+                </li>
+            </ul>
+            <h3>v1.0.0</h3>
+            <ul>
+                <li>
+                    Gdal compiled to javascript with Proj, Geos, Spatialite, Sqlite, GeoTIFF, Tiff, WebP, JPEG JFIF, Expat, Zlib.
+                    <span class="right grid-list">
+                        <a class="hash link" href="https://github.com/trylab-net/gdal3.js/commit/ae5e6e8faa93cedec66b1afcf6a5314b9c66ad17">ae5e6e8</a>
+                        <a class="user link" href="https://github.com/bugra9">@bugra9</a>
+                    </span>
+                </li>
+                <li>
+                    Added gdal_translate, ogr2ogr, gdal_rasterize, gdalwarp programs.
+                    <span class="right grid-list">
+                        <a class="hash link" href="https://github.com/trylab-net/gdal3.js/commit/ae5e6e8faa93cedec66b1afcf6a5314b9c66ad17">ae5e6e8</a>
+                        <a class="user link" href="https://github.com/bugra9">@bugra9</a>
+                    </span>
+                </li>
+            </ul>
         </modal>
         <modal name="supporteddrivers" adaptive scrollable height="auto" width="1000">
             <h4>Supported Raster Drivers</h4>
@@ -101,6 +128,7 @@
 </template>
 
 <script>
+import Header from './components/Header.vue'
 import Tab from './components/Tab.vue'
 import TabRadio from './components/TabRadio.vue'
 import InputFiles from './components/InputFiles.vue'
@@ -117,6 +145,7 @@ let gdal;
 export default {
     name: 'App',
     components: {
+        Header,
         Loading,
         Tab,
         TabRadio,
@@ -157,7 +186,7 @@ export default {
     computed: {
         formatList() {
             if (this.drivers.length === 0) return [];
-            
+
             const out = [];
             if (this.drivers[0].type === 'vector') {
                 out.push({ name: 'raster', formats: [{ value: 'GTiff', text: 'GTiff - GeoTIFF' }] });
@@ -202,7 +231,7 @@ export default {
             }
 
             if (this.translateOptions !== '') parameters.push(...this.translateOptions.split(' '));
-            
+
             return parameters;
         },
         preview() {
@@ -269,7 +298,7 @@ export default {
                 if (e && e.length > 0) {
                     e.forEach(error => this.$toast.error(error.message));
                 }
-                
+
                 this.isLoading = false;
             });
         },
@@ -333,27 +362,6 @@ export default {
     border: 1px solid #96c8da;
     padding: 10px;
 }
-ul.appinfo {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    margin: 0;
-    padding: 10px 10px;
-    background-color: white;
-    width: 100%;
-}
-
-ul.appinfo > li {
-    list-style-type: none;
-    margin: 0 20px;
-    color: #333;
-    font-size: 15px;
-    cursor: pointer;
-}
-ul.appinfo > li:hover {
-    color: #666;
-}
 a {
     color: inherit;
     text-decoration: none;
@@ -376,5 +384,18 @@ a.link {
 .license {
     font-size: 10px;
     color: #bbdefb;
+}
+
+a.hash {
+    color: #ffe0b2;
+}
+
+a.user {
+    color: #c8e6c9;
+}
+
+.grid-list {
+    display: flex;
+    gap: 15px;
 }
 </style>

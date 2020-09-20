@@ -200,3 +200,45 @@ div.notices div.toast {
 .multiselect__single, .multiselect__input {
     font-size: inherit !important;
 }
+
+.right {
+    float: right;
+}
+
+ul.apps {
+    display: flex;
+    margin: 0;
+    padding: 10px 10px;
+    background-color: white;
+}
+
+ul.appinfo {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    margin: 0;
+    padding: 10px 10px;
+    background-color: white;
+    width: 100%;
+}
+
+ul.appinfo > li, ul.apps > li {
+    list-style-type: none;
+    margin: 0 20px;
+    color: #333;
+    font-size: 15px;
+    cursor: pointer;
+}
+ul.appinfo > li:hover {
+    color: #666;
+}
+
+ul.apps > li > a:hover {
+    text-decoration: underline;
+}
+
+ul.apps > li.selected > a {
+    color: #3f51b5;
+    font-weight: bold;
+}

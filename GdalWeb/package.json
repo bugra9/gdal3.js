@@ -1,6 +1,6 @@
 {
-  "name": "GdalWeb",
-  "version": "1.0.0",
+  "name": "gdalweb",
+  "version": "1.0.1",
   "description": "GdalWeb is a open source project offering a user interface for Gdal.",
   "license": "GPL-3.0-or-later",
   "scripts": {

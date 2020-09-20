@@ -12,8 +12,8 @@
 ```js
 Gdal3().then((instance) => {});
 ```
-> Example: https://github.com/bugra9/gdal3.js/tree/master/examples/browser  
-> Example: https://github.com/bugra9/gdal3.js/tree/master/examples/browser-worker  
+> Example: https://github.com/trylab-net/gdal3.js/tree/master/examples/browser
+> Example: https://github.com/trylab-net/gdal3.js/tree/master/examples/browser-worker
 
 **ES Module**
 ```html
@@ -25,8 +25,8 @@ Gdal3().then((instance) => {});
     Gdal3().then((instance) => {});
 </script>
 ```
-> Example: https://github.com/bugra9/gdal3.js/tree/master/examples/module-browser  
-> Example: https://github.com/bugra9/gdal3.js/tree/master/examples/module-browser-worker  
+> Example: https://github.com/trylab-net/gdal3.js/tree/master/examples/module-browser
+> Example: https://github.com/trylab-net/gdal3.js/tree/master/examples/module-browser-worker
 
 **Builder such as Webpack (Vue, React, Angular, ...)**
 ```bash
@@ -53,7 +53,7 @@ plugins: [
     })
 ]
 ```
-> Full working example: https://github.com/bugra9/gdal3.js/blob/master/GdalWeb/src/App.vue  
+> Full working example: https://github.com/trylab-net/gdal3.js/blob/master/GdalWeb/src/App.vue
 
 **Node**
 ```bash
@@ -67,7 +67,7 @@ import Gdal3 from 'gdal3.js';
 
 Gdal3().then((instance) => {});
 ```
-> Example: https://github.com/bugra9/gdal3.js/blob/master/examples/node/index.js 
+> Example: https://github.com/trylab-net/gdal3.js/blob/master/examples/node/index.js
 
 ## Usage
 ```js
@@ -77,7 +77,7 @@ const result = await gdal3.open(files);
 const firstDataset = result.dataset[0];
 const outputs = await gdal3.ogr2ogr(firstDataset, ['-f', 'GeoJSON']);
 const bytes = await gdal3.getFileBytes(outputs[0]);
-``` 
+```
 
 ## API
 
@@ -251,9 +251,9 @@ const bytes = await gdal.getFileBytes('/output/polygon.tab');
 - Run `yarn build`
 
 ## License
-GNU General Public License v3.0 or later  
+GNU General Public License v3.0 or later
 
-See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the full text.
+See [LICENSE](https://github.com/trylab-net/gdal3.js/blob/master/LICENSE) to see the full text.
 
 **Compiled with**
 - [Gdal 3.1.0](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
