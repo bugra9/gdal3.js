@@ -4,10 +4,9 @@
     "description": "gdal3.js is a port of Gdal to Webassembly, by compiling the Gdal C code with Emscripten",
     "license": "GPL-3.0-or-later",
     "homepage": "https://github.com/trylab-net/gdal3.js",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/trylab-net/gdal3.js.git"
-    },
+    "repository": "https://github.com/trylab-net/gdal3.js.git",
+    "author": "Bugra <bugra@trylab.net>",
+    "private": false,
     "main": "./src/worker.js",
     "scripts": {
         "lint": "eslint .",
