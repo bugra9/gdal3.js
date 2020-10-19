@@ -30,7 +30,10 @@ export default function ogr2ogr(dataset, options = []) {
         if (driverIndex !== 0) {
             const driverName = options[driverIndex];
             const driver = drivers.vector[driverName];
-            if (driver) ext = driver.extension;
+            if (driver) {
+                if (driverName === 'MapInfo File' && options.indexOf('FORMAT=MIF') !== -1) ext = 'mif';
+                else ext = driver.extension;
+            }
         }
 
         const outputName = dataset.path.split('.', 1)[0];
