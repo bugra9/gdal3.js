@@ -1,0 +1,51 @@
+{
+  "name": "gdal.js-gui",
+  "version": "2.0.0",
+  "description": "GdalWeb is a open source project offering a user interface for Gdal.",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.6.4",
+    "vue": "^2.6.11",
+    "vue-awesome": "^4.0.2",
+    "vue-js-modal": "2.0.0-rc.3",
+    "vue-loading-overlay": "^3.3.2",
+    "vue-multiselect": "^2.1.6",
+    "vue-toast-notification": "^0.3.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.15",
+    "@vue/cli-plugin-eslint": "~5.0.0-rc.1",
+    "@vue/cli-service": "~4.5.15",
+    "@babel/eslint-parser": "^7.16.5",
+    "copy-webpack-plugin": "^6.4.1",
+    "eslint": "^8.6.0",
+    "eslint-plugin-vue": "^8.2.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {
+      "vue/no-mutating-props": 0
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

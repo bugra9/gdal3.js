@@ -1,0 +1,106 @@
+{
+    "homepage": "https://gdal.js.org/",
+    "description": "Convert raster and vector geospatial data to various formats and coordinate systems <b>entirely in the browser.</b>",
+    "cli": {
+        "name": "gdal.js",
+        "descriptions": [
+            "<b>gdal.js</b> is a port of Gdal applications (<b>gdal_translate</b>, <b>ogr2ogr</b>, <b>gdal_rasterize</b>, <b>gdalwarp</b>, <b>gdaltransform</b>) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
+            "gdal.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, exfat and zlib to webassembly."
+        ]
+    },
+    "gui": {
+        "name": "gdal.js GUI",
+        "descriptions": [
+            "<b>gdal.js GUI</b> is a web application that provides a gui to gdal_translate, ogr2ogr and gdal_rasterize applications to be used online. Uses gdal.js in the background. It runs on the browser and files are converted on the client side."
+        ]
+    },
+    "license": {
+        "name": "GNU General Public License v3.0 or later",
+        "url": "https://github.com/bugra9/gdal.js/blob/master/LICENSE"
+    },
+    "sourceCodeUrl": "https://github.com/bugra9/gdal.js",
+    "apiReferencesUrl": "https://gdal.js.org/docs",
+    "testUrl": "https://gdal.js.org/test",
+    "coverageUrl": "https://gdal.js.org/coverage",
+    "nativeDependencies": [
+        {
+            "name": "Emscripten 1.39.19",
+            "url": "https://github.com/emscripten-core/emscripten",
+            "licenseUrl": "https://github.com/emscripten-core/emscripten/blob/main/LICENSE"
+        },
+        {
+            "name": "Gdal 3.4.0",
+            "url": "https://github.com/OSGeo/gdal",
+            "licenseUrl": "https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT"
+        },
+        {
+            "name": "Proj 6.3.2",
+            "url": "https://github.com/OSGeo/PROJ",
+            "licenseUrl": "https://github.com/OSGeo/PROJ/blob/master/COPYING"
+        },
+        {
+            "name": "Geos 3.9.2",
+            "url": "https://github.com/libgeos/geos",
+            "licenseUrl": "https://github.com/libgeos/geos/blob/master/COPYING"
+        },
+        {
+            "name": "Spatialite 5.0.1",
+            "url": "https://www.gaia-gis.it/fossil/libspatialite/index",
+            "licenseUrl": "http://www.gnu.org/licenses/lgpl-2.1.html"
+        },
+        {
+            "name": "Sqlite 3.37.0",
+            "url": "https://www.sqlite.org/index.html",
+            "licenseUrl": "https://www.sqlite.org/copyright.html"
+        },
+        {
+            "name": "GeoTIFF 1.7.0",
+            "url": "https://github.com/OSGeo/libgeotiff",
+            "licenseUrl": "https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE"
+        },
+        {
+            "name": "Tiff 4.3.0",
+            "url": "https://gitlab.com/libtiff/libtiff",
+            "licenseUrl": "https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT"
+        },
+        {
+            "name": "WebP 1.2.0",
+            "url": "https://chromium.googlesource.com/webm/libwebp",
+            "licenseUrl": "https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING"
+        },
+        {
+            "name": "JPEG JFIF 9d",
+            "title": "This software is based in part on the work of the Independent JPEG Group",
+            "url": "https://www.ijg.org/",
+            "licenseUrl": "https://spdx.org/licenses/IJG.html"
+        },
+        {
+            "name": "Expat 2.4.2",
+            "url": "https://github.com/libexpat/libexpat",
+            "licenseUrl": "https://github.com/libexpat/libexpat/blob/master/expat/COPYING"
+        },
+        {
+            "name": "Zlib 1.2.11",
+            "url": "https://www.zlib.net/",
+            "licenseUrl": "https://www.zlib.net/zlib_license.html"
+        }
+    ],
+    "inspiredBy": [
+        {
+            "name": "ddohler/gdal-js",
+            "url": "https://github.com/ddohler/gdal-js"
+        },
+        {
+            "name": "sql-js/sql.js",
+            "url": "https://github.com/sql-js/sql.js"
+        },
+        {
+            "name": "jvail/spatiasql.js",
+            "url": "https://github.com/jvail/spatiasql.js"
+        },
+        {
+            "name": "azavea/loam",
+            "url": "https://github.com/azavea/loam"
+        }
+    ]
+}

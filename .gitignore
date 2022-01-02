@@ -1,4 +1,11 @@
 build
+build-dev
+
+dist-dev
+
+test-dev
+
+TODO.md
 
 # Created by https://www.gitignore.io/api/node,linux,macos,windows,webstorm,sublimetext,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,linux,macos,windows,webstorm,sublimetext,visualstudiocode
@@ -310,5 +317,3 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/node,linux,macos,windows,webstorm,sublimetext,visualstudiocode
-
-!dist

@@ -7,7 +7,11 @@
     "env": {
         "browser": true
     },
+    "plugins": [
+        "mocha"
+    ],
     "extends": [
+        "plugin:mocha/recommended",
         "airbnb-base"
     ],
     "ignorePatterns": ["**", "!src", "!src/**"],
@@ -27,7 +31,7 @@
             "SwitchCase": 1
         }],
         "no-console": ["error", {
-            "allow": ["warn", "error"]
+            "allow": ["warn", "error", "info", "debug"]
         }],
         "no-param-reassign": ["error", {
             "props": false
@@ -42,9 +46,13 @@
         "no-unused-expressions": ["error", {
             "allowShortCircuit": true,
             "allowTernary": true
-        }]
+        }],
+        "prefer-arrow-callback": 0,
+        "mocha/prefer-arrow-callback": 2
     },
     "globals": {
-        "window": false
+        "window": false,
+        "initGdalJs": true,
+        "chai": false
     }
 }

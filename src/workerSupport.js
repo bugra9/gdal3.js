@@ -5,7 +5,7 @@ function onModuleReady(Gdal) {
         Gdal[this.data.func](...this.data.params).then((result) => {
             postMessage({ success: true, id: this.data.id, data: result });
         }).catch((error) => {
-            postMessage({ success: false, id: this.data.id, data: error });
+            postMessage({ success: false, id: this.data.id, data: { message: error.message } });
         });
     } else {
         console.error('undefined function', this.data);
@@ -16,8 +16,8 @@ function onError(err) {
     postMessage({ success: false, id: this.id, data: getSystemError(err.message) });
 }
 
-export default function workerSupport(Gdal3) {
-    const moduleReady = Gdal3();
+export default function workerInsideSupport(initGdalJs) {
+    const moduleReady = initGdalJs({ useWorker: false });
     moduleReady.then(({ drivers }) => postMessage({ success: true, id: 'onload', data: drivers })).catch((e) => postMessage({ success: false, id: 'onload', data: e }));
     onmessage = function onmessage(event) {
         return moduleReady
@@ -25,3 +25,51 @@ export default function workerSupport(Gdal3) {
             .catch(onError.bind(event));
     };
 }
+
+const variables = {
+    gdalWorkerWrapper: null,
+    drivers: null,
+};
+class WorkerWrapper {
+    constructor(file, onload) {
+        this.promises = { onload: { resolve: onload, reject: console.error } };
+        this.gdalWorker = new Worker(file);
+        this.gdalWorker.onmessage = (evt) => {
+            if (evt.data && evt.data.id && this.promises[evt.data.id]) {
+                if (evt.data.success) this.promises[evt.data.id].resolve(evt.data.data);
+                else this.promises[evt.data.id].reject(evt.data.data);
+            }
+        };
+    }
+
+    call(i) {
+        return new Promise((resolve, reject) => {
+            i.id = Math.floor(Math.random() * 100000);
+            this.promises[i.id] = { resolve, reject };
+            this.gdalWorker.postMessage(i);
+        });
+    }
+
+    terminate() {
+        this.gdalWorker.terminate();
+        delete this.gdalWorker;
+        delete this.promises;
+    }
+}
+
+const gdalProxy = new Proxy({}, {
+    get(target, name) {
+        if (name === 'then' || name === 'catch') return target;
+        if (name === 'drivers') return variables.drivers;
+        return (...args) => new Promise((resolve, reject) => {
+            variables.gdalWorkerWrapper.call({ func: name, params: args })
+                .then((data) => { resolve(data); }).catch((e) => reject(e));
+        });
+    },
+});
+
+export const workerOutsideSupport = {
+    variables,
+    WorkerWrapper,
+    gdalProxy,
+};

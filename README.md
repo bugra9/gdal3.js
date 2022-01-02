@@ -1,275 +1,216 @@
-# gdal3.js
+# gdal.js - Gdal compiled to JavaScript
+![npm](https://img.shields.io/npm/v/gdal.js?style=for-the-badge)
 
-## Installation
+gdal.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
 
-**Direct <script>**
+gdal.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, exfat and zlib to webassembly.
+
+If you are building a native application in JavaScript (using Electron for instance), or are working in node.js, you will likely prefer to use a native binding of Gdal to JavaScript. A native binding will be faster because it will run native code.
+
+**gdal.js GUI**
+
+gdal.js GUI is a web application that provides a gui to gdal_translate, ogr2ogr and gdal_rasterize applications to be used online. Uses gdal.js in the background.
+It runs on the browser and files are converted on the client side.
+
+[https://gdal.js.org](https://gdal.js.org)
+
+## Supported Formats
+
+### Raster
+**Read & Write**  
+AAIGrid, ADRG, ARG, BLX, BMP, BT, BYN, CALS, CTable2, DTED, EHdr, ELAS, ENVI, ERS, FIT, GIF, GPKG, GRIB, GS7BG, GSAG, GSBG, GTX, GTiff, HF2, HFA, IDA, ILWIS, INGR, ISCE, ISIS2, ISIS3, JPEG, KMLSUPEROVERLAY, KRO, LAN, LCP, Leveller, MBTiles, MEM, MFF, MFF2, MRF, NITF, NTv2, NWT_GRD, PAux, PCIDSK, PCRaster, PDS4, PNG, PNM, R, RMF, ROI_PAC, RRASTER, RST, Rasterlite, SAGA, SGI, SIGDEM, SRTMHGT, Terragen, USGSDEM, VICAR, VRT, WEBP, XPM, XYZ, ZMap, Zarr
+
+**Read Only**  
+ACE2, AIG, AirSAR, BIGGIF, BSB, CAD, CEOS, COASP, COSAR, CPG, CTG, DERIVED, DIMAP, DIPEx, DOQ1, DOQ2, ECRGTOC, EIR, ESAT, ESRIC, FAST, FujiBAS, GFF, GRASSASCIIGrid, GSC, GXF, GenBin, IRIS, ISG, JAXAPALSAR, JDEM, L1B, LOSLAS, MAP, MSGN, NDF, NGSGEOID, NWT_GRC, OZI, PDS, PRF, RIK, RPFTOC, RS2, SAFE, SAR_CEOS, SDTS, SENTINEL2, SNODAS, SRP, STACIT, STACTA, TGA, TIL, TSX
+
+**Write Only**  
+COG, PDF
+
+
+### Vector
+**Read & Write**  
+CSV, DGN, DXF, ESRI Shapefile, FlatGeobuf, GML, GPKG, GPSBabel, GPSTrackMaker, GPX, GeoJSON, GeoJSONSeq, GeoRSS, Geoconcept, JML, KML, MBTiles, MVT, MapInfo File, MapML, Memory, ODS, OGR_GMT, PCIDSK, PDS4, S57, SQLite/Spatialite, TIGER, VDV, VICAR, WAsP, XLSX
+
+**Read Only**  
+ARCGEN, AVCBin, AVCE00, CAD, EDIGEO, ESRIJSON, Idrisi, LVBAG, OGR_PDS, OGR_SDTS, OGR_VRT, OSM, OpenFileGDB, REC, SVG, SXF, TopoJSON, UK .NTF, VFK
+
+**Write Only**  
+PDF, PGDUMP
+
+
+## Guide
+
+### Installation
+
+**Script**
 ```html
-<script src="https://cdn.jsdelivr.net/npm/gdal3.js/dist/gdal3.js"></script>
-<!--or use as web worker-->
-<script src="https://cdn.jsdelivr.net/npm/gdal3.js/dist/gdal3-worker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gdal.js@2.0.0/dist/gdal.js"></script>
 ```
 
 ```js
-Gdal3().then((instance) => {});
+initGdalJs().then((Gdal) => {});
 ```
-> Example: https://github.com/trylab-net/gdal3.js/tree/master/examples/browser
-> Example: https://github.com/trylab-net/gdal3.js/tree/master/examples/browser-worker
+> Example: [https://github.com/bugra9/gdal.js/tree/master/apps/example-browser-worker](https://github.com/bugra9/gdal.js/tree/master/apps/example-browser-worker) \
+> Example: [https://github.com/bugra9/gdal.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal.js/tree/master/apps/example-browser)
 
 **ES Module**
 ```html
 <script type="module">
-    import 'https://cdn.jsdelivr.net/npm/gdal3.js/dist/gdal3.js'
-    // or use as web worker
-    import 'https://cdn.jsdelivr.net/npm/gdal3.js/dist/gdal3-worker.js'
+    import 'https://cdn.jsdelivr.net/npm/gdal.js@2.0.0/dist/gdal.js'
 
-    Gdal3().then((instance) => {});
+    initGdalJs().then((Gdal) => {});
 </script>
 ```
-> Example: https://github.com/trylab-net/gdal3.js/tree/master/examples/module-browser
-> Example: https://github.com/trylab-net/gdal3.js/tree/master/examples/module-browser-worker
+> Example: [https://github.com/bugra9/gdal.js/tree/master/apps/example-module-browser-worker](https://github.com/bugra9/gdal.js/tree/master/apps/example-module-browser-worker) \
+> Example: [https://github.com/bugra9/gdal.js/tree/master/apps/example-module-browser](https://github.com/bugra9/gdal.js/tree/master/apps/example-module-browser)
 
 **Builder such as Webpack (Vue, React, Angular, ...)**
 ```bash
-yarn add gdal3.js
+yarn add gdal.js
 # or
-npm install gdal3.js
+npm install gdal.js
 ```
 
 ```js
-import Gdal3 from 'gdal3.js';
-// or use as web worker
-import Gdal3 from 'gdal3-worker.js';
+import initGdalJs from 'gdal.js';
 
-Gdal3({ path: 'static' }).then((instance) => {});
+initGdalJs({ path: 'static' }).then((Gdal) => {});
 ```
 
 ```js
 plugins: [
     new CopyWebpackPlugin({
         patterns: [
-            { from: '../node_modules/gdal3.js/gdal3WebAssembly.wasm', to: 'static' },
-            { from: '../node_modules/gdal3.js/gdal3WebAssembly.data', to: 'static' }
+            { from: '../node_modules/gdal.js/gdalWebAssembly.wasm', to: 'static' },
+            { from: '../node_modules/gdal.js/gdalWebAssembly.data', to: 'static' }
         ]
     })
 ]
 ```
-> Full working example: https://github.com/trylab-net/gdal3.js/blob/master/GdalWeb/src/App.vue
+> Full working example: [https://github.com/bugra9/gdal.js/blob/master/apps/app-gui/src/App.vue](https://github.com/bugra9/gdal.js/blob/master/apps/app-gui/src/App.vue)
 
 **Node**
 ```bash
-yarn add gdal3.js
+yarn add gdal.js
 # or
-npm install gdal3.js
+npm install gdal.js
 ```
 
 ```js
-import Gdal3 from 'gdal3.js';
+const initGdalJs = require('gdal.js');
 
-Gdal3().then((instance) => {});
+initGdalJs().then((Gdal) => {});
 ```
-> Example: https://github.com/trylab-net/gdal3.js/blob/master/examples/node/index.js
+> Example: [https://github.com/bugra9/gdal.js/blob/master/apps/example-node/index.js](https://github.com/bugra9/gdal.js/blob/master/apps/example-node/index.js)
 
-## Usage
+### Basic Usage
 ```js
-const gdal3 = await Gdal3();
+const Gdal = await initGdalJs();
 
-const result = await gdal3.open(files);
-const firstDataset = result.dataset[0];
-const outputs = await gdal3.ogr2ogr(firstDataset, ['-f', 'GeoJSON']);
-const bytes = await gdal3.getFileBytes(outputs[0]);
+const files = ['a.mbtiles', 'b.tif']; // [Vector, Raster]
+const result = await Gdal.open(files); // https://gdal.js.org/docs/module-f_open.html
+const mbTilesDataset = result.dataset[0];
+const tifDataset = result.dataset[1];
+
+
+/* ======== Dataset Info ======== */
+// https://gdal.js.org/docs/module-f_getInfo.html
+const mbTilesDatasetInfo = await Gdal.getInfo(mbTilesDataset); // Vector
+const tifDatasetInfo = await Gdal.getInfo(tifDataset); // Raster
+
+
+/* ======== Vector translate (mbtiles -> geojson) ======== */
+const options = [ // https://gdal.org/programs/ogr2ogr.html#description
+    '-f', 'GeoJSON',
+    '-t_srs', 'EPSG:4326'
+];
+const output = await Gdal.ogr2ogr(mbTilesDataset, options); // https://gdal.js.org/docs/module-a_ogr2ogr.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal.js.org/docs/module-f_getFileBytes.html
+
+
+/* ======== Raster translate (tif -> png) ======== */
+const options = [ // https://gdal.org/programs/gdal_translate.html#description
+    '-of', 'PNG'
+];
+const output = await Gdal.gdal_translate(tifDataset, options); // https://gdal.js.org/docs/module-a_gdal_translate.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal.js.org/docs/module-f_getFileBytes.html
+
+
+/* ======== Rasterize (mbtiles -> tif) ======== */
+const options = [ // https://gdal.org/programs/gdal_rasterize.html#description
+    '-of', 'GTiff',
+    '-co', 'alpha=yes'
+];
+const output = await Gdal.gdal_rasterize(mbTilesDataset, options); // https://gdal.js.org/docs/module-a_gdal_rasterize.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal.js.org/docs/module-f_getFileBytes.html
+
+
+/* ======== Warp (reprojection) ======== */
+const options = [ // https://gdal.org/programs/gdalwarp.html#description
+    '-of', 'GTiff',
+    '-t_srs', 'EPSG:4326'
+];
+const output = await Gdal.gdalwarp(tifDataset, options); // https://gdal.js.org/docs/module-a_gdalwarp.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal.js.org/docs/module-f_getFileBytes.html
+
+
+// Close all datasets. // https://gdal.js.org/docs/module-f_close.html
+Gdal.close(mbTilesDataset);
+Gdal.close(tifDataset);
+
+
+/* ======== Transform (Coordinate) ======== */
+const coords = [
+    [27.143757, 38.4247972],
+];
+const options = [ // https://gdal.org/programs/gdaltransform.html#description
+    '-s_srs', 'EPSG:4326',
+    '-t_srs', 'EPSG:3857',
+    '-output_xy',
+];
+const newCoords = await Gdal.gdaltransform(coords, options); // https://gdal.js.org/docs/module-a_gdaltransform.html
+console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 ```
 
-## API
+## API References
+[https://gdal.js.org/docs](https://gdal.js.org/docs)
 
-### Gdal3
-```js
-/*
-    Create an instance of Gdal.
+## Examples
+- Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/app-gui/), [Live](https://gdal.js.org/) 
+- Browser with Worker -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-browser-worker/), [Live](https://gdal.js.org/apps/example-browser-worker) 
+- Browser without Worker -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-browser/), [Live](https://gdal.js.org/apps/example-browser) 
+- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-module-browser-worker/), [Live](https://gdal.js.org/apps/example-module-browser-worker) 
+- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-module-browser/), [Live](https://gdal.js.org/apps/example-module-browser) 
+- Node.js -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-node/), [Live](https://gdal.js.org/apps/example-node) 
 
-    @param      {Object} Configuration Object.
-    config.path {String} Path of wasm and data files.
-    config.dest {String} Destination path where the created files will be saved.
+## Development
 
-    @return {Promise -> Instance} "Promise" returns instance of Gdal.
-*/
-Gdal3(config)
-```
-
-### open
-
-```js
-/*
-    Opens files selected with HTML <input> element (browser) or given file path (Node.js).
-
-    @param {FileList|String|Array<String>} Returned by the files property of the HTML <input> element or file path.
-    @return {Promise -> { datasets, errors }} "Promise" returns dataset list and error list.
-*/
-open(files)
-```
-```js
-const dataset = (await gdal.open(files)).datasets[0];
-```
-
-### close
-
-```js
-/*
-    Close the dataset. The memory associated to the dataset will be freed.
-
-    Datasets **must** be closed when you're finished with them, or the
-    memory consumption will grow forever.
-
-    @param  {object} Dataset to be closed.
-    @return {Promise -> void}
-*/
-close(dataset)
-```
-```js
-await gdal.close(dataset);
-```
-
-### gdal_translate
-```js
-/*
-    gdal_translate function can be used to convert raster data between different formats,
-    potentially performing some operations like subsettings, resampling,
-    and rescaling pixels in the process.
-
-    @param  {object} Dataset to be converted.
-    @param  {Array} Options (https://gdal.org/programs/gdal_translate.html)
-    @return {Promise -> Array} "Promise" returns paths of created files.
-*/
-gdal_translate(dataset, options)
-```
-```js
-const dataset = (await gdal.open(files)).datasets[0];
-const outputs = await gdal.gdal_translate(dataset, ['-of', 'GTiff']);
-```
-> Visit for options: https://gdal.org/programs/gdal_translate.html
-
-
-### ogr2ogr
-```js
-/*
-    ogr2ogr function can be used to convert simple features data between file formats.
-    It can also perform various operations during the process,
-    such as spatial or attribute selection, reducing the set of attributes,
-    setting the output coordinate system or even reprojecting the features during translation.
-
-    @param  {object} Dataset to be converted.
-    @param  {Array} Options (https://gdal.org/programs/ogr2ogr.html)
-    @return {Promise -> Array} "Promise" returns paths of created files.
-*/
-ogr2ogr(dataset, options)
-```
-```js
-const dataset = (await gdal.open(files)).datasets[0];
-const outputs = await gdal.ogr2ogr(dataset, ['-f', 'GeoJSON']);
-```
-> Visit for options: https://gdal.org/programs/ogr2ogr.html
-
-
-### gdal_rasterize
-```js
-/*
-    gdal_rasterize function burns vector geometries (points, lines, and polygons)
-    into the raster band(s) of a raster image. Vectors are read from OGR supported vector formats.
-
-    @param  {object} Dataset to be converted.
-    @param  {Array} Options (https://gdal.org/programs/gdal_rasterize.html)
-    @return {Promise -> Array} "Promise" returns paths of created files.
-*/
-gdal_rasterize(dataset, options)
-```
-```js
-const dataset = (await gdal.open(files)).datasets[0];
-const outputs = await gdal.gdal_rasterize(dataset, ['-of', 'GTiff', '-ts', '256', '256']);
-```
-> Visit for options: https://gdal.org/programs/gdal_rasterize.html
-
-### gdalwarp
-```js
-/*
-    gdalwarp function is an image mosaicing, reprojection and warping utility.
-    The function can reproject to any supported projection,
-    and can also apply GCPs stored with the image if the image is “raw” with control information.
-
-    @param  {object} Dataset to be converted.
-    @param  {Array} Options (https://gdal.org/programs/gdalwarp.html)
-    @return {Promise -> Array} "Promise" returns paths of created files.
-*/
-gdalwarp(dataset, options)
-```
-```js
-const dataset = (await gdal.open(files)).datasets[0];
-const outputs = await gdal.gdalwarp(dataset, ['-of', 'GTiff', '-t_srs', 'EPSG:4326']);
-```
-> Visit for options: https://gdal.org/programs/gdalwarp.html
-
-### getInfo
-```js
-/*
-    @param  {object} Dataset
-    @return {Promise -> Object} "Promise" returns an object containing file information.
-*/
-getInfo(dataset)
-```
-```js
-const dataset = (await gdal.open(files)).datasets[0];
-const info = await gdal.gdalInfo(dataset);
-```
-
-### getOutputFiles
-```js
-/*
-    Get paths of created files.
-
-    @return {Promise -> Array} "Promise" returns path and size of created files.
-*/
-getOutputFiles()
-```
-```js
-const outputs = await gdal.getOutputFiles();
-```
-
-### getFileBytes
-
-```js
-/*
-    @param  {string} The path of the file to be downloaded.
-    @return {Promise -> Uint8Array} "Promise" returns an array of bytes of the file.
-*/
-getFileBytes()
-```
-```js
-const bytes = await gdal.getFileBytes('/output/polygon.tab');
-```
-
-## Compiling
+### Compiling
 - Install the EMSDK, [as described here](https://emscripten.org/docs/getting_started/downloads.html)
-- Run `yarn compile` or `make`
-- Run `yarn build`
+- Run `yarn compile` or `make`. Run `make type=debug` for debug version.
+- Run `yarn build`. Run `yarn build-dev` for debug version.
 
 ## License
 GNU General Public License v3.0 or later
 
-See [LICENSE](https://github.com/trylab-net/gdal3.js/blob/master/LICENSE) to see the full text.
+See [LICENSE](https://github.com/bugra9/gdal.js/blob/master/LICENSE) to see the full text.
 
 **Compiled with**
-- [Gdal 3.1.0](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
+- [Emscripten 1.39.19](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)
+- [Gdal 3.4.0](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
 - [Proj 6.3.2](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
-- [Geos 3.8.1](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
-- [Spatialite 5.0.0-beta0](https://www.gaia-gis.it/fossil/libspatialite/index) [(License)](http://www.gnu.org/licenses/lgpl-2.1.html)
-- [Sqlite 3.31.1](https://www.sqlite.org/index.html) [(License)](https://www.sqlite.org/copyright.html)
-- [GeoTIFF 1.5.1](https://github.com/OSGeo/libgeotiff) [(License)](https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE)
-- [Tiff 4.1.0](https://gitlab.com/libtiff/libtiff) [(License)](https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT)
-- [WebP 1.1.0](https://chromium.googlesource.com/webm/libwebp) [(License)](https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING)
-- [JPEG JFIF 9d](https://www.ijg.org/) [(License)](https://spdx.org/licenses/IJG.html) (This software is based in part on the work of the Independent JPEG Group)
-- [Expat 2.2.9](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
+- [Geos 3.9.2](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
+- [Spatialite 5.0.1](https://www.gaia-gis.it/fossil/libspatialite/index) [(License)](http://www.gnu.org/licenses/lgpl-2.1.html)
+- [Sqlite 3.37.0](https://www.sqlite.org/index.html) [(License)](https://www.sqlite.org/copyright.html)
+- [GeoTIFF 1.7.0](https://github.com/OSGeo/libgeotiff) [(License)](https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE)
+- [Tiff 4.3.0](https://gitlab.com/libtiff/libtiff) [(License)](https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT)
+- [WebP 1.2.0](https://chromium.googlesource.com/webm/libwebp) [(License)](https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING)
+- [JPEG JFIF 9d](https://www.ijg.org/) [(License)](https://spdx.org/licenses/IJG.html)
+- [Expat 2.4.2](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
 - [Zlib 1.2.11](https://www.zlib.net/) [(License)](https://www.zlib.net/zlib_license.html)
 
 **Inspired by**
-- [Emscripten](https://github.com/emscripten-core/emscripten)
 - [ddohler/gdal-js](https://github.com/ddohler/gdal-js)
 - [sql-js/sql.js](https://github.com/sql-js/sql.js)
 - [jvail/spatiasql.js](https://github.com/jvail/spatiasql.js)
+- [azavea/loam](https://github.com/azavea/loam)

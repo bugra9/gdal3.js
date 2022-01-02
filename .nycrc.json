@@ -1,0 +1,11 @@
+{
+    "all": true,
+    "include": [
+      "src/allJsFunctions/application/*.js",
+      "src/allJsFunctions/function/*.js"
+    ],
+    "exclude": [
+      "**/*.spec.js"
+    ],
+    "temp-dir": "./build/.nyc_output"
+}

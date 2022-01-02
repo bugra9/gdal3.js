@@ -14,7 +14,7 @@ export function initCFunctions() {
     GDALFunctions.CPLErrorReset = Module.cwrap('CPLErrorReset', null, []);
     GDALFunctions.CPLSetErrorHandler = Module.cwrap('CPLSetErrorHandler', 'number', ['number']);
     GDALFunctions.CPLQuietErrorHandler = Module.cwrap('CPLQuietErrorHandler', null, ['number', 'number', 'string']);
-    const cplQuietFnPtr = Module.addFunction(GDALFunctions.CPLQuietErrorHandler, 'viii');
+    // const cplQuietFnPtr = Module.addFunction(GDALFunctions.CPLQuietErrorHandler, 'viii');
     GDALFunctions.CPLGetLastErrorNo = Module.cwrap('CPLGetLastErrorNo', 'number', []);
     GDALFunctions.CPLGetLastErrorMsg = Module.cwrap('CPLGetLastErrorMsg', 'string', []);
     GDALFunctions.CPLGetLastErrorType = Module.cwrap('CPLGetLastErrorType', 'number', []);
@@ -104,6 +104,13 @@ export function initCFunctions() {
     GDALFunctions.OGRGetDriver = Module.cwrap('OGRGetDriver', 'number', ['number']);
     GDALFunctions.GDALGetMetadataItem = Module.cwrap('GDALGetMetadataItem', 'string', ['number', 'string', 'string']);
     GDALFunctions.GDALGetDescription = Module.cwrap('GDALGetDescription', 'string', ['number']);
+    GDALFunctions.OGR_L_GetFeatureCount = Module.cwrap('OGR_L_GetFeatureCount', 'number', ['number', 'number']);
 
-    GDALFunctions.CPLSetErrorHandler(cplQuietFnPtr);
+    GDALFunctions.GDALGenImgProjTransform = Module.cwrap('GDALGenImgProjTransform', 'number', ['number', 'number', 'number', 'number', 'number', 'number', 'number']);
+    GDALFunctions.GDALCreateGenImgProjTransformer2 = Module.cwrap('GDALCreateGenImgProjTransformer2', 'number', ['number', 'number', 'number']);
+    GDALFunctions.GDALDestroyGenImgProjTransformer = Module.cwrap('GDALDestroyGenImgProjTransformer', null, ['number']);
+
+    GDALFunctions.OSRSetFromUserInput = Module.cwrap('OSRSetFromUserInput', 'number', ['number', 'string']);
+
+    // GDALFunctions.CPLSetErrorHandler(cplQuietFnPtr);
 }

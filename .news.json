@@ -1,0 +1,90 @@
+[
+    {
+        "version": "v2.0.0",
+        "date": "18.04.2021",
+        "commits": [
+            {
+                "description": "Updated Gdal, Spatialite, Sqlite, Geos, Tiff, GeoTiff, Webp and Exfat.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Added opening/creation options list and the information page link of the driver to the driver detail.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Added dialog screen that options for the driver are listed / edited.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Added type=debug parameter to makefile.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Fixed the issue where some error logs were blank.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Fixed the issue where some vector files are detected as raster.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Fixed the issue where some files could not be opened.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Fixed convert issue of the formats querying on file such as sqlite.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Fixed MVT and Mbtiles creation issues.",
+                "hash": "",
+                "user": "bugra9"
+            },
+            {
+                "description": "Fixed mif file creation issue.",
+                "hash": "cdebea42526f9722c7b2e6102b1182c44191ce7d",
+                "user": "bugra9"
+            },
+            {
+                "description": "Fixed double quote detection and display issues in options section of gdal.js GUI convert screen.",
+                "hash": "",
+                "user": "bugra9"
+            }
+        ]
+    },
+    {
+        "version": "v1.0.1",
+        "date": "21.09.2020",
+        "commits": [
+            {
+                "description": "Fixed a conversion issue for formats containing spaces.",
+                "hash": "53cddf4df1ee3ea1d046e30bf2c6b004bd023d17",
+                "user": "bugra9"
+            }
+        ]
+    },
+    {
+        "version": "v1.0.0",
+        "date": "26.05.2020",
+        "commits": [
+            {
+                "description": "Gdal compiled to javascript with Proj, Geos, Spatialite, Sqlite, GeoTIFF, Tiff, WebP, JPEG JFIF, Expat, Zlib.",
+                "hash": "ae5e6e8faa93cedec66b1afcf6a5314b9c66ad17",
+                "user": "bugra9"
+            },
+            {
+                "description": "Added gdal_translate, ogr2ogr, gdal_rasterize, gdalwarp programs.",
+                "hash": "ae5e6e8faa93cedec66b1afcf6a5314b9c66ad17",
+                "user": "bugra9"
+            }
+        ]
+    }
+]

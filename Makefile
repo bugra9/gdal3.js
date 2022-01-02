@@ -1,16 +1,16 @@
-GDAL_VERSION = 3.1.0
-SPATIALITE_VERSION = 5.0.0-beta0
-SQLITE_VERSION = 3310100
-GEOS_VERSION = 3.8.1
+GDAL_VERSION = 3.4.0
+SPATIALITE_VERSION = 5.0.1
+SQLITE_VERSION = 3370000
+GEOS_VERSION = 3.9.2
 PROJ_VERSION = 6.3.2
 ZLIB_VERSION = 1.2.11
-TIFF_VERSION = 4.1.0
-GEOTIFF_VERSION = 1.5.1
+TIFF_VERSION = 4.3.0
+GEOTIFF_VERSION = 1.7.0
 JPEG_VERSION = 9d
-WEBP_VERSION = 1.1.0
-EXPAT_VERSION = 2.2.9
+WEBP_VERSION = 1.2.0
+EXPAT_VERSION = 2.4.2
 
-SQLITE_URL = "https://www.sqlite.org/2020/sqlite-autoconf-$(SQLITE_VERSION).tar.gz"
+SQLITE_URL = "https://www.sqlite.org/2021/sqlite-autoconf-$(SQLITE_VERSION).tar.gz"
 PROJ_URL = "http://download.osgeo.org/proj/proj-$(PROJ_VERSION).tar.gz"
 GEOS_URL = "http://download.osgeo.org/geos/geos-$(GEOS_VERSION).tar.bz2"
 SPATIALITE_URL = "http://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-$(SPATIALITE_VERSION).tar.gz"
@@ -23,21 +23,27 @@ WEBP_URL = "https://storage.googleapis.com/downloads.webmproject.org/releases/we
 EXPAT_URL = "https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))/expat-${EXPAT_VERSION}.tar.gz"
 
 PWD = $(shell pwd)
-SRC_DIR = build/src
+SRC_DIR = build/native/src
 SRC_DIR_FULL = $(PWD)/$(SRC_DIR)
-ROOT_DIR = $(PWD)/build/usr
-DIST_DIR = $(PWD)/dist
+ROOT_DIR = $(PWD)/build/native/usr
+DIST_DIR = $(PWD)/build/package
 PREFIX = --prefix=$(ROOT_DIR)
 PREFIX_CMAKE = "-DCMAKE_INSTALL_PREFIX=$(ROOT_DIR)"
 
+ifeq ($(type), debug)
+TYPE_FLAGS = -g4 -O0
+else
+TYPE_FLAGS = -O3
+endif
+
 # EMCC_CFLAGS = -g4 -O0 -fexceptions -DRENAME_INTERNAL_LIBTIFF_SYMBOLS
-EMCC_CFLAGS = -O3 -fexceptions -DRENAME_INTERNAL_LIBTIFF_SYMBOLS
+EMCC_CFLAGS = $(TYPE_FLAGS) -fexceptions -DRENAME_INTERNAL_LIBTIFF_SYMBOLS -s ERROR_ON_UNDEFINED_SYMBOLS=0
 EMMAKE ?= EMCC_CFLAGS="$(EMCC_CFLAGS)" emmake
 EMCMAKE ?= emcmake
 EMCC ?= CFLAGS="$(EMCC_CFLAGS)" emcc
 EMCONFIGURE ?= CXXFLAGS="$(EMCC_CFLAGS)" CFLAGS="$(EMCC_CFLAGS)" emconfigure
 
-include GDAL_EMCC_FLAGS
+include GDAL_EMCC_FLAGS.mk
 
 
 ########
@@ -45,25 +51,25 @@ include GDAL_EMCC_FLAGS
 ########
 GDAL_SRC = $(SRC_DIR)/gdal-$(GDAL_VERSION)
 
-gdal3.js: $(DIST_DIR)/gdal3WebAssembly.js
+gdal.js: $(DIST_DIR)/gdalWebAssembly.js
 gdal: $(ROOT_DIR)/lib/libgdal.a
 
-$(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
+$(DIST_DIR)/gdalWebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
 	mkdir -p $(DIST_DIR); \
 	cd $(DIST_DIR); \
-	$(EMCC) $(ROOT_DIR)/lib/libgdal.a \
+	EMCC_CORES=4 $(EMCC) $(ROOT_DIR)/lib/libgdal.a \
 		$(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libspatialite.a \
 		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libwebpdemux.a \
 		$(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libgeotiff.a \
-		-o gdal3WebAssembly.js $(GDAL_EMCC_FLAGS) \
+		-o gdalWebAssembly.js $(GDAL_EMCC_FLAGS) \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
 		--preload-file $(ROOT_DIR)/share/proj@/usr/share/proj;
 
 $(ROOT_DIR)/lib/libgdal.a: $(GDAL_SRC)/config.status
 	cd $(GDAL_SRC); \
-	$(EMMAKE) make install;
+	$(EMMAKE) make -j4 install;
 
-$(GDAL_SRC)/config.status: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libgeotiff.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libspatialite.a $(GDAL_SRC)/configure
+$(GDAL_SRC)/config.status: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libgeotiff.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libspatialite.a $(ROOT_DIR)/include/linux/fs.h $(GDAL_SRC)/configure
 	cd $(GDAL_SRC); \
 	$(EMCONFIGURE) ./configure $(PREFIX) \
 	CFLAGS="-I$(ROOT_DIR)/include/" \
@@ -72,6 +78,10 @@ $(GDAL_SRC)/config.status: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.
 	--with-sqlite3=$(ROOT_DIR) --with-proj=$(ROOT_DIR) --with-tiff=$(ROOT_DIR) --with-geotiff=$(ROOT_DIR) \
 	--enable-shared=no --with-libz=$(ROOT_DIR) --with-spatialite=$(ROOT_DIR) --with-geos=$(ROOT_DIR)/bin/geos-config \
 	--with-webp=$(ROOT_DIR) --with-expat=$(ROOT_DIR);
+
+$(ROOT_DIR)/include/linux/fs.h:
+	mkdir -p $(ROOT_DIR)/include/linux; \
+	touch $(ROOT_DIR)/include/linux/fs.h;
 
 $(GDAL_SRC)/configure:
 	mkdir -p $(SRC_DIR); \
@@ -98,18 +108,12 @@ $(SPATIALITE_SRC)/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj
 	LDFLAGS="-L$(ROOT_DIR)/lib/" \
 	--with-geosconfig="$(ROOT_DIR)/bin/geos-config" \
 	--enable-geosadvanced=yes \
-	--enable-epsg=no \
-	--enable-mathsql=no \
-	--enable-rttopo=no \
-	--enable-knn=no \
-	--enable-geocallbacks=no \
-	--enable-geosreentrant=no \
-	--enable-geopackage=yes \
-	--enable-freexl=no \
-	--enable-lwgeom=no  \
-	--enable-libxml2=no \
-	--enable-gcov=no \
-	--enable-examples=no;
+    --enable-geopackage=yes \
+    --enable-examples=no \
+    --enable-minizip=no \
+    --enable-libxml2=no \
+	--disable-rttopo \
+    --enable-freexl=no;
 
 $(SPATIALITE_SRC)/configure:
 	mkdir -p $(SRC_DIR); \
@@ -120,24 +124,18 @@ $(SPATIALITE_SRC)/configure:
 ########
 # GEOS #
 ########
+
 GEOS_SRC = $(SRC_DIR)/geos-$(GEOS_VERSION)
 
 geos: $(ROOT_DIR)/lib/libgeos.a
 
-$(ROOT_DIR)/lib/libgeos.a: $(GEOS_SRC)/build/Makefile
-	cd $(GEOS_SRC)/build; \
-	$(EMMAKE) make install;
-	cd $(GEOS_SRC)/tools; \
+$(ROOT_DIR)/lib/libgeos.a: $(GEOS_SRC)/Makefile
+	cd $(GEOS_SRC); \
 	$(EMMAKE) make install;
 
-$(GEOS_SRC)/build/Makefile: $(GEOS_SRC)/configure
+$(GEOS_SRC)/Makefile: $(GEOS_SRC)/configure
 	cd $(GEOS_SRC); \
-	sed -i 's/add_subdirectory(doc)//g' ./CMakeLists.txt; \
-	sed -i 's/add_subdirectory(benchmarks)//g' ./CMakeLists.txt; \
-	$(EMCONFIGURE) ./configure $(PREFIX) --enable-tests=no; \
-	mkdir -p build; \
-	cd build; \
-	$(EMCMAKE) cmake $(PREFIX_CMAKE) -DDISABLE_GEOS_INLINE=ON -DENABLE_TESTS=OFF -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Release ..;
+	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no --disable-inline;
 
 $(GEOS_SRC)/configure:
 	mkdir -p $(SRC_DIR); \
@@ -210,7 +208,7 @@ $(ROOT_DIR)/lib/libsqlite3.a: $(SQLITE3_SRC)/Makefile
 $(SQLITE3_SRC)/Makefile: $(ROOT_DIR)/lib/libz.a $(SQLITE3_SRC)/configure
 	cd $(SQLITE3_SRC); \
 	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no \
-	CFLAGS="-I$(ROOT_DIR)/include -DLONGDOUBLE_TYPE=double -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_DISABLE_LFS -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_THREADSAFE=0" \
+	CFLAGS="-I$(ROOT_DIR)/include -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_DISABLE_LFS -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_JSON1 -DSQLITE_THREADSAFE=0 -DSQLITE_ENABLE_NORMALIZE" \
 	CPPFLAGS="-I$(ROOT_DIR)/include" \
 	LDFLAGS="-L$(ROOT_DIR)/lib";
 
