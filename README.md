@@ -1,5 +1,5 @@
 # gdal.js - Gdal compiled to JavaScript
-![npm](https://img.shields.io/npm/v/gdal.js?style=for-the-badge)
+![npm](https://img.shields.io/npm/v/gdal3.js?style=for-the-badge)
 
 gdal.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
 
@@ -44,7 +44,7 @@ PDF, PGDUMP
 
 **Script**
 ```html
-<script src="https://cdn.jsdelivr.net/npm/gdal.js@2.0.0/dist/package/gdal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.0/dist/package/gdal.js"></script>
 ```
 
 ```js
@@ -56,7 +56,7 @@ initGdalJs().then((Gdal) => {});
 **ES Module**
 ```html
 <script type="module">
-    import 'https://cdn.jsdelivr.net/npm/gdal.js@2.0.0/dist/package/gdal.js'
+    import 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.0/dist/package/gdal.js'
 
     initGdalJs().then((Gdal) => {});
 </script>
@@ -66,13 +66,13 @@ initGdalJs().then((Gdal) => {});
 
 **Builder such as Webpack (Vue, React, Angular, ...)**
 ```bash
-yarn add gdal.js
+yarn add gdal3.js
 # or
-npm install gdal.js
+npm install gdal3.js
 ```
 
 ```js
-import initGdalJs from 'gdal.js';
+import initGdalJs from 'gdal3.js';
 
 initGdalJs({ path: 'static' }).then((Gdal) => {});
 ```
@@ -81,8 +81,8 @@ initGdalJs({ path: 'static' }).then((Gdal) => {});
 plugins: [
     new CopyWebpackPlugin({
         patterns: [
-            { from: '../node_modules/gdal.js/dist/package/gdalWebAssembly.wasm', to: 'static' },
-            { from: '../node_modules/gdal.js/dist/package/gdalWebAssembly.data', to: 'static' }
+            { from: '../node_modules/gdal3.js/dist/package/gdalWebAssembly.wasm', to: 'static' },
+            { from: '../node_modules/gdal3.js/dist/package/gdalWebAssembly.data', to: 'static' }
         ]
     })
 ]
@@ -91,13 +91,13 @@ plugins: [
 
 **Node**
 ```bash
-yarn add gdal.js
+yarn add gdal3.js
 # or
-npm install gdal.js
+npm install gdal3.js
 ```
 
 ```js
-const initGdalJs = require('gdal.js');
+const initGdalJs = require('gdal3.js');
 
 initGdalJs().then((Gdal) => {});
 ```
