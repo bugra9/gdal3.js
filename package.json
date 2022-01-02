@@ -6,7 +6,19 @@
     "homepage": "https://gdal.js.org",
     "repository": "https://github.com/bugra9/gdal.js.git",
     "private": false,
-    "main": "src/index.js",
+    "keywords": [
+		"gdal",
+		"ogr2ogr",
+		"gdal_translate",
+		"gdal_rasterize",
+		"gdalwarp",
+		"gdaltransform"
+	],
+    "files": [
+        "dist/package/gdalWebAssembly.data",
+        "dist/package/gdalWebAssembly.wasm"
+    ],
+    "main": "dist/package/gdal.js",
     "scripts": {
         "lint": "eslint .",
         "build": "yarn run build-native && yarn run build-src-all && yarn run build-spec && yarn run build-gui && yarn run build-docs",

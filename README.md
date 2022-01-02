@@ -44,7 +44,7 @@ PDF, PGDUMP
 
 **Script**
 ```html
-<script src="https://cdn.jsdelivr.net/npm/gdal.js@2.0.0/dist/gdal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gdal.js@2.0.0/dist/package/gdal.js"></script>
 ```
 
 ```js
@@ -56,7 +56,7 @@ initGdalJs().then((Gdal) => {});
 **ES Module**
 ```html
 <script type="module">
-    import 'https://cdn.jsdelivr.net/npm/gdal.js@2.0.0/dist/gdal.js'
+    import 'https://cdn.jsdelivr.net/npm/gdal.js@2.0.0/dist/package/gdal.js'
 
     initGdalJs().then((Gdal) => {});
 </script>
@@ -81,8 +81,8 @@ initGdalJs({ path: 'static' }).then((Gdal) => {});
 plugins: [
     new CopyWebpackPlugin({
         patterns: [
-            { from: '../node_modules/gdal.js/gdalWebAssembly.wasm', to: 'static' },
-            { from: '../node_modules/gdal.js/gdalWebAssembly.data', to: 'static' }
+            { from: '../node_modules/gdal.js/dist/package/gdalWebAssembly.wasm', to: 'static' },
+            { from: '../node_modules/gdal.js/dist/package/gdalWebAssembly.data', to: 'static' }
         ]
     })
 ]
@@ -176,12 +176,12 @@ console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 [https://gdal.js.org/docs](https://gdal.js.org/docs)
 
 ## Examples
-- Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/app-gui/), [Live](https://gdal.js.org/) 
-- Browser with Worker -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-browser-worker/), [Live](https://gdal.js.org/apps/example-browser-worker) 
-- Browser without Worker -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-browser/), [Live](https://gdal.js.org/apps/example-browser) 
-- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-module-browser-worker/), [Live](https://gdal.js.org/apps/example-module-browser-worker) 
-- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-module-browser/), [Live](https://gdal.js.org/apps/example-module-browser) 
-- Node.js -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-node/), [Live](https://gdal.js.org/apps/example-node) 
+- Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/app-gui/), [Live](https://gdal.js.org/)  
+- Browser with Worker -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-browser-worker/)  
+- Browser without Worker -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-browser/)  
+- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-module-browser-worker/)  
+- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-module-browser/)  
+- Node.js -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-node/)  
 
 ## Development
 
