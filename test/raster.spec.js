@@ -44,7 +44,7 @@ createTest();
 async function createTest() {
     if (isNode) {
         const dest = require('fs').mkdtempSync('/tmp/gdaljs');
-        const initGdalJs = require('../build/package/gdal.coverage');
+        const initGdalJs = require('../build/package/gdal3.coverage');
         Gdal = await initGdalJs({ path: 'build/package', dest });
     } else {
         Gdal = await initGdalJs({ path: '../package', useWorker: false });

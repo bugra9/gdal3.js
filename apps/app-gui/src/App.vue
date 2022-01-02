@@ -49,7 +49,7 @@
             </template>
         </Tab>
         <ul class="appinfo">
-            <li><a href="https://github.com/bugra9/gdal.js" target="_blank"><img src="github.png" /></a></li>
+            <li><a href="https://github.com/bugra9/gdal3.js" target="_blank"><img src="github.png" /></a></li>
             <li @click="$modal.show('about')">About</li>
             <li @click="$modal.show('supporteddrivers')">Formats</li>
             <li @click="$modal.show('releasenotes')" :title="projectNews[0].version+' - '+projectNews[0].date">{{ projectNews[0].version }}</li>
@@ -98,7 +98,7 @@
                     <li v-for="commit in note.commits" :key="commit.description">
                         {{ commit.description }}
                         <span class="right grid-list desktop">
-                            <a class="hash link" :href="`https://github.com/bugra9/gdal.js/commit/${commit.hash}`" target="_blank">{{ commit.hash.substr(0, 7) }}</a>
+                            <a class="hash link" :href="`https://github.com/bugra9/gdal3.js/commit/${commit.hash}`" target="_blank">{{ commit.hash.substr(0, 7) }}</a>
                             <a class="user link" href="https://github.com/bugra9" target="_blank">@{{ commit.user }}</a>
                         </span>
                     </li>
@@ -141,7 +141,7 @@ import InputFiles from './components/InputFiles.vue'
 import OutputFiles from './components/OutputFiles.vue'
 import Form from './components/Form.vue'
 import { split } from './utils';
-import initGdalJs from '../../../build/package/gdal';
+import initGdalJs from '../../../build/package/gdal3';
 import crs from './crs.json';
 import projectNews from '../../../.news.json';
 import projectInfo from '../../../.info.json';

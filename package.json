@@ -1,10 +1,10 @@
 {
     "name": "gdal3.js",
     "version": "2.0.0",
-    "description": "gdal.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
+    "description": "gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
     "license": "GPL-3.0-or-later",
-    "homepage": "https://gdal.js.org",
-    "repository": "https://github.com/bugra9/gdal.js.git",
+    "homepage": "https://gdal3.js.org",
+    "repository": "https://github.com/bugra9/gdal3.js.git",
     "private": false,
     "keywords": [
 		"gdal",
@@ -15,10 +15,10 @@
 		"gdaltransform"
 	],
     "files": [
-        "dist/package/gdalWebAssembly.data",
-        "dist/package/gdalWebAssembly.wasm"
+        "dist/package/gdal3WebAssembly.data",
+        "dist/package/gdal3WebAssembly.wasm"
     ],
-    "main": "dist/package/gdal.js",
+    "main": "dist/package/gdal3.js",
     "scripts": {
         "lint": "eslint .",
         "build": "yarn run build-native && yarn run build-src-all && yarn run build-spec && yarn run build-gui && yarn run build-docs",
@@ -27,13 +27,13 @@
         "serve": "http-server dist",
         "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
         "build-native": "make",
-        "build-src": "webpack --config .webpack.config.js src/index.js -o build/package/gdal.js",
-        "build-src-dev": "webpack --config .webpack.config.js src/index.js -o build/package/gdal.js --mode development",
-        "build-src-withcoverage": "NODE_ENV=coverage webpack --config .webpack.config.js src/index.js -o build/package/gdal.coverage.js",
+        "build-src": "webpack --config .webpack.config.js src/index.js -o build/package/gdal3.js",
+        "build-src-dev": "webpack --config .webpack.config.js src/index.js -o build/package/gdal3.js --mode development",
+        "build-src-withcoverage": "NODE_ENV=coverage webpack --config .webpack.config.js src/index.js -o build/package/gdal3.coverage.js",
         "build-src-all": "yarn run build-src && yarn run build-src-withcoverage",
         "build-spec": "mkdir -p build/test/specs/ && cp src/**/**/*.spec.js build/test/specs/ && cp test/*.spec.js build/test/specs/ && cp test/browser.html build/test/index.html && cp -r test/data build/test/data",
         "build-gui": "cd apps/app-gui && yarn install && yarn run build",
-        "build-docs": "jsdoc --configure .jsdoc.json --verbose && cp -r build/docs/gdal.js/2.0.0/* build/docs",
+        "build-docs": "jsdoc --configure .jsdoc.json --verbose && cp -r build/docs/gdal3.js/2.0.0/* build/docs",
         "test-node": "nyc --reporter=json --reporter=html --report-dir=./build/coverage/node mocha",
         "test-browser": "karma start .karma.conf.js",
         "test-coverage": "istanbul-merge --out build/coverage/coverage-final.json build/coverage/browser/coverage-final.json build/coverage/node/coverage-final.json && nyc report --reporter html -t build/coverage --report-dir build/coverage"

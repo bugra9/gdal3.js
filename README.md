@@ -1,18 +1,18 @@
-# gdal.js - Gdal compiled to JavaScript
+# gdal3.js - Gdal compiled to JavaScript
 ![npm](https://img.shields.io/npm/v/gdal3.js?style=for-the-badge)
 
-gdal.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
+gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
 
-gdal.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, exfat and zlib to webassembly.
+gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, exfat and zlib to webassembly.
 
 If you are building a native application in JavaScript (using Electron for instance), or are working in node.js, you will likely prefer to use a native binding of Gdal to JavaScript. A native binding will be faster because it will run native code.
 
-**gdal.js GUI**
+**gdal3.js GUI**
 
-gdal.js GUI is a web application that provides a gui to gdal_translate, ogr2ogr and gdal_rasterize applications to be used online. Uses gdal.js in the background.
+gdal3.js GUI is a web application that provides a gui to gdal_translate, ogr2ogr and gdal_rasterize applications to be used online. Uses gdal3.js in the background.
 It runs on the browser and files are converted on the client side.
 
-[https://gdal.js.org](https://gdal.js.org)
+[https://gdal3.js.org](https://gdal3.js.org)
 
 ## Supported Formats
 
@@ -44,25 +44,25 @@ PDF, PGDUMP
 
 **Script**
 ```html
-<script src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.0/dist/package/gdal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.0/dist/package/gdal3.js"></script>
 ```
 
 ```js
 initGdalJs().then((Gdal) => {});
 ```
-> Example: [https://github.com/bugra9/gdal.js/tree/master/apps/example-browser-worker](https://github.com/bugra9/gdal.js/tree/master/apps/example-browser-worker) \
-> Example: [https://github.com/bugra9/gdal.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal.js/tree/master/apps/example-browser)
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker) \
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser)
 
 **ES Module**
 ```html
 <script type="module">
-    import 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.0/dist/package/gdal.js'
+    import 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.0/dist/package/gdal3.js'
 
     initGdalJs().then((Gdal) => {});
 </script>
 ```
-> Example: [https://github.com/bugra9/gdal.js/tree/master/apps/example-module-browser-worker](https://github.com/bugra9/gdal.js/tree/master/apps/example-module-browser-worker) \
-> Example: [https://github.com/bugra9/gdal.js/tree/master/apps/example-module-browser](https://github.com/bugra9/gdal.js/tree/master/apps/example-module-browser)
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser-worker](https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser-worker) \
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser)
 
 **Builder such as Webpack (Vue, React, Angular, ...)**
 ```bash
@@ -81,13 +81,13 @@ initGdalJs({ path: 'static' }).then((Gdal) => {});
 plugins: [
     new CopyWebpackPlugin({
         patterns: [
-            { from: '../node_modules/gdal3.js/dist/package/gdalWebAssembly.wasm', to: 'static' },
-            { from: '../node_modules/gdal3.js/dist/package/gdalWebAssembly.data', to: 'static' }
+            { from: '../node_modules/gdal3.js/dist/package/gdal3WebAssembly.wasm', to: 'static' },
+            { from: '../node_modules/gdal3.js/dist/package/gdal3WebAssembly.data', to: 'static' }
         ]
     })
 ]
 ```
-> Full working example: [https://github.com/bugra9/gdal.js/blob/master/apps/app-gui/src/App.vue](https://github.com/bugra9/gdal.js/blob/master/apps/app-gui/src/App.vue)
+> Full working example: [https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/src/App.vue](https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/src/App.vue)
 
 **Node**
 ```bash
@@ -101,20 +101,20 @@ const initGdalJs = require('gdal3.js');
 
 initGdalJs().then((Gdal) => {});
 ```
-> Example: [https://github.com/bugra9/gdal.js/blob/master/apps/example-node/index.js](https://github.com/bugra9/gdal.js/blob/master/apps/example-node/index.js)
+> Example: [https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/index.js](https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/index.js)
 
 ### Basic Usage
 ```js
 const Gdal = await initGdalJs();
 
 const files = ['a.mbtiles', 'b.tif']; // [Vector, Raster]
-const result = await Gdal.open(files); // https://gdal.js.org/docs/module-f_open.html
+const result = await Gdal.open(files); // https://gdal3.js.org/docs/module-f_open.html
 const mbTilesDataset = result.dataset[0];
 const tifDataset = result.dataset[1];
 
 
 /* ======== Dataset Info ======== */
-// https://gdal.js.org/docs/module-f_getInfo.html
+// https://gdal3.js.org/docs/module-f_getInfo.html
 const mbTilesDatasetInfo = await Gdal.getInfo(mbTilesDataset); // Vector
 const tifDatasetInfo = await Gdal.getInfo(tifDataset); // Raster
 
@@ -124,16 +124,16 @@ const options = [ // https://gdal.org/programs/ogr2ogr.html#description
     '-f', 'GeoJSON',
     '-t_srs', 'EPSG:4326'
 ];
-const output = await Gdal.ogr2ogr(mbTilesDataset, options); // https://gdal.js.org/docs/module-a_ogr2ogr.html
-const bytes = await Gdal.getFileBytes(output); // https://gdal.js.org/docs/module-f_getFileBytes.html
+const output = await Gdal.ogr2ogr(mbTilesDataset, options); // https://gdal3.js.org/docs/module-a_ogr2ogr.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
 
 
 /* ======== Raster translate (tif -> png) ======== */
 const options = [ // https://gdal.org/programs/gdal_translate.html#description
     '-of', 'PNG'
 ];
-const output = await Gdal.gdal_translate(tifDataset, options); // https://gdal.js.org/docs/module-a_gdal_translate.html
-const bytes = await Gdal.getFileBytes(output); // https://gdal.js.org/docs/module-f_getFileBytes.html
+const output = await Gdal.gdal_translate(tifDataset, options); // https://gdal3.js.org/docs/module-a_gdal_translate.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
 
 
 /* ======== Rasterize (mbtiles -> tif) ======== */
@@ -141,8 +141,8 @@ const options = [ // https://gdal.org/programs/gdal_rasterize.html#description
     '-of', 'GTiff',
     '-co', 'alpha=yes'
 ];
-const output = await Gdal.gdal_rasterize(mbTilesDataset, options); // https://gdal.js.org/docs/module-a_gdal_rasterize.html
-const bytes = await Gdal.getFileBytes(output); // https://gdal.js.org/docs/module-f_getFileBytes.html
+const output = await Gdal.gdal_rasterize(mbTilesDataset, options); // https://gdal3.js.org/docs/module-a_gdal_rasterize.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
 
 
 /* ======== Warp (reprojection) ======== */
@@ -150,11 +150,11 @@ const options = [ // https://gdal.org/programs/gdalwarp.html#description
     '-of', 'GTiff',
     '-t_srs', 'EPSG:4326'
 ];
-const output = await Gdal.gdalwarp(tifDataset, options); // https://gdal.js.org/docs/module-a_gdalwarp.html
-const bytes = await Gdal.getFileBytes(output); // https://gdal.js.org/docs/module-f_getFileBytes.html
+const output = await Gdal.gdalwarp(tifDataset, options); // https://gdal3.js.org/docs/module-a_gdalwarp.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
 
 
-// Close all datasets. // https://gdal.js.org/docs/module-f_close.html
+// Close all datasets. // https://gdal3.js.org/docs/module-f_close.html
 Gdal.close(mbTilesDataset);
 Gdal.close(tifDataset);
 
@@ -168,20 +168,20 @@ const options = [ // https://gdal.org/programs/gdaltransform.html#description
     '-t_srs', 'EPSG:3857',
     '-output_xy',
 ];
-const newCoords = await Gdal.gdaltransform(coords, options); // https://gdal.js.org/docs/module-a_gdaltransform.html
+const newCoords = await Gdal.gdaltransform(coords, options); // https://gdal3.js.org/docs/module-a_gdaltransform.html
 console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 ```
 
 ## API References
-[https://gdal.js.org/docs](https://gdal.js.org/docs)
+[https://gdal3.js.org/docs](https://gdal3.js.org/docs)
 
 ## Examples
-- Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/app-gui/), [Live](https://gdal.js.org/)  
-- Browser with Worker -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-browser-worker/)  
-- Browser without Worker -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-browser/)  
-- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-module-browser-worker/)  
-- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-module-browser/)  
-- Node.js -> [Code](https://github.com/bugra9/gdal.js/blob/master/apps/example-node/)  
+- Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/), [Live](https://gdal3.js.org/)  
+- Browser with Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser-worker/)  
+- Browser without Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser/)  
+- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser-worker/)  
+- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser/)  
+- Node.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/)  
 
 ## Development
 
@@ -193,7 +193,7 @@ console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 ## License
 GNU General Public License v3.0 or later
 
-See [LICENSE](https://github.com/bugra9/gdal.js/blob/master/LICENSE) to see the full text.
+See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the full text.
 
 **Compiled with**
 - [Emscripten 1.39.19](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)

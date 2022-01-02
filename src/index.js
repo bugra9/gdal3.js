@@ -1,6 +1,6 @@
 import isNode from 'detect-node';
 // eslint-disable-next-line import/extensions
-import CModule from '../build/package/gdalWebAssembly.js';
+import CModule from '../build/package/gdal3WebAssembly.js';
 
 import { initCFunctions, GDALFunctions } from './allCFunctions';
 import allJsFunctions from './allJsFunctions';
@@ -12,7 +12,7 @@ import workerInsideSupport, { workerOutsideSupport } from './workerSupport';
 let gdalJsPromise;
 
 /**
-    * Asynchronously initializes gdal.js
+    * Asynchronously initializes gdal3.js
     * @async
     * @function initGdalJs
     * @param      {Object} config Configuration Object.
@@ -76,7 +76,7 @@ export default function initGdalJs(
                     prefix = config.path;
                     if (prefix.slice(-1) !== '/') prefix += '/';
                 } else if (isNode) {
-                    prefix = 'node_modules/gdal.js/dist/package/';
+                    prefix = 'node_modules/gdal3.js/dist/package/';
                 }
                 return prefix + path;
             };
@@ -93,7 +93,7 @@ export default function initGdalJs(
             });
         });
     } else {
-        const workerJsName = config.workerJsName || 'gdal.js';
+        const workerJsName = config.workerJsName || 'gdal3.js';
         gdalJsPromise = new Promise((resolve) => {
             workerOutsideSupport.variables.gdalWorkerWrapper = new workerOutsideSupport.WorkerWrapper(`${config.path || ''}/${workerJsName}`, (d) => {
                 workerOutsideSupport.variables.drivers = d;

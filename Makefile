@@ -51,17 +51,17 @@ include GDAL_EMCC_FLAGS.mk
 ########
 GDAL_SRC = $(SRC_DIR)/gdal-$(GDAL_VERSION)
 
-gdal.js: $(DIST_DIR)/gdalWebAssembly.js
+gdal3.js: $(DIST_DIR)/gdal3WebAssembly.js
 gdal: $(ROOT_DIR)/lib/libgdal.a
 
-$(DIST_DIR)/gdalWebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
+$(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
 	mkdir -p $(DIST_DIR); \
 	cd $(DIST_DIR); \
 	EMCC_CORES=4 $(EMCC) $(ROOT_DIR)/lib/libgdal.a \
 		$(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libspatialite.a \
 		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libwebpdemux.a \
 		$(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libgeotiff.a \
-		-o gdalWebAssembly.js $(GDAL_EMCC_FLAGS) \
+		-o gdal3WebAssembly.js $(GDAL_EMCC_FLAGS) \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
 		--preload-file $(ROOT_DIR)/share/proj@/usr/share/proj;
 

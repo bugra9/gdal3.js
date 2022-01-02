@@ -54,7 +54,7 @@
                 "user": "bugra9"
             },
             {
-                "description": "Fixed double quote detection and display issues in options section of gdal.js GUI convert screen.",
+                "description": "Fixed double quote detection and display issues in options section of gdal3.js GUI convert screen.",
                 "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             }

@@ -10,7 +10,7 @@ module.exports = {
         globalObject: `(typeof self !== 'undefined' ? self : this)`
     },
     module: {
-        noParse: (content) => /gdalWebAssembly/.test(content),
+        noParse: (content) => /gdal3WebAssembly/.test(content),
         rules: [
             isCoverage ? {
                 test: /\.(js|ts)/,

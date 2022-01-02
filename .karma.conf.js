@@ -5,10 +5,10 @@ module.exports = function(config) {
     frameworks: ['mocha', 'chai'],
 
     files: [
-      {pattern: 'build/package/gdal.coverage.js', included: true, served: true, watched: false, nocache: true},
-      {pattern: 'build/package/gdalWebAssembly.js', included: false, served: true, watched: false, nocache: true},
-      {pattern: 'build/package/gdalWebAssembly.wasm', included: false, served: true, watched: false, nocache: true},
-      {pattern: 'build/package/gdalWebAssembly.data', included: false, served: true, watched: false, nocache: true},
+      {pattern: 'build/package/gdal3.coverage.js', included: true, served: true, watched: false, nocache: true},
+      {pattern: 'build/package/gdal3WebAssembly.js', included: false, served: true, watched: false, nocache: true},
+      {pattern: 'build/package/gdal3WebAssembly.wasm', included: false, served: true, watched: false, nocache: true},
+      {pattern: 'build/package/gdal3WebAssembly.data', included: false, served: true, watched: false, nocache: true},
       {pattern: 'test/data/*', included: false, served: true, watched: false, nocache: true},
       {pattern: 'src/**/*.spec.js', type: 'module', included: true, served: true, watched: false, nocache: true},
       {pattern: 'test/*.spec.js', type: 'module', included: true, served: true, watched: false, nocache: true}

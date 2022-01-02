@@ -1,4 +1,4 @@
-const initGdalJs = require('../../dist/package/gdal');
+const initGdalJs = require('../../dist/package/gdal3');
 
 async function main() {
     const Gdal = await initGdalJs({ path: 'dist/package', dest: 'build' });

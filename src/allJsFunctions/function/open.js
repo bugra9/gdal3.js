@@ -39,7 +39,7 @@ import { mount } from '../helper/filesystem';
     * // Opening files from filesystem on Node.js.
     * const result = await Gdal.open(['test/polygon.geojson', 'test/line.geojson']);
     * @example
-    * // Opening files from virtual gdal.js path.
+    * // Opening files from virtual gdal3.js path.
     * // * Opened files are saved in the /input/... virtual path.
     * // * Converted files are saved in the /output/... virtual path.
     * const result = await Gdal.open('/output/polygon.geojson');

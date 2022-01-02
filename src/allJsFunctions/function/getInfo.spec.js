@@ -13,7 +13,7 @@ describe('function / getInfo', function () {
         if (isNode) {
             this.timeout(15000);
             const dest = require('fs').mkdtempSync('/tmp/gdaljs');
-            const initGdalJs = require('../../../build/package/gdal.coverage');
+            const initGdalJs = require('../../../build/package/gdal3.coverage');
             Gdal = await initGdalJs({ path: 'build/package', dest });
         } else {
             this.timeout(30000);

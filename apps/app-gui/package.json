@@ -1,7 +1,7 @@
 {
-  "name": "gdal.js-gui",
+  "name": "gdal3.js-gui",
   "version": "2.0.0",
-  "description": "gdal.js GUI is a open source project offering a user interface for Gdal.",
+  "description": "gdal3.js GUI is a open source project offering a user interface for Gdal.",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "serve": "vue-cli-service serve",

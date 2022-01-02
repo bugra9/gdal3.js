@@ -1,27 +1,27 @@
 {
-    "homepage": "https://gdal.js.org/",
+    "homepage": "https://gdal3.js.org/",
     "description": "Convert raster and vector geospatial data to various formats and coordinate systems <b>entirely in the browser.</b>",
     "cli": {
-        "name": "gdal.js",
+        "name": "gdal3.js",
         "descriptions": [
-            "<b>gdal.js</b> is a port of Gdal applications (<b>gdal_translate</b>, <b>ogr2ogr</b>, <b>gdal_rasterize</b>, <b>gdalwarp</b>, <b>gdaltransform</b>) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
-            "gdal.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, exfat and zlib to webassembly."
+            "<b>gdal3.js</b> is a port of Gdal applications (<b>gdal_translate</b>, <b>ogr2ogr</b>, <b>gdal_rasterize</b>, <b>gdalwarp</b>, <b>gdaltransform</b>) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
+            "gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, exfat and zlib to webassembly."
         ]
     },
     "gui": {
-        "name": "gdal.js GUI",
+        "name": "gdal3.js GUI",
         "descriptions": [
-            "<b>gdal.js GUI</b> is a web application that provides a gui to gdal_translate, ogr2ogr and gdal_rasterize applications to be used online. Uses gdal.js in the background. It runs on the browser and files are converted on the client side."
+            "<b>gdal3.js GUI</b> is a web application that provides a gui to gdal_translate, ogr2ogr and gdal_rasterize applications to be used online. Uses gdal3.js in the background. It runs on the browser and files are converted on the client side."
         ]
     },
     "license": {
         "name": "GNU General Public License v3.0 or later",
-        "url": "https://github.com/bugra9/gdal.js/blob/master/LICENSE"
+        "url": "https://github.com/bugra9/gdal3.js/blob/master/LICENSE"
     },
-    "sourceCodeUrl": "https://github.com/bugra9/gdal.js",
-    "apiReferencesUrl": "https://gdal.js.org/docs",
-    "testUrl": "https://gdal.js.org/test",
-    "coverageUrl": "https://gdal.js.org/coverage",
+    "sourceCodeUrl": "https://github.com/bugra9/gdal3.js",
+    "apiReferencesUrl": "https://gdal3.js.org/docs",
+    "testUrl": "https://gdal3.js.org/test",
+    "coverageUrl": "https://gdal3.js.org/coverage",
     "nativeDependencies": [
         {
             "name": "Emscripten 1.39.19",
