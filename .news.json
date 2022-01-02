@@ -1,51 +1,51 @@
 [
     {
         "version": "v2.0.0",
-        "date": "18.04.2021",
+        "date": "02.01.2022",
         "commits": [
             {
                 "description": "Updated Gdal, Spatialite, Sqlite, Geos, Tiff, GeoTiff, Webp and Exfat.",
-                "hash": "",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
                 "description": "Added opening/creation options list and the information page link of the driver to the driver detail.",
-                "hash": "",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
                 "description": "Added dialog screen that options for the driver are listed / edited.",
-                "hash": "",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
                 "description": "Added type=debug parameter to makefile.",
-                "hash": "",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
                 "description": "Fixed the issue where some error logs were blank.",
-                "hash": "",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
-                "description": "Fixed the issue where some vector files are detected as raster.",
-                "hash": "",
+                "description": "Fixed the issue that some vector files are detected as raster.",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
-                "description": "Fixed the issue where some files could not be opened.",
-                "hash": "",
+                "description": "Fixed the issue that some files could not be opened.",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
                 "description": "Fixed convert issue of the formats querying on file such as sqlite.",
-                "hash": "",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
                 "description": "Fixed MVT and Mbtiles creation issues.",
-                "hash": "",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             },
             {
@@ -55,7 +55,7 @@
             },
             {
                 "description": "Fixed double quote detection and display issues in options section of gdal.js GUI convert screen.",
-                "hash": "",
+                "hash": "8fa68b7a4f0630c77e4ea256f95c529543811ff6",
                 "user": "bugra9"
             }
         ]
