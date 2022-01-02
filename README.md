@@ -44,7 +44,7 @@ PDF, PGDUMP
 
 **Script**
 ```html
-<script src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.0/dist/package/gdal3.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.1/dist/package/gdal3.js"></script>
 ```
 
 ```js
@@ -56,7 +56,7 @@ initGdalJs().then((Gdal) => {});
 **ES Module**
 ```html
 <script type="module">
-    import 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.0/dist/package/gdal3.js'
+    import 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.1/dist/package/gdal3.js'
 
     initGdalJs().then((Gdal) => {});
 </script>
