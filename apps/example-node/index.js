@@ -1,7 +1,7 @@
-const initGdalJs = require('../../dist/package/gdal3');
+const initGdalJs = require('gdal3.js');
 
 async function main() {
-    const Gdal = await initGdalJs({ path: 'dist/package', dest: 'build' });
+    const Gdal = await initGdalJs();
 
     const count = Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length;
     console.log("Number of drivers: " + count);

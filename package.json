@@ -23,7 +23,7 @@
         "lint": "eslint .",
         "build": "yarn run build-native && yarn run build-src-all && yarn run build-spec && yarn run build-gui && yarn run build-docs",
         "test": "yarn run test-node && yarn run test-browser && yarn run test-coverage",
-        "dist": "rm -rf dist && mkdir dist && cp -r build/app/* dist && cp -r build/package dist && cp -r build/docs dist && cp -r build/test dist && cp -r build/coverage dist",
+        "dist": "rm -rf dist && mkdir -p dist/examples && cp -r build/app/* dist && cp -r build/package dist && cp -r build/docs dist && cp -r build/test dist && cp -r build/coverage dist && cp -r apps/example*browser* dist/examples",
         "serve": "http-server dist",
         "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
         "build-native": "make",

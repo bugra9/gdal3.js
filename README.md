@@ -1,5 +1,5 @@
 # gdal3.js - Gdal compiled to JavaScript
-![npm](https://img.shields.io/npm/v/gdal3.js?style=for-the-badge)
+[![npm](https://img.shields.io/npm/v/gdal3.js?style=for-the-badge)](https://www.npmjs.com/package/gdal3.js)
 
 gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
 
@@ -42,21 +42,35 @@ PDF, PGDUMP
 
 ### Installation
 
-**Script**
+**Script (CDN)** \
+Note:  It doesn't work with web worker.
 ```html
-<script src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.1/dist/package/gdal3.js"></script>
+<script type="text/javascript"
+    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.1/dist/package/gdal3.js"
+    integrity="sha384-kBK/1E7Ucftl+q9BgJLSjxYXl50E04hunMphr89+UG/L624dOkyzC4dMiIjHGZND"
+    crossorigin="anonymous"
+></script>
+```
+
+```js
+initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.1/dist/package', useWorker: false }).then((Gdal) => {});
+```
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser) \
+
+**Script (Local)**
+```html
+<script type="text/javascript" src="gdal3.js"></script>
 ```
 
 ```js
 initGdalJs().then((Gdal) => {});
 ```
 > Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker) \
-> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser)
 
 **ES Module**
 ```html
 <script type="module">
-    import 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.1/dist/package/gdal3.js'
+    import 'gdal3.js'
 
     initGdalJs().then((Gdal) => {});
 </script>
@@ -177,10 +191,10 @@ console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 
 ## Examples
 - Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/), [Live](https://gdal3.js.org/)  
-- Browser with Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser-worker/)  
-- Browser without Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser/)  
-- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser-worker/)  
-- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser/)  
+- Browser with Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser-worker/), [Live](https://gdal3.js.org/examples/example-browser-worker/)   
+- Browser without Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser/), [Live](https://gdal3.js.org/examples/example-browser/)   
+- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser-worker/), [Live](https://gdal3.js.org/examples/example-module-browser-worker/)   
+- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser/), [Live](https://gdal3.js.org/examples/example-module-browser/)   
 - Node.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/)  
 
 ## Development
