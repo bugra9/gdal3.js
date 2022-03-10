@@ -18,6 +18,8 @@ export function initCFunctions() {
     GDALFunctions.CPLGetLastErrorNo = Module.cwrap('CPLGetLastErrorNo', 'number', []);
     GDALFunctions.CPLGetLastErrorMsg = Module.cwrap('CPLGetLastErrorMsg', 'string', []);
     GDALFunctions.CPLGetLastErrorType = Module.cwrap('CPLGetLastErrorType', 'number', []);
+    GDALFunctions.CPLSetConfigOption = Module.cwrap('CPLSetConfigOption', null, ['string', 'string']);
+    GDALFunctions.CPLSetThreadLocalConfigOption = Module.cwrap('CPLSetThreadLocalConfigOption', null, ['string', 'string']);
     GDALFunctions.GDALGetRasterCount = Module.cwrap('GDALGetRasterCount', 'number', ['number']);
     GDALFunctions.GDALGetRasterXSize = Module.cwrap('GDALGetRasterXSize', 'number', ['number']);
     GDALFunctions.GDALGetRasterYSize = Module.cwrap('GDALGetRasterYSize', 'number', ['number']);
