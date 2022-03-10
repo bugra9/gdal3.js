@@ -1,5 +1,26 @@
 [
     {
+        "version": "v2.0.2",
+        "date": "11.03.2022",
+        "commits": [
+            {
+                "description": "Update Gdal to 3.4.1.",
+                "hash": "3a27029ed43d96c9aa822e36651f91a31d591661",
+                "user": "bugra9"
+            },
+            {
+                "description": "Fix file opening issue.",
+                "hash": "3a27029ed43d96c9aa822e36651f91a31d591661",
+                "user": "bugra9"
+            },
+            {
+                "description": "Add cpl config function.",
+                "hash": "e046b11d5be8b1e46926a6bd365a6da523400958",
+                "user": "khrushjing"
+            }
+        ]
+    },
+    {
         "version": "v2.0.1",
         "date": "02.01.2022",
         "commits": [
