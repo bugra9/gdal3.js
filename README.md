@@ -46,14 +46,14 @@ PDF, PGDUMP
 Note:  It doesn't work with web worker.
 ```html
 <script type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.1/dist/package/gdal3.js"
-    integrity="sha384-kBK/1E7Ucftl+q9BgJLSjxYXl50E04hunMphr89+UG/L624dOkyzC4dMiIjHGZND"
+    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.0.2/dist/package/gdal3.js"
+    integrity="sha384-BRUDikOiBTBuQJEujfwicGrKL+KqI8gWVEDxrBiumId37JQdQbXrWVfxFz46Ufzj"
     crossorigin="anonymous"
 ></script>
 ```
 
 ```js
-initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.1/dist/package', useWorker: false }).then((Gdal) => {});
+initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.2/dist/package', useWorker: false }).then((Gdal) => {});
 ```
 > Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser) \
 
@@ -211,7 +211,7 @@ See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the
 
 **Compiled with**
 - [Emscripten 1.39.19](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)
-- [Gdal 3.4.0](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
+- [Gdal 3.4.1](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
 - [Proj 6.3.2](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
 - [Geos 3.9.2](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
 - [Spatialite 5.0.1](https://www.gaia-gis.it/fossil/libspatialite/index) [(License)](http://www.gnu.org/licenses/lgpl-2.1.html)

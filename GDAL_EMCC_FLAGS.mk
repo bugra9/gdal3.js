@@ -95,7 +95,9 @@ GDAL_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
   '_GDALGenImgProjTransform',\
   '_GDALCreateGenImgProjTransformer2',\
   '_GDALDestroyGenImgProjTransformer',\
-  '_OSRSetFromUserInput'\
+  '_OSRSetFromUserInput',\
+  '_CPLSetConfigOption',\
+  '_CPLSetThreadLocalConfigOption'\
 ]"
 
 GDAL_EMCC_FLAGS += -s EXTRA_EXPORTED_RUNTIME_METHODS="[\

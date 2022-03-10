@@ -25,7 +25,7 @@ export function mount(files) {
             files.forEach((file) => {
                 const temp = file.split('/');
                 const name = temp.pop();
-                const path = temp.join('/');
+                const path = temp.join('/') || '.';
 
                 if (lastInputMountedPath !== path) {
                     if (lastInputMountedPath) unmount();
