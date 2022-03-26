@@ -17,24 +17,24 @@ It runs on the browser and files are converted on the client side.
 ## Supported Formats
 
 ### Raster
-**Read & Write**  
+**Read & Write** \
 AAIGrid, ADRG, ARG, BLX, BMP, BT, BYN, CALS, CTable2, DTED, EHdr, ELAS, ENVI, ERS, FIT, GIF, GPKG, GRIB, GS7BG, GSAG, GSBG, GTX, GTiff, HF2, HFA, IDA, ILWIS, INGR, ISCE, ISIS2, ISIS3, JPEG, KMLSUPEROVERLAY, KRO, LAN, LCP, Leveller, MBTiles, MEM, MFF, MFF2, MRF, NITF, NTv2, NWT_GRD, PAux, PCIDSK, PCRaster, PDS4, PNG, PNM, R, RMF, ROI_PAC, RRASTER, RST, Rasterlite, SAGA, SGI, SIGDEM, SRTMHGT, Terragen, USGSDEM, VICAR, VRT, WEBP, XPM, XYZ, ZMap, Zarr
 
-**Read Only**  
+**Read Only** \
 ACE2, AIG, AirSAR, BIGGIF, BSB, CAD, CEOS, COASP, COSAR, CPG, CTG, DERIVED, DIMAP, DIPEx, DOQ1, DOQ2, ECRGTOC, EIR, ESAT, ESRIC, FAST, FujiBAS, GFF, GRASSASCIIGrid, GSC, GXF, GenBin, IRIS, ISG, JAXAPALSAR, JDEM, L1B, LOSLAS, MAP, MSGN, NDF, NGSGEOID, NWT_GRC, OZI, PDS, PRF, RIK, RPFTOC, RS2, SAFE, SAR_CEOS, SDTS, SENTINEL2, SNODAS, SRP, STACIT, STACTA, TGA, TIL, TSX
 
-**Write Only**  
+**Write Only** \
 COG, PDF
 
 
 ### Vector
-**Read & Write**  
+**Read & Write** \
 CSV, DGN, DXF, ESRI Shapefile, FlatGeobuf, GML, GPKG, GPSBabel, GPSTrackMaker, GPX, GeoJSON, GeoJSONSeq, GeoRSS, Geoconcept, JML, KML, MBTiles, MVT, MapInfo File, MapML, Memory, ODS, OGR_GMT, PCIDSK, PDS4, S57, SQLite/Spatialite, TIGER, VDV, VICAR, WAsP, XLSX
 
-**Read Only**  
+**Read Only** \
 ARCGEN, AVCBin, AVCE00, CAD, EDIGEO, ESRIJSON, Idrisi, LVBAG, OGR_PDS, OGR_SDTS, OGR_VRT, OSM, OpenFileGDB, REC, SVG, SXF, TopoJSON, UK .NTF, VFK
 
-**Write Only**  
+**Write Only** \
 PDF, PGDUMP
 
 
@@ -55,7 +55,7 @@ Note:  It doesn't work with web worker.
 ```js
 initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.2/dist/package', useWorker: false }).then((Gdal) => {});
 ```
-> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser) \
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser)
 
 **Script (Local)**
 ```html
@@ -65,7 +65,7 @@ initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.0.2/dist/package', u
 ```js
 initGdalJs().then((Gdal) => {});
 ```
-> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker) \
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker)
 
 **ES Module**
 ```html
@@ -190,12 +190,12 @@ console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 [https://gdal3.js.org/docs](https://gdal3.js.org/docs)
 
 ## Examples
-- Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/), [Live](https://gdal3.js.org/)  
-- Browser with Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser-worker/), [Live](https://gdal3.js.org/examples/example-browser-worker/)   
-- Browser without Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser/), [Live](https://gdal3.js.org/examples/example-browser/)   
-- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser-worker/), [Live](https://gdal3.js.org/examples/example-module-browser-worker/)   
-- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser/), [Live](https://gdal3.js.org/examples/example-module-browser/)   
-- Node.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/)  
+- Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/), [Live](https://gdal3.js.org/)
+- Browser with Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser-worker/), [Live](https://gdal3.js.org/examples/example-browser-worker/)
+- Browser without Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser/), [Live](https://gdal3.js.org/examples/example-browser/)
+- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser-worker/), [Live](https://gdal3.js.org/examples/example-module-browser-worker/)
+- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser/), [Live](https://gdal3.js.org/examples/example-module-browser/)
+- Node.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/)
 
 ## Development
 
@@ -210,8 +210,8 @@ GNU General Public License v3.0 or later
 See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the full text.
 
 **Compiled with**
-- [Emscripten 1.39.19](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)
-- [Gdal 3.4.1](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
+- [Emscripten 3.1.7](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)
+- [Gdal 3.4.2](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
 - [Proj 6.3.2](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
 - [Geos 3.9.2](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
 - [Spatialite 5.0.1](https://www.gaia-gis.it/fossil/libspatialite/index) [(License)](http://www.gnu.org/licenses/lgpl-2.1.html)

@@ -78,8 +78,8 @@
         "nyc": "^15.1.0",
         "puppeteer": "^13.0.1",
         "push-dir": "^0.4.1",
-        "webpack": "^4.46.0",
-        "webpack-cli": "^3.3.12"
+        "webpack": "^5.70.0",
+        "webpack-cli": "^4.9.2"
     },
     "dependencies": {
         "detect-node": "^2.1.0",

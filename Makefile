@@ -1,4 +1,4 @@
-GDAL_VERSION = 3.4.1
+GDAL_VERSION = 3.4.2
 SPATIALITE_VERSION = 5.0.1
 SQLITE_VERSION = 3370000
 GEOS_VERSION = 3.9.2
@@ -61,7 +61,7 @@ $(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
 		$(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libspatialite.a \
 		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libwebpdemux.a \
 		$(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libgeotiff.a \
-		-o gdal3WebAssembly.js $(GDAL_EMCC_FLAGS) \
+		-o $@ $(GDAL_EMCC_FLAGS) \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
 		--preload-file $(ROOT_DIR)/share/proj@/usr/share/proj;
 
@@ -208,7 +208,7 @@ $(ROOT_DIR)/lib/libsqlite3.a: $(SQLITE3_SRC)/Makefile
 $(SQLITE3_SRC)/Makefile: $(ROOT_DIR)/lib/libz.a $(SQLITE3_SRC)/configure
 	cd $(SQLITE3_SRC); \
 	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no \
-	CFLAGS="-I$(ROOT_DIR)/include -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_DISABLE_LFS -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_JSON1 -DSQLITE_THREADSAFE=0 -DSQLITE_ENABLE_NORMALIZE" \
+	CFLAGS="-I$(ROOT_DIR)/include -DSQLITE_DISABLE_LFS -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_JSON1 -DSQLITE_THREADSAFE=0 -DSQLITE_ENABLE_NORMALIZE" \
 	CPPFLAGS="-I$(ROOT_DIR)/include" \
 	LDFLAGS="-L$(ROOT_DIR)/lib";
 
@@ -299,7 +299,7 @@ $(ROOT_DIR)/lib/libexpat.a: $(EXPAT_SRC)/Makefile
 
 $(EXPAT_SRC)/Makefile: $(EXPAT_SRC)/configure
 	cd $(EXPAT_SRC); \
-	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no;
+	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no --without-getrandom --without-sys-getrandom;
 
 $(EXPAT_SRC)/configure:
 	mkdir -p $(SRC_DIR); \

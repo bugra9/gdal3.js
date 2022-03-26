@@ -100,7 +100,7 @@ GDAL_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
   '_CPLSetThreadLocalConfigOption'\
 ]"
 
-GDAL_EMCC_FLAGS += -s EXTRA_EXPORTED_RUNTIME_METHODS="[\
+GDAL_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\
   'setValue',\
   'getValue',\
   'ccall',\
