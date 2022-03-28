@@ -17,9 +17,18 @@ function onError(err) {
 }
 
 export default function workerInsideSupport(initGdalJs) {
-    const moduleReady = initGdalJs({ useWorker: false });
-    moduleReady.then(({ drivers }) => postMessage({ success: true, id: 'onload', data: drivers })).catch((e) => postMessage({ success: false, id: 'onload', data: e }));
+    let moduleReady;
     onmessage = function onmessage(event) {
+        if (event.data && event.data.func === 'constructor') {
+            let config = { useWorker: false };
+            if (event.data.params && event.data.params.config) {
+                config = { ...event.data.params.config, ...config };
+            }
+            moduleReady = initGdalJs(config);
+            moduleReady.then(({ drivers }) => postMessage({ success: true, id: 'onload', data: drivers })).catch((e) => postMessage({ success: false, id: 'onload', data: e }));
+            return null;
+        }
+
         return moduleReady
             .then(onModuleReady.bind(event))
             .catch(onError.bind(event));
@@ -31,7 +40,7 @@ const variables = {
     drivers: null,
 };
 class WorkerWrapper {
-    constructor(file, onload) {
+    constructor(file, config, onload) {
         this.promises = { onload: { resolve: onload, reject: console.error } };
         this.gdalWorker = new Worker(file);
         this.gdalWorker.onmessage = (evt) => {
@@ -40,6 +49,7 @@ class WorkerWrapper {
                 else this.promises[evt.data.id].reject(evt.data.data);
             }
         };
+        this.gdalWorker.postMessage({ func: 'constructor', params: { config } });
     }
 
     call(i) {

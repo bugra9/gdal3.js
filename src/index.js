@@ -16,7 +16,11 @@ let gdalJsPromise;
     * @async
     * @function initGdalJs
     * @param      {Object} config Configuration Object.
-    * @param      {string} config.path Path of wasm and data files.
+    * @param      {string} config.path Parent path of wasm and data files.
+    * @param      {Object} config.paths Use if filenames differ from gdal3WebAssembly.(data|wasm) and gdal3.js.
+    * @param      {string} config.paths.wasm Wasm file path. (Default: gdal3WebAssembly.wasm)
+    * @param      {string} config.paths.data Data file path. (Default: gdal3WebAssembly.data)
+    * @param      {string} config.paths.js Js file path for web worker. (Default: gdal3.js)
     * @param      {string} config.dest Destination path where the created files will be saved. (Node.js only)
     * @param      {boolean} config.useWorker=true Using [Web Workers]{@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers} on the browser. It doesn't work on Node.js.
     * @return     {Promise<Gdal>} "Promise" returns Gdal namespace.
@@ -70,7 +74,14 @@ export default function initGdalJs(
                 setDrivers();
             };
 
-            Module.locateFile = function locateFile(path) {
+            Module.locateFile = function locateFile(fileName) {
+                let path = fileName;
+                if (config.paths && config.paths.wasm && fileName.split('.').pop() === 'wasm') {
+                    path = config.paths.wasm;
+                } else if (config.paths && config.paths.data && fileName.split('.').pop() === 'data') {
+                    path = config.paths.data;
+                }
+
                 let prefix = '';
                 if (config.path) {
                     prefix = config.path;
@@ -78,7 +89,9 @@ export default function initGdalJs(
                 } else if (isNode) {
                     prefix = 'node_modules/gdal3.js/dist/package/';
                 }
-                return prefix + path;
+                let output = prefix + path;
+                if (!isNode && output.substring(0, 4) !== 'http' && output[0] !== '/') output = `/${output}`;
+                return output;
             };
 
             if (isNode) {
@@ -93,9 +106,16 @@ export default function initGdalJs(
             });
         });
     } else {
-        const workerJsName = config.workerJsName || 'gdal3.js';
+        const workerJsName = (config.paths && config.paths.js) || 'gdal3.js';
+
+        let prefix = '';
+        if (config.path) {
+            prefix = config.path;
+            if (prefix.slice(-1) !== '/') prefix += '/';
+        }
+
         gdalJsPromise = new Promise((resolve) => {
-            workerOutsideSupport.variables.gdalWorkerWrapper = new workerOutsideSupport.WorkerWrapper(`${config.path || ''}/${workerJsName}`, (d) => {
+            workerOutsideSupport.variables.gdalWorkerWrapper = new workerOutsideSupport.WorkerWrapper(`${prefix}${workerJsName}`, config, (d) => {
                 workerOutsideSupport.variables.drivers = d;
                 resolve(workerOutsideSupport.gdalProxy);
             });

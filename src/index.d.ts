@@ -58,8 +58,15 @@ interface Gdal {
     drivers: Drivers;
 }
 
+interface GdalFilePaths {
+    wasm: string;
+    data: string;
+    js?: string;
+}
+
 interface Config {
     path?: string;
+    paths?: GdalFilePaths
     dest?: string;
     useWorker?: boolean;
 }
