@@ -103,6 +103,38 @@ plugins: [
 ```
 > Full working example: [https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/src/App.vue](https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/src/App.vue)
 
+**Vite + Vue3**
+```bash
+yarn add gdal3.js
+# or
+npm install gdal3.js
+```
+
+```html
+<script setup>
+import { ref } from 'vue'
+import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'
+import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url'
+import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url'
+import initGdalJs from 'gdal3.js';
+
+const paths = {
+  wasm: wasmUrl,
+  data: dataUrl,
+  js: workerUrl,
+};
+
+const count = ref(0);
+initGdalJs({paths}).then((Gdal) => {
+    count.value = Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length;
+});
+</script>
+
+<template>
+  <div>Number of drivers: {{ count }}</div>
+</template>
+```
+
 **Node**
 ```bash
 yarn add gdal3.js
