@@ -20,9 +20,13 @@
     ],
     "files": [
         "dist/package/gdal3WebAssembly.data",
-        "dist/package/gdal3WebAssembly.wasm"
+        "dist/package/gdal3WebAssembly.wasm",
+        "dist/package/gdal3.dev.js",
+        "src",
+        "build/package/gdal3WebAssembly.js"
     ],
     "main": "dist/package/gdal3.js",
+    "types": "src/index.d.ts",
     "scripts": {
         "lint": "eslint .",
         "build": "yarn run build-native && yarn run build-src && yarn run build-spec && yarn run build-gui && yarn run build-docs",
