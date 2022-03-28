@@ -1,5 +1,31 @@
 [
     {
+        "version": "v2.1.0",
+        "date": "28.03.2022",
+        "commits": [
+            {
+                "description": "Added paths parameter to config to be used if filenames are different from gdal3WebAssembly.(data|wasm) and gdal3.js.",
+                "hash": "427d76f72129c0596eafc9f46f9a7d4bcc78d355",
+                "user": "bugra9"
+            },
+            {
+                "description": "Added Typescript declaration file (index.d.ts)",
+                "hash": "492c5d0ae379ee464d06b3cc043427110e16a642",
+                "user": "bugra9"
+            },
+            {
+                "description": "Changed build tool from Webpack to Rollup.",
+                "hash": "caf27a7b98994d59676fc385ab6361b1f0c41f94",
+                "user": "bugra9"
+            },
+            {
+                "description": "Updated Gdal (3.4.2) and Emscripten (3.1.7)",
+                "hash": "b65b4c8fc57d36bd77226f2e81e9e98d59e7453a",
+                "user": "bugra9"
+            }
+        ]
+    },
+    {
         "version": "v2.0.2",
         "date": "11.03.2022",
         "commits": [

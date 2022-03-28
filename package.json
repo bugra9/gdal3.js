@@ -1,6 +1,6 @@
 {
     "name": "gdal3.js",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "description": "gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
     "license": "GPL-3.0-or-later",
     "homepage": "https://gdal3.js.org",
@@ -39,7 +39,7 @@
         "build-src-dev": "webpack --config .webpack.config.js src/index.js -o build/package/gdal3.js --mode development",
         "build-spec": "mkdir -p build/test/specs/ && cp src/**/**/*.spec.js build/test/specs/ && cp test/*.spec.js build/test/specs/ && cp test/browser.html build/test/index.html && cp -r test/data build/test/data",
         "build-gui": "cd apps/app-gui && yarn install && yarn run build",
-        "build-docs": "jsdoc --configure .jsdoc.json --verbose && cp -r build/docs/gdal3.js/2.0.2/* build/docs",
+        "build-docs": "jsdoc --configure .jsdoc.json --verbose && cp -r build/docs/gdal3.js/2.1.0/* build/docs",
         "test-node": "nyc --reporter=json --reporter=html --report-dir=./build/coverage/node mocha",
         "test-browser": "karma start .karma.conf.js",
         "test-coverage": "istanbul-merge --out build/coverage/coverage-final.json build/coverage/browser/coverage-final.json build/coverage/node/coverage-final.json && nyc report --reporter html -t build/coverage --report-dir build/coverage"
