@@ -233,6 +233,7 @@ console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 
 ### Compiling
 - Install the EMSDK, [as described here](https://emscripten.org/docs/getting_started/downloads.html)
+- Install Sqlite3. ([#31](https://github.com/bugra9/gdal3.js/issues/31))
 - Run `yarn compile` or `make`. Run `make type=debug` for debug version.
 - Run `yarn build`. Run `yarn build-dev` for debug version.
 
