@@ -80,7 +80,7 @@
             "licenseUrl": "https://github.com/libexpat/libexpat/blob/master/expat/COPYING"
         },
         {
-            "name": "Zlib 1.2.11",
+            "name": "Zlib 1.2.12",
             "url": "https://www.zlib.net/",
             "licenseUrl": "https://www.zlib.net/zlib_license.html"
         }
