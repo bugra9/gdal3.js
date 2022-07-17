@@ -254,7 +254,7 @@ See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the
 - [WebP 1.2.0](https://chromium.googlesource.com/webm/libwebp) [(License)](https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING)
 - [JPEG JFIF 9d](https://www.ijg.org/) [(License)](https://spdx.org/licenses/IJG.html)
 - [Expat 2.4.2](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
-- [Zlib 1.2.11](https://www.zlib.net/) [(License)](https://www.zlib.net/zlib_license.html)
+- [Zlib 1.2.12](https://www.zlib.net/) [(License)](https://www.zlib.net/zlib_license.html)
 
 **Inspired by**
 - [ddohler/gdal-js](https://github.com/ddohler/gdal-js)
