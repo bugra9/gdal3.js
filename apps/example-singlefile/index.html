@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3.js"
+        integrity="sha384-r9LuL3uWvWB90NwulendmLxfI6CPFkDSUiZ2qiUK7qCPhbK+JIQOD/pKp7NO+5Ys"
+        crossorigin="anonymous"
+    ></script>
+</head>
+<body>
+    Loading...
+    <script type="text/javascript">
+        async function start() {
+            const workerData = await fetch('https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3.js');
+            const workerUrl = window.URL.createObjectURL(await workerData.blob());
+
+            const paths = {
+                wasm: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3WebAssembly.wasm',
+                data: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3WebAssembly.data',
+                js: workerUrl,
+            };
+
+            const Gdal = await initGdalJs({paths});
+            const numberOfDrivers = Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length;
+            document.write(`Number of driver: ${numberOfDrivers}`);
+        }
+
+        start();
+    </script>
+</body>
+</html>
