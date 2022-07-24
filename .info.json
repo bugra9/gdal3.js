@@ -15,7 +15,7 @@
         ]
     },
     "license": {
-        "name": "GNU General Public License v3.0 or later",
+        "name": "GNU Lesser General Public License v2.1 or later",
         "url": "https://github.com/bugra9/gdal3.js/blob/master/LICENSE"
     },
     "sourceCodeUrl": "https://github.com/bugra9/gdal3.js",

@@ -238,7 +238,7 @@ console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 - Run `yarn build`. Run `yarn build-dev` for debug version.
 
 ## License
-GNU General Public License v3.0 or later
+GNU Lesser General Public License v2.1 or later
 
 See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the full text.
 

@@ -2,7 +2,7 @@
     "name": "gdal3.js",
     "version": "2.1.0",
     "description": "gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
-    "license": "GPL-3.0-or-later",
+    "license": "LGPL-2.1-or-later",
     "homepage": "https://gdal3.js.org",
     "repository": "https://github.com/bugra9/gdal3.js.git",
     "private": false,
