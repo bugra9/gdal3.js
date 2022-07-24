@@ -46,14 +46,14 @@ PDF, PGDUMP
 Note:  It doesn't work with web worker.
 ```html
 <script type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3.js"
-    integrity="sha384-r9LuL3uWvWB90NwulendmLxfI6CPFkDSUiZ2qiUK7qCPhbK+JIQOD/pKp7NO+5Ys"
+    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.2.0/dist/package/gdal3.js"
+    integrity="sha384-2rG8vVNx/obzgpBjrhkrijaDKe3aM32+JNs202K5DskLCBlGk+gOjUZ1RwoFYRZn"
     crossorigin="anonymous"
 ></script>
 ```
 
 ```js
-initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package', useWorker: false }).then((Gdal) => {});
+initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.2.0/dist/package', useWorker: false }).then((Gdal) => {});
 ```
 > Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser)
 

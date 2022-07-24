@@ -1,10 +1,36 @@
 [
     {
+        "version": "v2.2.0",
+        "date": "24.07.2022",
+        "commits": [
+            {
+                "description": "Add single file example running without server required.",
+                "hash": "8468f225ead3a71a6a3a4500e70b6891b7d4175a",
+                "user": "bugra9"
+            },
+            {
+                "description": "Change license from GPL to LGPL",
+                "hash": "da0afff9369b1cb1c4ac17b82738e40e11e2d06c",
+                "user": "bugra9"
+            },
+            {
+                "description": "Rename gdal3.js file to gdal3.node.js and create gdal3.js which only supports browser.",
+                "hash": "aa0a2f52a9e2ecfbe1191be03239bce90daabf55",
+                "user": "bugra9"
+            },
+            {
+                "description": "Update zlib version to fix broken link when running make",
+                "hash": "3210d1e368b65c9f5d0dc96ca20d3343d5a1fad9",
+                "user": "mthh"
+            }
+        ]
+    },
+    {
         "version": "v2.1.0",
         "date": "28.03.2022",
         "commits": [
             {
-                "description": "Added paths parameter to config to be used if filenames are different from gdal3WebAssembly.(data|wasm) and gdal3.js.",
+                "description": "Added paths parameter to specify the path of the worker, data and wasm files.",
                 "hash": "427d76f72129c0596eafc9f46f9a7d4bcc78d355",
                 "user": "bugra9"
             },

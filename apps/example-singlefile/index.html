@@ -4,8 +4,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3.js"
-        integrity="sha384-r9LuL3uWvWB90NwulendmLxfI6CPFkDSUiZ2qiUK7qCPhbK+JIQOD/pKp7NO+5Ys"
+        src="https://cdn.jsdelivr.net/npm/gdal3.js@2.2.0/dist/package/gdal3.js"
+        integrity="sha384-2rG8vVNx/obzgpBjrhkrijaDKe3aM32+JNs202K5DskLCBlGk+gOjUZ1RwoFYRZn"
         crossorigin="anonymous"
     ></script>
 </head>
@@ -13,12 +13,12 @@
     Loading...
     <script type="text/javascript">
         async function start() {
-            const workerData = await fetch('https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3.js');
+            const workerData = await fetch('https://cdn.jsdelivr.net/npm/gdal3.js@2.2.0/dist/package/gdal3.js');
             const workerUrl = window.URL.createObjectURL(await workerData.blob());
 
             const paths = {
-                wasm: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3WebAssembly.wasm',
-                data: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.1.0/dist/package/gdal3WebAssembly.data',
+                wasm: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.2.0/dist/package/gdal3WebAssembly.wasm',
+                data: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.2.0/dist/package/gdal3WebAssembly.data',
                 js: workerUrl,
             };
 
