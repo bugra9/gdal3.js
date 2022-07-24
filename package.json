@@ -22,8 +22,11 @@
         "dist/package/gdal3WebAssembly.data",
         "dist/package/gdal3WebAssembly.wasm",
         "dist/package/gdal3.dev.js",
+        "dist/package/gdal3.node.js",
+        "dist/package/gdal3.js",
         "src",
-        "build/package/gdal3WebAssembly.js"
+        "build/package/gdal3WebAssembly.js",
+        "node.js"
     ],
     "main": "dist/package/gdal3.js",
     "types": "src/index.d.ts",
@@ -36,7 +39,6 @@
         "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup",
         "build-native": "make",
         "build-src": "rollup --config rollup.config.js",
-        "build-src-dev": "webpack --config .webpack.config.js src/index.js -o build/package/gdal3.js --mode development",
         "build-spec": "mkdir -p build/test/specs/ && cp src/**/**/*.spec.js build/test/specs/ && cp test/*.spec.js build/test/specs/ && cp test/browser.html build/test/index.html && cp -r test/data build/test/data",
         "build-gui": "cd apps/app-gui && yarn install && yarn run build",
         "build-docs": "jsdoc --configure .jsdoc.json --verbose && cp -r build/docs/gdal3.js/2.1.0/* build/docs",
@@ -53,6 +55,7 @@
         "@rollup/plugin-babel": "^5.3.1",
         "@rollup/plugin-commonjs": "^21.0.2",
         "@rollup/plugin-node-resolve": "^13.1.3",
+        "@rollup/plugin-virtual": "^2.1.0",
         "@types/detect-node": "^2.0.0",
         "babel-eslint": "^10.1.0",
         "babel-loader": "^8.2.3",

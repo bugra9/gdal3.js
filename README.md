@@ -143,7 +143,7 @@ npm install gdal3.js
 ```
 
 ```js
-const initGdalJs = require('gdal3.js');
+const initGdalJs = require('gdal3.js/node');
 
 initGdalJs().then((Gdal) => {});
 ```

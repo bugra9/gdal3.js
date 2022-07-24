@@ -1,4 +1,4 @@
-const initGdalJs = require('gdal3.js');
+const initGdalJs = require('gdal3.js/node');
 
 async function main() {
     const Gdal = await initGdalJs();
