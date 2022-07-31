@@ -9,7 +9,7 @@ if (isNode) assert = require('chai').assert;
 else assert = chai.assert;
 
 const ignoredInputFormats = [''];
-const ignoredOutputFormats = ['GTiff', 'NITF', 'DTED', 'SRTMHGT', 'ISIS3', 'KMLSUPEROVERLAY', 'PDF', 'BYN', 'ADRG', 'LCP', 'BLX', 'SAGA'];
+const ignoredOutputFormats = ['GTiff', 'NITF', 'DTED', 'SRTMHGT', 'ISIS3', 'KMLSUPEROVERLAY', 'PDF', 'BYN', 'ADRG', 'LCP', 'BLX', 'SAGA', 'USGSDEM'];
 const ignoredParams = [
     'JPEG-COLOR_TRANSFORM',
     'PCIDSK-INTERLEAVING',
@@ -55,7 +55,7 @@ async function createTest() {
             if (ignoredOutputFormats.includes(driver.shortName)) return;
             const suffix = suffixes[driver.shortName] || {};
             const tempParams = suffixes[driver.shortName] && suffixes[driver.shortName].outputParams ? suffixes[driver.shortName].outputParams : [];
-            
+
             [
                 [],
                 ...getOptions(driver.creationOptionList).map(value => ['-co', value]),
@@ -74,7 +74,7 @@ async function createTest() {
                             const fileData = await fetch(file);
                             file = new File([await fileData.blob()], `${suffix.file || 'spaf27_epsg'}.tif`);
                         } else file = `test/${file}`;
-                
+
                         const result = await Gdal.open(file);
                         const firstDataset = result.datasets[0];
                         assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the tif file. (ptr == 0)');
@@ -97,11 +97,13 @@ async function createTest() {
                     };
                     if (driver.isReadable && driver.isWritable) {
                         it(`tif -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> tif`, async () => {
+                            console.log(`tif -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> tif`);
                             await writeFunc();
                             // await readFunc();
                         });
                     } else if (driver.isWritable) {
                         it(`tif -> ${driver.shortName} params: ${p2}`, async () => {
+                            console.log(`tif -> ${driver.shortName} params: ${p2}`);
                             await writeFunc();
                         });
                     }

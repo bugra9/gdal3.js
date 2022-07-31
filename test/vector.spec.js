@@ -9,7 +9,7 @@ if (isNode) assert = require('chai').assert;
 else assert = chai.assert;
 
 const ignoredInputFormats = [''];
-const ignoredOutputFormats = ['GeoJSON', 'S57', 'PDS4', 'PDF', 'PGDUMP'];
+const ignoredOutputFormats = ['GeoJSON', 'S57', 'PDS4', 'PDF', 'PGDUMP', 'GPSBabel'];
 const ignoredParams = [
     'ESRI Shapefile-SHPT',
     'CSV',
@@ -48,7 +48,7 @@ async function createTest() {
             if (ignoredOutputFormats.includes(driver.shortName)) return;
             const suffix = suffixes[driver.shortName] || {};
             const tempParams = suffixes[driver.shortName] && suffixes[driver.shortName].outputParams ? suffixes[driver.shortName].outputParams : [];
-            
+
             [
                 [],
                 ...getOptions(driver.layerCreationOptionList).map(value => ['-lco', value]),
@@ -68,7 +68,7 @@ async function createTest() {
                             const fileData = await fetch(file);
                             file = new File([await fileData.blob()], `${suffix.file || 'polygon-line-point'}.geojson`);
                         } else file = `test/${file}`;
-                
+
                         const result = await Gdal.open(file);
                         const firstDataset = result.datasets[0];
                         assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the geojson file. (ptr == 0)');
@@ -91,11 +91,13 @@ async function createTest() {
                     };
                     if (driver.isReadable && driver.isWritable) {
                         it(`geojson -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> geojson`, async () => {
+                            console.log(`geojson -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> geojson`);
                             await writeFunc();
                             await readFunc();
                         });
                     } else if (driver.isWritable) {
                         it(`geojson -> ${driver.shortName} params: ${p2}`, async () => {
+                            console.log(`geojson -> ${driver.shortName} params: ${p2}`);
                             await writeFunc();
                         });
                     }

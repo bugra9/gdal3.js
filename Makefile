@@ -1,16 +1,17 @@
-GDAL_VERSION = 3.4.2
+GDAL_VERSION = 3.5.1
 SPATIALITE_VERSION = 5.0.1
-SQLITE_VERSION = 3370000
+SQLITE_VERSION = 3380500
 GEOS_VERSION = 3.9.2
-PROJ_VERSION = 6.3.2
+PROJ_VERSION = 9.0.1
 ZLIB_VERSION = 1.2.12
-TIFF_VERSION = 4.3.0
-GEOTIFF_VERSION = 1.7.0
+TIFF_VERSION = 4.4.0
+GEOTIFF_VERSION = 1.7.1
 JPEG_VERSION = 9d
 WEBP_VERSION = 1.2.0
-EXPAT_VERSION = 2.4.2
+EXPAT_VERSION = 2.4.8
+ICONV_VERSION = 1.17
 
-SQLITE_URL = "https://www.sqlite.org/2021/sqlite-autoconf-$(SQLITE_VERSION).tar.gz"
+SQLITE_URL = "https://www.sqlite.org/2022/sqlite-autoconf-$(SQLITE_VERSION).tar.gz"
 PROJ_URL = "http://download.osgeo.org/proj/proj-$(PROJ_VERSION).tar.gz"
 GEOS_URL = "http://download.osgeo.org/geos/geos-$(GEOS_VERSION).tar.bz2"
 SPATIALITE_URL = "http://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-$(SPATIALITE_VERSION).tar.gz"
@@ -21,6 +22,7 @@ GEOTIFF_URL = "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-$(GEOTIFF
 JPEG_URL = "http://www.ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz"
 WEBP_URL = "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz"
 EXPAT_URL = "https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))/expat-${EXPAT_VERSION}.tar.gz"
+ICONV_URL = "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${ICONV_VERSION}.tar.gz"
 
 PWD = $(shell pwd)
 SRC_DIR = build/native/src
@@ -61,29 +63,42 @@ $(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
 		$(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libspatialite.a \
 		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libwebpdemux.a \
 		$(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libgeotiff.a \
+        $(ROOT_DIR)/lib/libiconv.a \
 		-o $@ $(GDAL_EMCC_FLAGS) \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
 		--preload-file $(ROOT_DIR)/share/proj@/usr/share/proj;
 
-$(ROOT_DIR)/lib/libgdal.a: $(GDAL_SRC)/config.status
-	cd $(GDAL_SRC); \
+$(ROOT_DIR)/lib/libgdal.a: $(GDAL_SRC)/build/Makefile
+	cd $(GDAL_SRC)/build; \
 	$(EMMAKE) make -j4 install;
 
-$(GDAL_SRC)/config.status: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libgeotiff.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libspatialite.a $(ROOT_DIR)/include/linux/fs.h $(GDAL_SRC)/configure
+$(GDAL_SRC)/build/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libgeotiff.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libspatialite.a $(ROOT_DIR)/lib/libiconv.a $(ROOT_DIR)/include/linux/fs.h $(GDAL_SRC)/CMakeLists.txt
 	cd $(GDAL_SRC); \
-	$(EMCONFIGURE) ./configure $(PREFIX) \
-	CFLAGS="-I$(ROOT_DIR)/include/" \
-	CPPFLAGS="-I$(ROOT_DIR)/include/" \
-	LDFLAGS="-L$(ROOT_DIR)/lib/" \
-	--with-sqlite3=$(ROOT_DIR) --with-proj=$(ROOT_DIR) --with-tiff=$(ROOT_DIR) --with-geotiff=$(ROOT_DIR) \
-	--enable-shared=no --with-libz=$(ROOT_DIR) --with-spatialite=$(ROOT_DIR) --with-geos=$(ROOT_DIR)/bin/geos-config \
-	--with-webp=$(ROOT_DIR) --with-expat=$(ROOT_DIR);
+	sed -i 's/ iconv_open/ libiconv_open/g' ./port/cpl_recode_iconv.cpp; \
+    sed -i 's/        iconv/        libiconv/g' ./port/cpl_recode_iconv.cpp; \
+    sed -i 's/#include <iconv.h>/# include <iconv.h>\nextern "C" {\n    extern __attribute__((__visibility__("default"))) iconv_t libiconv_open (const char* tocode, const char* fromcode);\n    extern __attribute__((__visibility__("default"))) size_t libiconv (iconv_t cd,  char* * inbuf, size_t *inbytesleft, char* * outbuf, size_t *outbytesleft);\n}/g' ./port/cpl_recode_iconv.cpp; \
+	rm -rf $(ROOT_DIR)/lib/cmake; \
+	mkdir build; \
+	cd build; \
+	$(EMCMAKE) cmake .. $(PREFIX_CMAKE) -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_APPS=OFF \
+        -DCMAKE_PREFIX_PATH=$(ROOT_DIR) -DCMAKE_FIND_ROOT_PATH=$(ROOT_DIR) \
+        -DGDAL_USE_HDF5=OFF GDAL_USE_HDFS=OFF \
+        -DSQLite3_INCLUDE_DIR=$(ROOT_DIR)/include -DSQLite3_LIBRARY=$(ROOT_DIR)/lib/libsqlite3.a \
+        -DPROJ_INCLUDE_DIR=$(ROOT_DIR)/include -DPROJ_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libproj.a \
+        -DTIFF_INCLUDE_DIR=$(ROOT_DIR)/include -DTIFF_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libtiff.a \
+        -DGEOTIFF_INCLUDE_DIR=$(ROOT_DIR)/include -DGEOTIFF_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libgeotiff.a \
+        -DZLIB_INCLUDE_DIR=$(ROOT_DIR)/include -DZLIB_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libz.a \
+        -DSPATIALITE_INCLUDE_DIR=$(ROOT_DIR)/include -DSPATIALITE_LIBRARY=$(ROOT_DIR)/lib/libspatialite.a \
+        -DGEOS_INCLUDE_DIR=$(ROOT_DIR)/include -DGEOS_LIBRARY=$(ROOT_DIR)/lib/libgeos.a \
+        -DWEBP_INCLUDE_DIR=$(ROOT_DIR)/include -DWEBP_LIBRARY=$(ROOT_DIR)/lib/libwebp.a \
+        -DEXPAT_INCLUDE_DIR=$(ROOT_DIR)/include -DEXPAT_LIBRARY=$(ROOT_DIR)/lib/libexpat.a \
+        -DIconv_INCLUDE_DIR=$(ROOT_DIR)/include -DIconv_LIBRARY=$(ROOT_DIR)/lib/libiconv.a;
 
 $(ROOT_DIR)/include/linux/fs.h:
 	mkdir -p $(ROOT_DIR)/include/linux; \
 	touch $(ROOT_DIR)/include/linux/fs.h;
 
-$(GDAL_SRC)/configure:
+$(GDAL_SRC)/CMakeLists.txt:
 	mkdir -p $(SRC_DIR); \
 	cd $(SRC_DIR); \
 	wget -nc $(GDAL_URL); \
@@ -103,8 +118,8 @@ $(ROOT_DIR)/lib/libspatialite.a: $(SPATIALITE_SRC)/Makefile
 $(SPATIALITE_SRC)/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libgeos.a $(SPATIALITE_SRC)/configure
 	cd $(SPATIALITE_SRC); \
 	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no \
-	CFLAGS="-ULOADABLE_EXTENSION -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1" \
-	CPPFLAGS="-I$(ROOT_DIR)/include/ -DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1" \
+	CFLAGS="-ULOADABLE_EXTENSION" \
+	CPPFLAGS="-I$(ROOT_DIR)/include/" \
 	LDFLAGS="-L$(ROOT_DIR)/lib/" \
 	--with-geosconfig="$(ROOT_DIR)/bin/geos-config" \
 	--enable-geosadvanced=yes \
@@ -179,16 +194,20 @@ $(ROOT_DIR)/lib/libproj.a: $(PROJ_SRC)/Makefile
 	cd $(PROJ_SRC); \
 	$(EMMAKE) make install;
 
-$(PROJ_SRC)/Makefile: $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libsqlite3.a $(PROJ_SRC)/configure
+$(PROJ_SRC)/Makefile: $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libsqlite3.a $(PROJ_SRC)/CMakeLists.txt
 	cd $(PROJ_SRC); \
-	$(EMCONFIGURE) ./configure $(PREFIX) --without-curl --enable-shared=no  \
-	CFLAGS="-I$(ROOT_DIR)/include" \
-	CPPFLAGS="-I$(ROOT_DIR)/include" \
-	LDFLAGS="-L$(ROOT_DIR)/lib" \
-	SQLITE3_LIBS="-L${ROOT_DIR}/lib -lsqlite3" \
-	TIFF_LIBS="-L${ROOT_DIR}/lib -ltiff";
+	$(EMCMAKE) cmake . $(PREFIX_CMAKE)  \
+    -DSQLITE3_INCLUDE_DIR=${ROOT_DIR}/include \
+    -DSQLITE3_LIBRARY=${ROOT_DIR}/lib/libsqlite3.a \
+    -DTIFF_INCLUDE_DIR=${ROOT_DIR}/include \
+    -DTIFF_LIBRARY_RELEASE=${ROOT_DIR}/lib/libtiff.a \
+    -DENABLE_CURL=OFF \
+    -DBUILD_TESTING=OFF \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DBUILD_APPS=OFF;
 
-$(PROJ_SRC)/configure:
+
+$(PROJ_SRC)/CMakeLists.txt:
 	mkdir -p $(SRC_DIR); \
 	cd $(SRC_DIR); \
 	wget -nc $(PROJ_URL); \
@@ -329,3 +348,25 @@ $(ZLIB_SRC)/configure:
 	cd $(SRC_DIR); \
 	wget -nc $(ZLIB_URL); \
 	tar -xf zlib-$(ZLIB_VERSION).tar.gz;
+
+###########
+# ICONV #
+###########
+ICONV_SRC = $(SRC_DIR)/libiconv-$(ICONV_VERSION)
+
+iconv: $(ROOT_DIR)/lib/libiconv.a
+
+$(ROOT_DIR)/lib/libiconv.a: $(ICONV_SRC)/Makefile
+	cd $(ICONV_SRC); \
+	$(EMMAKE) make lib/localcharset.h; \
+    cd lib && $(EMMAKE) make install prefix='$(ROOT_DIR)' exec_prefix='$(ROOT_DIR)' libdir='$(ROOT_DIR)/lib';
+
+$(ICONV_SRC)/Makefile: $(ICONV_SRC)/configure
+	cd $(ICONV_SRC); \
+	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no;
+
+$(ICONV_SRC)/configure:
+	mkdir -p $(SRC_DIR); \
+	cd $(SRC_DIR); \
+	wget -nc $(ICONV_URL); \
+	tar -xf libiconv-$(ICONV_VERSION).tar.gz;
