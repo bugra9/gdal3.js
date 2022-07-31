@@ -7,10 +7,10 @@ detect-node@^2.1.0:
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.1.0.tgz#c9c70775a49c3d03bc2c06d9a73be550f978f8b1"
   integrity sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==
 
-gdal3.js@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/gdal3.js/-/gdal3.js-2.1.0.tgz#9d375cb80cd4932dcc70746d7ddb77fddbd530fa"
-  integrity sha512-E8ZeJwficzfHnwNW6+CcxaPFjfQjIpZViHHMzNvLhDJ8N9DZ6/JizDYW41dbmq40YuKfO9s3zXyslWjpfII2mA==
+gdal3.js@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/gdal3.js/-/gdal3.js-2.3.0.tgz#aeacced3e7127c2cc4bec36ccaded48d8845246f"
+  integrity sha512-ilpwwAnaK8z5qD33FFCJ16gUrkAQaFFz1h3XKZ5iPezyL09QFVhV9hw7SaHwAs68mo+0CrzNtMWXS9w/WVHTEQ==
   dependencies:
     detect-node "^2.1.0"
     xml-js "^1.6.11"
