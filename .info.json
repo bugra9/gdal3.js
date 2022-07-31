@@ -29,12 +29,12 @@
             "licenseUrl": "https://github.com/emscripten-core/emscripten/blob/main/LICENSE"
         },
         {
-            "name": "Gdal 3.4.2",
+            "name": "Gdal 3.5.1",
             "url": "https://github.com/OSGeo/gdal",
             "licenseUrl": "https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT"
         },
         {
-            "name": "Proj 6.3.2",
+            "name": "Proj 9.0.1",
             "url": "https://github.com/OSGeo/PROJ",
             "licenseUrl": "https://github.com/OSGeo/PROJ/blob/master/COPYING"
         },
@@ -49,17 +49,17 @@
             "licenseUrl": "http://www.gnu.org/licenses/lgpl-2.1.html"
         },
         {
-            "name": "Sqlite 3.37.0",
+            "name": "Sqlite 3.38.5",
             "url": "https://www.sqlite.org/index.html",
             "licenseUrl": "https://www.sqlite.org/copyright.html"
         },
         {
-            "name": "GeoTIFF 1.7.0",
+            "name": "GeoTIFF 1.7.1",
             "url": "https://github.com/OSGeo/libgeotiff",
             "licenseUrl": "https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE"
         },
         {
-            "name": "Tiff 4.3.0",
+            "name": "Tiff 4.4.0",
             "url": "https://gitlab.com/libtiff/libtiff",
             "licenseUrl": "https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT"
         },
@@ -75,7 +75,7 @@
             "licenseUrl": "https://spdx.org/licenses/IJG.html"
         },
         {
-            "name": "Expat 2.4.2",
+            "name": "Expat 2.4.8",
             "url": "https://github.com/libexpat/libexpat",
             "licenseUrl": "https://github.com/libexpat/libexpat/blob/master/expat/COPYING"
         },
