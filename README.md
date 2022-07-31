@@ -46,14 +46,14 @@ PDF, PGDUMP
 Note:  It doesn't work with web worker.
 ```html
 <script type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.2.0/dist/package/gdal3.js"
-    integrity="sha384-2rG8vVNx/obzgpBjrhkrijaDKe3aM32+JNs202K5DskLCBlGk+gOjUZ1RwoFYRZn"
+    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.3.0/dist/package/gdal3.js"
+    integrity="sha384-MqXlgRokqK6AH/sqdbP2YToc3B4iHkdNDrs9XFx62LOA6aO0Q4DKd9C39I7q97ay"
     crossorigin="anonymous"
 ></script>
 ```
 
 ```js
-initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.2.0/dist/package', useWorker: false }).then((Gdal) => {});
+initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.3.0/dist/package', useWorker: false }).then((Gdal) => {});
 ```
 > Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser)
 
@@ -255,6 +255,7 @@ See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the
 - [JPEG JFIF 9d](https://www.ijg.org/) [(License)](https://spdx.org/licenses/IJG.html)
 - [Expat 2.4.2](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
 - [Zlib 1.2.12](https://www.zlib.net/) [(License)](https://www.zlib.net/zlib_license.html)
+- [Iconv 1.17](https://www.gnu.org/software/libiconv/) [(License)](https://www.gnu.org/software/libiconv/)
 
 **Inspired by**
 - [ddohler/gdal-js](https://github.com/ddohler/gdal-js)

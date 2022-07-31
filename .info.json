@@ -83,6 +83,11 @@
             "name": "Zlib 1.2.12",
             "url": "https://www.zlib.net/",
             "licenseUrl": "https://www.zlib.net/zlib_license.html"
+        },
+        {
+            "name": "Iconv 1.17",
+            "url": "https://www.gnu.org/software/libiconv/",
+            "licenseUrl": "https://www.gnu.org/software/libiconv/"
         }
     ],
     "inspiredBy": [

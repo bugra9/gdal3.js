@@ -1,5 +1,21 @@
 [
     {
+        "version": "v2.3.0",
+        "date": "31.07.2022",
+        "commits": [
+            {
+                "description": "Update Gdal, Proj, SQLite, Tiff, Geotiff, Expat",
+                "hash": "8c14ea922b8e606ad46a66ac48ea822e4edb2dd3",
+                "user": "bugra9"
+            },
+            {
+                "description": "Add and use external libiconv instead of Emscripten/Musl libiconv.",
+                "hash": "8c14ea922b8e606ad46a66ac48ea822e4edb2dd3",
+                "user": "bugra9"
+            }
+        ]
+    },
+    {
         "version": "v2.2.0",
         "date": "24.07.2022",
         "commits": [
