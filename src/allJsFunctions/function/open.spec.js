@@ -83,6 +83,23 @@ describe('function / open', function () {
         assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the geojson file. (ptr == 0)');
         assert.strictEqual(firstDataset.type === 'vector', true, 'No vector data in input file.');
     });
+    it('open with open options', async function () {
+        let file = 'data/pts.csv';
+        if (!isNode) {
+            const fileData = await fetch(file);
+            file = new File([await fileData.blob()], 'pts.csv');
+        } else file = `test/${file}`;
+
+        const input = await Gdal.open(file, ['AUTODETECT_TYPE=YES', 'X_POSSIBLE_NAMES=lng', 'Y_POSSIBLE_NAMES=lat']);
+        const output = await Gdal.ogr2ogr(input.datasets[0], ['-f', 'GeoJSON', '-s_srs', 'EPSG:4326', '-t_srs', 'EPSG:4326']);
+        const bytes = await Gdal.getFileBytes(output);
+
+        const result = JSON.parse(new TextDecoder().decode(bytes));
+        assert.strictEqual(result.features.length, 2, 'Wrong number of features');
+        assert.strictEqual(typeof result.features[0].properties.lng === 'number', true, 'Open option AUTODETECT_TYPE failed');
+        assert.strictEqual(typeof result.features[0].properties.lat === 'number', true, 'Open option AUTODETECT_TYPE failed');
+        assert.strictEqual(result.features[0].geometry !== null, true, 'Open options X_POSSIBLE_NAMES/Y_POSSIBLE_NAMES failed');
+    });
     it('open raster', async function () {
         let file = 'data/simple-polygon-line-point.tif';
         if (!isNode) {
