@@ -9,7 +9,13 @@ export function initCFunctions() {
     Module.ccall('GDALAllRegister', null, [], []);
 
     GDALFunctions.GDALOpen = Module.cwrap('GDALOpen', 'number', ['string']);
-    GDALFunctions.GDALOpenEx = Module.cwrap('GDALOpenEx', 'number', ['string']);
+    GDALFunctions.GDALOpenEx = Module.cwrap('GDALOpenEx', 'number', [
+        'string', // char * the destination dataset path or NULL.
+        'number', // unsigned int a combination of GDAL_OF_ flags that may be combined through logical or operator.
+        'number', // char ** null-terminated array of strings with the driver short names that must be considered.
+        'number', // char ** null-terminated array of strings with the dataset open options.
+        'number', // char ** null-terminated array of strings that are filenames auxiliary to the main filename.
+    ]);
     GDALFunctions.GDALClose = Module.cwrap('GDALClose', null, ['number']);
     GDALFunctions.CPLErrorReset = Module.cwrap('CPLErrorReset', null, []);
     GDALFunctions.CPLSetErrorHandler = Module.cwrap('CPLSetErrorHandler', 'number', ['number']);

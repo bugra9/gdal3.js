@@ -82,7 +82,7 @@ $(GDAL_SRC)/build/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj
 	cd build; \
 	$(EMCMAKE) cmake .. $(PREFIX_CMAKE) -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_APPS=OFF \
         -DCMAKE_PREFIX_PATH=$(ROOT_DIR) -DCMAKE_FIND_ROOT_PATH=$(ROOT_DIR) \
-        -DGDAL_USE_HDF5=OFF GDAL_USE_HDFS=OFF \
+        -DGDAL_USE_HDF5=OFF -DGDAL_USE_HDFS=OFF \
         -DSQLite3_INCLUDE_DIR=$(ROOT_DIR)/include -DSQLite3_LIBRARY=$(ROOT_DIR)/lib/libsqlite3.a \
         -DPROJ_INCLUDE_DIR=$(ROOT_DIR)/include -DPROJ_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libproj.a \
         -DTIFF_INCLUDE_DIR=$(ROOT_DIR)/include -DTIFF_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libtiff.a \

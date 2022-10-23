@@ -3,6 +3,7 @@ import { GDALFunctions } from '../../allCFunctions';
 import { getGdalError } from '../helper/error';
 import { INPUTPATH, OUTPUTPATH } from '../helper/const';
 import { mount } from '../helper/filesystem';
+import { clearOptions, getOptions } from '../helper/options';
 
 /**
     * Opens files selected with HTML input element.
@@ -10,6 +11,7 @@ import { mount } from '../helper/filesystem';
     * @module f/open
     * @async
     * @param {FileList|File|Array<string>|string} files Returned by the files property of the HTML input element.
+    * @param {Array<string>} openOptions Open options passed to candidate drivers.
     * @return {Promise<TypeDefs.DatasetList>} "Promise" returns dataset list and error list.
     * @example
     * // Opening file from file input.
@@ -36,6 +38,9 @@ import { mount } from '../helper/filesystem';
     * // Opening a file from filesystem on Node.js.
     * const result = await Gdal.open('test/polygon.geojson');
     * @example
+    * // Opening a file from filesystem on Node.js with open options.
+    * const result = await Gdal.open('test/points.csv', ['X_POSSIBLE_NAMES=lng', 'Y_POSSIBLE_NAMES=lat']);
+    * @example
     * // Opening files from filesystem on Node.js.
     * const result = await Gdal.open(['test/polygon.geojson', 'test/line.geojson']);
     * @example
@@ -46,8 +51,9 @@ import { mount } from '../helper/filesystem';
     * const result2 = await Gdal.open('/input/polygon.geojson');
     *
 */
-export default function open(fileOrFiles) {
+export default function open(fileOrFiles, openOptions = []) {
     let files = fileOrFiles;
+    const optStr = getOptions(openOptions);
     if (!(Array.isArray(files) || (typeof FileList === 'function' && files instanceof FileList))) {
         files = [files];
     }
@@ -80,7 +86,7 @@ export default function open(fileOrFiles) {
                 let fileFullPath = `${INPUTPATH}/${path}`;
                 if (mountedFiles[i].internal) fileFullPath = `${OUTPUTPATH}/${path}`;
 
-                const datasetPtr = GDALFunctions.GDALOpenEx(fileFullPath);
+                const datasetPtr = GDALFunctions.GDALOpenEx(fileFullPath, null, null, optStr.ptr, null);
                 if (GDALFunctions.CPLGetLastErrorNo() !== 0 || datasetPtr === 0) {
                     const error = getGdalError();
                     errors.push(error);
@@ -96,6 +102,8 @@ export default function open(fileOrFiles) {
                     inputResults[name].type = 'vector';
                 }
             }
+
+            clearOptions(optStr);
 
             const datasets = Object.values(inputResults);
 
