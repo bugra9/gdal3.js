@@ -73,7 +73,7 @@
                     <h4>Compiled with</h4>
                     <ul>
                         <li v-for="dep in projectInfo.nativeDependencies" :key="dep.name">
-                            <a :href="dep.url" target="_blank" :title="dep.title || dep.name">{{ dep.name }}</a> 
+                            <a :href="dep.url" target="_blank" :title="dep.title || dep.name">{{ dep.name }}</a>
                             <a :href="dep.licenseUrl" target="_blank" class="license"> License</a>
                         </li>
                     </ul>
@@ -99,7 +99,7 @@
                         {{ commit.description }}
                         <span class="right grid-list desktop">
                             <a class="hash link" :href="`https://github.com/bugra9/gdal3.js/commit/${commit.hash}`" target="_blank">{{ commit.hash.substr(0, 7) }}</a>
-                            <a class="user link" href="https://github.com/bugra9" target="_blank">@{{ commit.user }}</a>
+                            <a class="user link" :href="`https://github.com/${commit.user}`" target="_blank">@{{ commit.user }}</a>
                         </span>
                     </li>
                 </ul>

@@ -1,5 +1,26 @@
 [
     {
+        "version": "v2.4.0",
+        "date": "30.10.2022",
+        "commits": [
+            {
+                "description": "Add support for 'open options'",
+                "hash": "31a9064829bafc9146e51d06448ad232495d5c0e",
+                "user": "mthh"
+            },
+            {
+                "description": "Add --config parameter to ogr2ogr, gdal_translate, gdalwarp and gdal_rasterize.",
+                "hash": "83aca76cb2447085e488e239511881b79dcb9832",
+                "user": "bugra9"
+            },
+            {
+                "description": "Update Gdal, Proj, Zlib and Expat.",
+                "hash": "83aca76cb2447085e488e239511881b79dcb9832",
+                "user": "bugra9"
+            }
+        ]
+    },
+    {
         "version": "v2.3.0",
         "date": "31.07.2022",
         "commits": [
