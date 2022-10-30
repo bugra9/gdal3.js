@@ -32,6 +32,10 @@ import { drivers } from '../helper/drivers';
 export default function ogr2ogr(dataset, options = []) {
     return new Promise((resolve, reject) => {
         const optStr = getOptions(options);
+        const config = optStr.config;
+        Object.entries(config).forEach(([key, value]) => {
+            GDALFunctions.CPLSetConfigOption(key, value);
+        });
         const translateOptionsPtr = GDALFunctions.GDALVectorTranslateOptionsNew(optStr.ptr, null);
 
         const datasetList = GDALFunctions.Module._malloc(4);

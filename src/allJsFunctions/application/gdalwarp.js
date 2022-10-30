@@ -30,6 +30,10 @@ import { drivers } from '../helper/drivers';
 export default function gdalwarp(dataset, options = []) {
     return new Promise((resolve, reject) => {
         const optStr = getOptions(options);
+        const config = optStr.config;
+        Object.entries(config).forEach(([key, value]) => {
+            GDALFunctions.CPLSetConfigOption(key, value);
+        });
         const translateOptionsPtr = GDALFunctions.GDALWarpAppOptionsNew(optStr.ptr, null);
 
         const datasetList = GDALFunctions.Module._malloc(4); // Uint32 pointer

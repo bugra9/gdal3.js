@@ -58,4 +58,21 @@ describe('application / gdal_translate', function () {
         return Gdal.gdal_translate(firstDataset, ['-f', 'PNG2']).then(() => { failed = false; }).catch(() => { failed = true; })
             .finally(() => { assert.strictEqual(failed, true, 'An error occurred'); });
     });
+    it('gdal_translate with config', async function () {
+        let file = 'data/spaf27_epsg.tif';
+        if (!isNode) {
+            const fileData = await fetch(file);
+            file = new File([await fileData.blob()], 'spaf27_epsg.tif');
+        } else file = `test/${file}`;
+
+        const result = await Gdal.open(file);
+        const firstDataset = result.datasets[0];
+        assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the tif file. (ptr == 0)');
+        const outputPath = await Gdal.gdal_translate(firstDataset, ['-of', 'JPEG', '--config', 'GDAL_JPEG_TO_RGB', 'NO']);
+        assert.strictEqual(outputPath.local, '/output/spaf27_epsg.jpg', 'An error occurred while converting the file.');
+
+        const result2 = await Gdal.open(outputPath.real);
+        const firstDataset2 = result2.datasets[0];
+        assert.strictEqual(firstDataset2.pointer > 0, true, 'An error occurred while converting the file. (ptr == 0)');
+    });
 });

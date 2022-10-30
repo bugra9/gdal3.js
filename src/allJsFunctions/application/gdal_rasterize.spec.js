@@ -58,4 +58,25 @@ describe('application / gdal_rasterize', function () {
         return Gdal.gdal_rasterize(firstDataset, ['-of', 'GTiff']).then(() => { failed = false; }).catch(() => { failed = true; })
             .finally(() => { assert.strictEqual(failed, true, 'An error occurred'); });
     });
+    it('gdal_rasterize with config', async function () {
+        let file = 'data/simple-polygon-line-point.geojson';
+        if (!isNode) {
+            const fileData = await fetch(file);
+            file = new File([await fileData.blob()], 'simple-polygon-line-point.geojson');
+        } else file = `test/${file}`;
+
+        const result = await Gdal.open(file);
+        const firstDataset = result.datasets[0];
+        const info = await Gdal.getInfo(firstDataset);
+        assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the geojson file. (ptr == 0)');
+        assert.strictEqual(info.featureCount > 0, true, 'geojson file has no feature. (featureCount == 0)');
+        const outputPath = await Gdal.gdal_rasterize(firstDataset, ['-of', 'GTiff', '-co', 'alpha=yes', '-burn', '255', '-burn', '0', '-burn', '0', '-burn', '100', '-ot', 'Byte', '-ts', '256', '256', '--config', 'NAME', 'TEST']);
+        assert.strictEqual(outputPath.local, '/output/simple-polygon-line-point.tif', 'An error occurred while converting the file.');
+
+        const result2 = await Gdal.open(outputPath.real);
+        const firstDataset2 = result2.datasets[0];
+        const info2 = await Gdal.getInfo(firstDataset2);
+        assert.strictEqual(firstDataset2.pointer > 0, true, 'An error occurred while converting the file. (ptr == 0)');
+        assert.strictEqual(info2.bandCount === 4, true, `tif file does not have four layers. (bandCount == ${info2.bandCount})`);
+    });
 });

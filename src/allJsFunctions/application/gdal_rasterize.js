@@ -29,6 +29,10 @@ import { OUTPUTPATH, getRealOutputPath } from '../helper/const';
 export default function gdal_rasterize(dataset, options = []) {
     return new Promise((resolve, reject) => {
         const optStr = getOptions(options);
+        const config = optStr.config;
+        Object.entries(config).forEach(([key, value]) => {
+            GDALFunctions.CPLSetConfigOption(key, value);
+        });
         const optionsPtr = GDALFunctions.GDALRasterizeOptionsNew(optStr.ptr, null);
 
         const driverIndex = options.indexOf('-of') + 1;

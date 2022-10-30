@@ -60,4 +60,21 @@ describe('application / ogr2ogr', function () {
         return Gdal.ogr2ogr(firstDataset, ['-f', 'PCIDSK2']).then(() => { failed = false; }).catch(() => { failed = true; })
             .finally(() => { assert.strictEqual(failed, true, 'An error occurred'); });
     });
+    it('ogr2ogr with config', async function () {
+        let file = 'data/polygon-line-point.geojson';
+        if (!isNode) {
+            const fileData = await fetch(file);
+            file = new File([await fileData.blob()], 'polygon-line-point.geojson');
+        } else file = `test/${file}`;
+
+        const result = await Gdal.open(file);
+        const firstDataset = result.datasets[0];
+        assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the geojson file. (ptr == 0)');
+        const outputPath = await Gdal.ogr2ogr(firstDataset, ['-f', 'MapInfo File', '-dsco', 'FORMAT=MIF', '--config', 'MITAB_SET_TOWGS84_ON_KNOWN_DATUM', 'YES']);
+        assert.strictEqual(outputPath.local, '/output/polygon-line-point.mif', 'An error occurred while converting the file.');
+
+        const result2 = await Gdal.open(outputPath.real);
+        const firstDataset2 = result2.datasets[0];
+        assert.strictEqual(firstDataset2.pointer > 0, true, 'An error occurred while converting the file. (ptr == 0)');
+    });
 });

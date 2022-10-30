@@ -29,6 +29,10 @@ import { OUTPUTPATH, getRealOutputPath } from '../helper/const';
 export default function gdal_translate(dataset, options = []) {
     return new Promise((resolve, reject) => {
         const optStr = getOptions(options);
+        const config = optStr.config;
+        Object.entries(config).forEach(([key, value]) => {
+            GDALFunctions.CPLSetConfigOption(key, value);
+        });
         const translateOptionsPtr = GDALFunctions.GDALTranslateOptionsNew(optStr.ptr, null);
 
         const driverIndex = options.indexOf('-of') + 1;
