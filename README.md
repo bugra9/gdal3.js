@@ -3,7 +3,7 @@
 
 gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
 
-gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, exfat and zlib to webassembly.
+gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, expat and zlib to webassembly.
 
 If you are building a native application in JavaScript (using Electron for instance), or are working in node.js, you will likely prefer to use a native binding of Gdal to JavaScript. A native binding will be faster because it will run native code.
 
