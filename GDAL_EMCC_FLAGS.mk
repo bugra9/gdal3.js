@@ -96,8 +96,13 @@ GDAL_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
   '_GDALCreateGenImgProjTransformer2',\
   '_GDALDestroyGenImgProjTransformer',\
   '_OSRSetFromUserInput',\
+  '_OSRExportToWkt',\
   '_CPLSetConfigOption',\
-  '_CPLSetThreadLocalConfigOption'\
+  '_CPLSetThreadLocalConfigOption',\
+  '_GDALGetSpatialRef',\
+  '_CPLAtof',\
+  '_OSRSetAxisMappingStrategy',\
+  '_GDALInvGeoTransform'\
 ]"
 
 GDAL_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\

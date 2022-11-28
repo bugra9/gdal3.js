@@ -56,6 +56,7 @@ interface Gdal {
     getOutputFiles(): Promise<Array<FileInfo>>;
     getFileBytes(filePath: string|FilePath): Promise<Uint8Array>;
     drivers: Drivers;
+    gdallocationinfo: Promise<void>; //TODO: Change this
 }
 
 interface GdalFilePaths {
