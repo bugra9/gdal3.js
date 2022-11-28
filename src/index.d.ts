@@ -39,6 +39,11 @@ interface DatasetInfo {
     layers?: Array<Layer>;
 }
 
+interface LocationInfo{
+    pixel: number;
+    line: number;
+}
+
 interface Drivers {
     raster: Object;
     vector: Object;
@@ -56,6 +61,7 @@ interface Gdal {
     getOutputFiles(): Promise<Array<FileInfo>>;
     getFileBytes(filePath: string|FilePath): Promise<Uint8Array>;
     drivers: Drivers;
+    gdal_location_info: Promise<LocationInfo>;
 }
 
 interface GdalFilePaths {

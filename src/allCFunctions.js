@@ -31,6 +31,7 @@ export function initCFunctions() {
     GDALFunctions.GDALGetRasterYSize = Module.cwrap('GDALGetRasterYSize', 'number', ['number']);
     GDALFunctions.GDALGetProjectionRef = Module.cwrap('GDALGetProjectionRef', 'string', ['number']);
     GDALFunctions.GDALGetGeoTransform = Module.cwrap('GDALGetGeoTransform', 'number', ['number', 'number']);
+    GDALFunctions.GDALInvGeoTransform = Module.cwrap('GDALInvGeoTransform', 'number', ['number', 'number']);
     GDALFunctions.GDALVectorTranslate = Module.cwrap('GDALVectorTranslate', 'number', [
         'string', // char * the destination dataset path or NULL.
         'number', // GDALDatasetH the destination dataset or NULL.
@@ -119,6 +120,9 @@ export function initCFunctions() {
     GDALFunctions.GDALDestroyGenImgProjTransformer = Module.cwrap('GDALDestroyGenImgProjTransformer', null, ['number']);
 
     GDALFunctions.OSRSetFromUserInput = Module.cwrap('OSRSetFromUserInput', 'number', ['number', 'string']);
-
+    GDALFunctions.OSRExportToWkt = Module.cwrap('OSRExportToWkt', 'number',['number','number']);
+    GDALFunctions.GDALGetSpatialRef = Module.cwrap('GDALGetSpatialRef','number',['number'])
+    GDALFunctions.CPLAtof = Module.cwrap('CPLAtof','number',['string'])
+    GDALFunctions.OSRSetAxisMappingStrategy = Module.cwrap('OSRSetAxisMappingStrategy',null,['number','number'])
     // GDALFunctions.CPLSetErrorHandler(cplQuietFnPtr);
 }
