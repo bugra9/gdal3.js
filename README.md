@@ -155,8 +155,8 @@ const Gdal = await initGdalJs();
 
 const files = ['a.mbtiles', 'b.tif']; // [Vector, Raster]
 const result = await Gdal.open(files); // https://gdal3.js.org/docs/module-f_open.html
-const mbTilesDataset = result.dataset[0];
-const tifDataset = result.dataset[1];
+const mbTilesDataset = result.datasets[0];
+const tifDataset = result.datasets[1];
 
 
 /* ======== Dataset Info ======== */
