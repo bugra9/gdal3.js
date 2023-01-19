@@ -5,7 +5,7 @@ gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal
 
 gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, expat and zlib to webassembly.
 
-If you are building a native application in JavaScript (using Electron for instance), or are working in node.js, you will likely prefer to use a native binding of Gdal to JavaScript. A native binding will be faster because it will run native code.
+Note: this project allows you to run GDAL in the browser. If you are working in Node.js or building a native app with Electron, you may want to look for a library with native bindings, such as [node-gdal]([url](https://github.com/naturalatlas/node-gdal)), [node-gdal-next]([url](https://github.com/yocontra/node-gdal-next)), or [node-gdal-async]([url](https://github.com/mmomtchev/node-gdal-async)). These will likely perform better.
 
 **gdal3.js GUI**
 
