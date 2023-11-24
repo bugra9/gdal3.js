@@ -55,7 +55,7 @@ interface Gdal {
     gdal_rasterize(dataset: Dataset, options: Array<string>): Promise<FilePath>;
     gdalwarp(dataset: Dataset, options: Array<string>): Promise<FilePath>;
     gdaltransform(coords: Array<Array<number>>, options: Array<string>): Promise<Array<Array<number>>>;
-    open(fileOrFiles: FileList|File|Array<string>|string): Promise<DatasetList>;
+    open(fileOrFiles: FileList|File|Array<string>|string, options?: Array<string>, VFSHandlers?: Array<string>): Promise<DatasetList>;
     close(dataset: Dataset): Promise<void>;
     getInfo(dataset: Dataset): Promise<DatasetInfo>;
     getOutputFiles(): Promise<Array<FileInfo>>;
