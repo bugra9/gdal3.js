@@ -12,6 +12,7 @@ import { clearOptions, getOptions } from '../helper/options';
     * @async
     * @param {FileList|File|Array<string>|string} files Returned by the files property of the HTML input element.
     * @param {Array<string>} openOptions Open options passed to candidate drivers.
+    * @param {Array<string>} VFSHandlers List of Virtual File System handlers, see https://gdal.org/user/virtual_file_systems.html
     * @return {Promise<TypeDefs.DatasetList>} "Promise" returns dataset list and error list.
     * @example
     * // Opening file from file input.
@@ -35,6 +36,10 @@ import { clearOptions, getOptions } from '../helper/options';
     * const file = new File([await fileData.blob()], "polygon.geojson");
     * const result = await Gdal.open(file);
     * @example
+    * // Opening a file using the virtual file system handler, ie. /vsicurl/ or /vsizip/.
+    * // One common scenario is a .zip shapefile
+    * const result = await Gdal.open(file, [], ['vsizip']);
+    * @example
     * // Opening a file from filesystem on Node.js.
     * const result = await Gdal.open('test/polygon.geojson');
     * @example
@@ -51,7 +56,7 @@ import { clearOptions, getOptions } from '../helper/options';
     * const result2 = await Gdal.open('/input/polygon.geojson');
     *
 */
-export default function open(fileOrFiles, openOptions = []) {
+export default function open(fileOrFiles, openOptions = [], VFSHandlers = []) {
     let files = fileOrFiles;
     const optStr = getOptions(openOptions);
     if (!(Array.isArray(files) || (typeof FileList === 'function' && files instanceof FileList))) {
@@ -82,8 +87,8 @@ export default function open(fileOrFiles, openOptions = []) {
                 if (!inputResults[name]) inputResults[name] = {};
                 if (inputResults[name].pointer) continue;
                 inputResults[name].path = path;
-
-                let fileFullPath = `${INPUTPATH}/${path}`;
+                const vfsHandlerStr = VFSHandlers && VFSHandlers.length ? `/${VFSHandlers.join('/')}/` : '';
+                let fileFullPath = `${vfsHandlerStr}${INPUTPATH}/${path}`;
                 if (mountedFiles[i].internal) fileFullPath = `${OUTPUTPATH}/${path}`;
 
                 const datasetPtr = GDALFunctions.GDALOpenEx(fileFullPath, null, null, optStr.ptr, null);
