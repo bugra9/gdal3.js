@@ -21,21 +21,21 @@ async function main() {
 
     Object.values(Gdal.drivers.raster).forEach(driver => {
         if (driver.isReadable && driver.isWritable) {
-            drivers.raster.readWrite.push(driver.shortName);    
+            drivers.raster.readWrite.push(driver.shortName);
         } else if(driver.isReadable) {
-            drivers.raster.readOnly.push(driver.shortName); 
+            drivers.raster.readOnly.push(driver.shortName);
         } else if(driver.isWritable) {
-            drivers.raster.writeOnly.push(driver.shortName); 
+            drivers.raster.writeOnly.push(driver.shortName);
         }
     });
 
     Object.values(Gdal.drivers.vector).forEach(driver => {
         if (driver.isReadable && driver.isWritable) {
-            drivers.vector.readWrite.push(driver.shortName);    
+            drivers.vector.readWrite.push(driver.shortName);
         } else if(driver.isReadable) {
-            drivers.vector.readOnly.push(driver.shortName); 
+            drivers.vector.readOnly.push(driver.shortName);
         } else if(driver.isWritable) {
-            drivers.vector.writeOnly.push(driver.shortName); 
+            drivers.vector.writeOnly.push(driver.shortName);
         }
     });
 

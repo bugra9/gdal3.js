@@ -1,5 +1,36 @@
 [
     {
+        "version": "v2.5.0",
+        "date": "02.12.2023",
+        "commits": [
+            {
+                "description": "Update npm and native dependencies",
+                "hash": "c8cf8f2249f55a7426096de751abbc17446907f8",
+                "user": "bugra9"
+            },
+            {
+                "description": "Support open prefixes",
+                "hash": "143b4be120ae58289a4c30d305e14d2687630f42",
+                "user": "j8seangel"
+            },
+            {
+                "description": "Add gdal location info",
+                "hash": "b395c5493f938e5a67e71a5b02c21aeb78207042",
+                "user": "danothemen"
+            },
+            {
+                "description": "README.md: fix dataset -> datasets typo",
+                "hash": "2de887c149d4cdceaea94856858d783a46bef0f7",
+                "user": "gregStickle"
+            },
+            {
+                "description": "README.md: fix exfat -> expat typo",
+                "hash": "072717a92ed68ff6e638ee283da03fbb0b4ca7da",
+                "user": "rouault"
+            }
+        ]
+    },
+    {
         "version": "v2.4.0",
         "date": "30.10.2022",
         "commits": [
