@@ -120,9 +120,9 @@ export function initCFunctions() {
     GDALFunctions.GDALDestroyGenImgProjTransformer = Module.cwrap('GDALDestroyGenImgProjTransformer', null, ['number']);
 
     GDALFunctions.OSRSetFromUserInput = Module.cwrap('OSRSetFromUserInput', 'number', ['number', 'string']);
-    GDALFunctions.OSRExportToWkt = Module.cwrap('OSRExportToWkt', 'number',['number','number']);
-    GDALFunctions.GDALGetSpatialRef = Module.cwrap('GDALGetSpatialRef','number',['number'])
-    GDALFunctions.CPLAtof = Module.cwrap('CPLAtof','number',['string'])
-    GDALFunctions.OSRSetAxisMappingStrategy = Module.cwrap('OSRSetAxisMappingStrategy',null,['number','number'])
+    GDALFunctions.OSRExportToWkt = Module.cwrap('OSRExportToWkt', 'number', ['number', 'number']);
+    GDALFunctions.GDALGetSpatialRef = Module.cwrap('GDALGetSpatialRef', 'number', ['number']);
+    GDALFunctions.CPLAtof = Module.cwrap('CPLAtof', 'number', ['string']);
+    GDALFunctions.OSRSetAxisMappingStrategy = Module.cwrap('OSRSetAxisMappingStrategy', null, ['number', 'number']);
     // GDALFunctions.CPLSetErrorHandler(cplQuietFnPtr);
 }

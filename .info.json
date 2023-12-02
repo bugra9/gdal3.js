@@ -5,7 +5,7 @@
         "name": "gdal3.js",
         "descriptions": [
             "<b>gdal3.js</b> is a port of Gdal applications (<b>gdal_translate</b>, <b>ogr2ogr</b>, <b>gdal_rasterize</b>, <b>gdalwarp</b>, <b>gdaltransform</b>) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
-            "gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, exfat and zlib to webassembly."
+            "gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, exfat, zlib and iconv to webassembly."
         ]
     },
     "gui": {
@@ -29,27 +29,27 @@
             "licenseUrl": "https://github.com/emscripten-core/emscripten/blob/main/LICENSE"
         },
         {
-            "name": "Gdal 3.5.1",
+            "name": "Gdal 3.8.1",
             "url": "https://github.com/OSGeo/gdal",
             "licenseUrl": "https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT"
         },
         {
-            "name": "Proj 9.0.1",
+            "name": "Proj 9.3.1",
             "url": "https://github.com/OSGeo/PROJ",
             "licenseUrl": "https://github.com/OSGeo/PROJ/blob/master/COPYING"
         },
         {
-            "name": "Geos 3.9.2",
+            "name": "Geos 3.12.1",
             "url": "https://github.com/libgeos/geos",
             "licenseUrl": "https://github.com/libgeos/geos/blob/master/COPYING"
         },
         {
-            "name": "Spatialite 5.0.1",
+            "name": "Spatialite 5.1.0",
             "url": "https://www.gaia-gis.it/fossil/libspatialite/index",
             "licenseUrl": "http://www.gnu.org/licenses/lgpl-2.1.html"
         },
         {
-            "name": "Sqlite 3.38.5",
+            "name": "Sqlite 3.44.2",
             "url": "https://www.sqlite.org/index.html",
             "licenseUrl": "https://www.sqlite.org/copyright.html"
         },
@@ -59,23 +59,17 @@
             "licenseUrl": "https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE"
         },
         {
-            "name": "Tiff 4.4.0",
+            "name": "Tiff 4.6.0",
             "url": "https://gitlab.com/libtiff/libtiff",
             "licenseUrl": "https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT"
         },
         {
-            "name": "WebP 1.2.0",
+            "name": "WebP 1.3.2",
             "url": "https://chromium.googlesource.com/webm/libwebp",
             "licenseUrl": "https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING"
         },
         {
-            "name": "JPEG JFIF 9d",
-            "title": "This software is based in part on the work of the Independent JPEG Group",
-            "url": "https://www.ijg.org/",
-            "licenseUrl": "https://spdx.org/licenses/IJG.html"
-        },
-        {
-            "name": "Expat 2.4.8",
+            "name": "Expat 2.5.0",
             "url": "https://github.com/libexpat/libexpat",
             "licenseUrl": "https://github.com/libexpat/libexpat/blob/master/expat/COPYING"
         },

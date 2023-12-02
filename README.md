@@ -3,7 +3,7 @@
 
 gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
 
-gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, jpeg, expat and zlib to webassembly.
+gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, expat, zlib and iconv to webassembly.
 
 If you are building a native application in JavaScript (using Electron for instance), or are working in node.js, you will likely prefer to use a native binding of Gdal to JavaScript. A native binding will be faster because it will run native code.
 
@@ -244,16 +244,15 @@ See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the
 
 **Compiled with**
 - [Emscripten 3.1.7](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)
-- [Gdal 3.5.1](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
-- [Proj 9.0.1](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
-- [Geos 3.9.2](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
-- [Spatialite 5.0.1](https://www.gaia-gis.it/fossil/libspatialite/index) [(License)](http://www.gnu.org/licenses/lgpl-2.1.html)
-- [Sqlite 3.38.5](https://www.sqlite.org/index.html) [(License)](https://www.sqlite.org/copyright.html)
+- [Gdal 3.8.1](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
+- [Proj 9.3.1](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
+- [Geos 3.12.1](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
+- [Spatialite 5.1.0](https://www.gaia-gis.it/fossil/libspatialite/index) [(License)](http://www.gnu.org/licenses/lgpl-2.1.html)
+- [Sqlite 3.44.2](https://www.sqlite.org/index.html) [(License)](https://www.sqlite.org/copyright.html)
 - [GeoTIFF 1.7.1](https://github.com/OSGeo/libgeotiff) [(License)](https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE)
-- [Tiff 4.4.0](https://gitlab.com/libtiff/libtiff) [(License)](https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT)
-- [WebP 1.2.0](https://chromium.googlesource.com/webm/libwebp) [(License)](https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING)
-- [JPEG JFIF 9d](https://www.ijg.org/) [(License)](https://spdx.org/licenses/IJG.html)
-- [Expat 2.4.8](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
+- [Tiff 4.6.0](https://gitlab.com/libtiff/libtiff) [(License)](https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT)
+- [WebP 1.3.2](https://chromium.googlesource.com/webm/libwebp) [(License)](https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING)
+- [Expat 2.5.0](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
 - [Zlib 1.2.12](https://www.zlib.net/) [(License)](https://www.zlib.net/zlib_license.html)
 - [Iconv 1.17](https://www.gnu.org/software/libiconv/) [(License)](https://www.gnu.org/software/libiconv/)
 

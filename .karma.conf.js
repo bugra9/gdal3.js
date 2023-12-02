@@ -2,6 +2,10 @@
 module.exports = function(config) {
   config.set({
     basePath: '',
+    plugins: [
+        'karma-mocha', 'karma-chai', 'karma-coverage', 'karma-coverage-istanbul-reporter',
+        'karma-chrome-launcher', 'karma-firefox-launcher', 'karma-phantomjs-launcher',
+    ],
     frameworks: ['mocha', 'chai'],
 
     files: [

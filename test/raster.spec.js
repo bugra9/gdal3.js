@@ -9,7 +9,10 @@ if (isNode) assert = require('chai').assert;
 else assert = chai.assert;
 
 const ignoredInputFormats = [''];
-const ignoredOutputFormats = ['GTiff', 'NITF', 'DTED', 'SRTMHGT', 'ISIS3', 'KMLSUPEROVERLAY', 'PDF', 'BYN', 'ADRG', 'LCP', 'BLX', 'SAGA', 'USGSDEM'];
+const ignoredOutputFormats = [
+    'GTiff', 'NITF', 'DTED', 'SRTMHGT', 'ISIS3', 'KMLSUPEROVERLAY', 'PDF', 'BYN',
+    'ADRG', 'LCP', 'BLX', 'SAGA', 'USGSDEM', 'VRT', 'COG', 'OpenFileGDB',
+];
 const ignoredParams = [
     'JPEG-COLOR_TRANSFORM',
     'PCIDSK-INTERLEAVING',
@@ -19,6 +22,8 @@ const ignoredParams = [
     'Rasterlite-PHOTOMETRIC',
     'MRF-COMPRESS',
     'HF2-COMPRESS',
+    'JPEG-LOSSLESS_COPY',
+    'WEBP-LOSSLESS_COPY',
 ];
 
 const suffixes = {

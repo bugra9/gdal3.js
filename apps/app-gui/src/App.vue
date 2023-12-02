@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <Header />
+        <AppHeader />
         <Tab :options="['Input', 'Convert', 'Output']" default="Input" ref="tab">
             <template slot="Input">
                 <TabRadio :options="['File', 'Folder']" default="File">
@@ -121,12 +121,12 @@
         <modal  v-if="dsco" name="createoptions" class="light" adaptive scrollable height="auto">
             <div class="right"><button class="close" @click="$modal.hide('createoptions')">✖</button></div>
             <h4>Database/Dataset Creation Options <a v-if="selectedFormat && selectedFormat.helpUrl" :href="`https://gdal.org/${selectedFormat.helpUrl}`" class="info-color" target="_blank">🛈</a></h4>
-            <Form :inputs="dsco" :prefix="drivers[0].type === 'vector' ? '-dsco' : '-co'" :self="this" />
+            <AppForm :inputs="dsco" :prefix="drivers[0].type === 'vector' ? '-dsco' : '-co'" :self="this" />
         </modal>
         <modal  v-if="lco" name="layercreateoptions" class="light" adaptive scrollable height="auto">
             <div class="right"><button class="close" @click="$modal.hide('layercreateoptions')">✖</button></div>
             <h4>Layer Creation Options <a v-if="selectedFormat && selectedFormat.helpUrl" :href="`https://gdal.org/${selectedFormat.helpUrl}`" class="info-color" target="_blank">🛈</a></h4>
-            <Form :inputs="lco" :self="this" prefix="-lco" />
+            <AppForm :inputs="lco" :self="this" prefix="-lco" />
         </modal>
         <loading :active.sync="isLoading" color="#007BFF" :width="150" :height="150" />
     </div>
@@ -134,12 +134,12 @@
 
 <script>
 import Loading from 'vue-loading-overlay';
-import Header from './components/Header.vue'
+import AppHeader from './components/Header.vue'
 import Tab from './components/Tab.vue'
 import TabRadio from './components/TabRadio.vue'
 import InputFiles from './components/InputFiles.vue'
 import OutputFiles from './components/OutputFiles.vue'
-import Form from './components/Form.vue'
+import AppForm from './components/Form.vue'
 import { split } from './utils';
 import initGdalJs from '../../../build/package/gdal3';
 import crs from './crs.json';
@@ -154,13 +154,13 @@ let gdal;
 export default {
     name: 'App',
     components: {
-        Header,
+        AppHeader,
         Loading,
         Tab,
         TabRadio,
         InputFiles,
         OutputFiles,
-        Form,
+        AppForm,
     },
     data() {
         return {

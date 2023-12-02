@@ -1,17 +1,16 @@
-GDAL_VERSION = 3.5.2
-SPATIALITE_VERSION = 5.0.1
-SQLITE_VERSION = 3380500
-GEOS_VERSION = 3.9.2
-PROJ_VERSION = 9.1.0
-ZLIB_VERSION = 1.2.13
-TIFF_VERSION = 4.4.0
+GDAL_VERSION = 3.8.1
+SPATIALITE_VERSION = 5.1.0
+SQLITE_VERSION = 3440200
+GEOS_VERSION = 3.12.1
+PROJ_VERSION = 9.3.1
+ZLIB_VERSION = 1.3
+TIFF_VERSION = 4.6.0
 GEOTIFF_VERSION = 1.7.1
-JPEG_VERSION = 9d
-WEBP_VERSION = 1.2.0
+WEBP_VERSION = 1.3.2
 EXPAT_VERSION = 2.5.0
 ICONV_VERSION = 1.17
 
-SQLITE_URL = "https://www.sqlite.org/2022/sqlite-autoconf-$(SQLITE_VERSION).tar.gz"
+SQLITE_URL = "https://www.sqlite.org/2023/sqlite-autoconf-$(SQLITE_VERSION).tar.gz"
 PROJ_URL = "http://download.osgeo.org/proj/proj-$(PROJ_VERSION).tar.gz"
 GEOS_URL = "http://download.osgeo.org/geos/geos-$(GEOS_VERSION).tar.bz2"
 SPATIALITE_URL = "http://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-$(SPATIALITE_VERSION).tar.gz"
@@ -19,7 +18,6 @@ ZLIB_URL = "http://zlib.net/zlib-$(ZLIB_VERSION).tar.gz"
 GDAL_URL = "https://github.com/OSGeo/gdal/releases/download/v$(GDAL_VERSION)/gdal-$(GDAL_VERSION).tar.gz"
 TIFF_URL = "http://download.osgeo.org/libtiff/tiff-$(TIFF_VERSION).tar.gz"
 GEOTIFF_URL = "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-$(GEOTIFF_VERSION).tar.gz"
-JPEG_URL = "http://www.ijg.org/files/jpegsrc.v${JPEG_VERSION}.tar.gz"
 WEBP_URL = "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz"
 EXPAT_URL = "https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))/expat-${EXPAT_VERSION}.tar.gz"
 ICONV_URL = "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${ICONV_VERSION}.tar.gz"
@@ -62,7 +60,7 @@ $(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
 	EMCC_CORES=4 $(EMCC) $(ROOT_DIR)/lib/libgdal.a \
 		$(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libspatialite.a \
 		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libwebpdemux.a \
-		$(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libgeotiff.a \
+		$(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libgeotiff.a \
         $(ROOT_DIR)/lib/libiconv.a \
 		-o $@ $(GDAL_EMCC_FLAGS) \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
@@ -82,7 +80,7 @@ $(GDAL_SRC)/build/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj
 	cd build; \
 	$(EMCMAKE) cmake .. $(PREFIX_CMAKE) -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_APPS=OFF \
         -DCMAKE_PREFIX_PATH=$(ROOT_DIR) -DCMAKE_FIND_ROOT_PATH=$(ROOT_DIR) \
-        -DGDAL_USE_HDF5=OFF -DGDAL_USE_HDFS=OFF \
+        -DGDAL_USE_HDF5=OFF -DGDAL_USE_HDFS=OFF -DACCEPT_MISSING_SQLITE3_MUTEX_ALLOC=ON \
         -DSQLite3_INCLUDE_DIR=$(ROOT_DIR)/include -DSQLite3_LIBRARY=$(ROOT_DIR)/lib/libsqlite3.a \
         -DPROJ_INCLUDE_DIR=$(ROOT_DIR)/include -DPROJ_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libproj.a \
         -DTIFF_INCLUDE_DIR=$(ROOT_DIR)/include -DTIFF_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libtiff.a \
@@ -118,9 +116,11 @@ $(ROOT_DIR)/lib/libspatialite.a: $(SPATIALITE_SRC)/Makefile
 $(SPATIALITE_SRC)/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libgeos.a $(SPATIALITE_SRC)/configure
 	cd $(SPATIALITE_SRC); \
 	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no \
-	CFLAGS="-ULOADABLE_EXTENSION" \
-	CPPFLAGS="-I$(ROOT_DIR)/include/" \
-	LDFLAGS="-L$(ROOT_DIR)/lib/" \
+	CFLAGS="-I$(ROOT_DIR)/include -ULOADABLE_EXTENSION" \
+	CPPFLAGS="-I$(ROOT_DIR)/include" \
+	LDFLAGS="-L$(ROOT_DIR)/lib" \
+	SQLITE3_CFLAGS="-I$(ROOT_DIR)/include" \
+	SQLITE3_LIBS="-L$(ROOT_DIR)/lib" \
 	--with-geosconfig="$(ROOT_DIR)/bin/geos-config" \
 	--enable-geosadvanced=yes \
     --enable-geopackage=yes \
@@ -144,15 +144,17 @@ GEOS_SRC = $(SRC_DIR)/geos-$(GEOS_VERSION)
 
 geos: $(ROOT_DIR)/lib/libgeos.a
 
-$(ROOT_DIR)/lib/libgeos.a: $(GEOS_SRC)/Makefile
-	cd $(GEOS_SRC); \
-	$(EMMAKE) make install;
+$(ROOT_DIR)/lib/libgeos.a: $(GEOS_SRC)/build/Makefile
+	cd $(GEOS_SRC)/build; \
+	$(EMMAKE) make -j4 install;
 
-$(GEOS_SRC)/Makefile: $(GEOS_SRC)/configure
+$(GEOS_SRC)/build/Makefile: $(GEOS_SRC)/CMakeLists.txt
 	cd $(GEOS_SRC); \
-	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no --disable-inline;
+    mkdir build; \
+	cd build; \
+	$(EMCMAKE) cmake .. $(PREFIX_CMAKE) -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTING=OFF;
 
-$(GEOS_SRC)/configure:
+$(GEOS_SRC)/CMakeLists.txt:
 	mkdir -p $(SRC_DIR); \
 	cd $(SRC_DIR); \
 	wget -nc $(GEOS_URL); \
@@ -172,7 +174,7 @@ $(ROOT_DIR)/lib/libgeotiff.a: $(GEOTIFF_SRC)/Makefile
 $(GEOTIFF_SRC)/Makefile: $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libproj.a $(GEOTIFF_SRC)/configure
 	cd $(GEOTIFF_SRC); \
 	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no \
-	--with-proj=$(ROOT_DIR) --with-libtiff=$(ROOT_DIR) --with-zlib=$(ROOT_DIR) --with-jpeg=$(ROOT_DIR) \
+	--with-proj=$(ROOT_DIR) --with-libtiff=$(ROOT_DIR) --with-zlib=$(ROOT_DIR) \
 	CFLAGS="-I$(ROOT_DIR)/include" \
 	CPPFLAGS="-I$(ROOT_DIR)/include" \
 	LDFLAGS="-L$(ROOT_DIR)/lib";
@@ -248,41 +250,17 @@ $(ROOT_DIR)/lib/libtiff.a: $(TIFF_SRC)/Makefile
 	cd $(TIFF_SRC); \
 	$(EMMAKE) make install;
 
-$(TIFF_SRC)/Makefile: $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libjpeg.a $(TIFF_SRC)/configure
+$(TIFF_SRC)/Makefile: $(ROOT_DIR)/lib/libz.a $(TIFF_SRC)/configure
 	cd $(TIFF_SRC); \
-	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no \
+	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no --disable-docs \
 	--with-zlib-include-dir=${ROOT_DIR}/include \
-	--with-zlib-lib-dir=${ROOT_DIR}/lib \
-	--with-jpeg-include-dir=${ROOT_DIR}/include \
-	--with-jpeg-lib-dir=${ROOT_DIR}/lib;
+	--with-zlib-lib-dir=${ROOT_DIR}/lib;
 
 $(TIFF_SRC)/configure:
 	mkdir -p $(SRC_DIR); \
 	cd $(SRC_DIR); \
 	wget -nc $(TIFF_URL); \
 	tar -xf tiff-$(TIFF_VERSION).tar.gz;
-
-###########
-# JPEG #
-###########
-JPEG_SRC = $(SRC_DIR)/jpeg-$(JPEG_VERSION)
-
-jpeg: $(ROOT_DIR)/lib/libjpeg.a
-
-$(ROOT_DIR)/lib/libjpeg.a: $(JPEG_SRC)/Makefile
-	cd $(JPEG_SRC); \
-	$(EMMAKE) make clean; \
-	$(EMMAKE) make install;
-
-$(JPEG_SRC)/Makefile: $(JPEG_SRC)/configure
-	cd $(JPEG_SRC); \
-	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no;
-
-$(JPEG_SRC)/configure:
-	mkdir -p $(SRC_DIR); \
-	cd $(SRC_DIR); \
-	wget -nc $(JPEG_URL); \
-	tar -xf jpegsrc.v$(JPEG_VERSION).tar.gz;
 
 ###########
 # WEBP #
@@ -297,6 +275,7 @@ $(ROOT_DIR)/lib/libwebp.a: $(WEBP_SRC)/Makefile
 
 $(WEBP_SRC)/Makefile: $(WEBP_SRC)/configure
 	cd $(WEBP_SRC); \
+    sed -i 's/SUBDIRS += examples//g' ./Makefile.am; \
 	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no;
 
 $(WEBP_SRC)/configure:

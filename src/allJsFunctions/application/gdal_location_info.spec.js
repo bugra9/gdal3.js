@@ -29,9 +29,9 @@ describe('application / gdal_location_info', function () {
 
         const result = await Gdal.open(file);
         const firstDataset = result.datasets[0];
-        
-        const stLouisAirport = await Gdal.gdal_location_info(firstDataset,[38.7548,-90.3575]);
-        
+
+        const stLouisAirport = await Gdal.gdal_location_info(firstDataset, [38.7548, -90.3575]);
+
         assert.strictEqual(stLouisAirport.pixel === 11511, true, 'An error occurred while converting the coordinates (wrong result, for pixel)');
         assert.strictEqual(stLouisAirport.line === 5349, true, 'An error occurred while converting the coordinates (wrong result, for line)');
     });

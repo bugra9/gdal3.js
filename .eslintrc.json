@@ -1,7 +1,7 @@
 {
     "root": true,
     "parserOptions":  {
-        "parser": "babel-eslint",
+        "parser": "babel/eslint-parser",
         "sourceType": "module"
     },
     "env": {
@@ -48,7 +48,8 @@
             "allowTernary": true
         }],
         "prefer-arrow-callback": 0,
-        "mocha/prefer-arrow-callback": 2
+        "mocha/prefer-arrow-callback": 2,
+        "import/no-unresolved": [2, { "ignore": ["\\/gdal3.coverage$", "\\/gdal3WebAssembly.js$"] }]
     },
     "globals": {
         "window": false,
