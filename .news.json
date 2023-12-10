@@ -1,5 +1,46 @@
 [
     {
+        "version": "v2.6.0",
+        "date": "11.12.2023",
+        "commits": [
+            {
+                "description": "feat: add log and error handler to config",
+                "hash": "179ce0eb320469d22662af9422d8f4d217fd4c70",
+                "user": "bugra9"
+            },
+            {
+                "description": "feat: add env param to config to set global gdal configuration",
+                "hash": "179ce0eb320469d22662af9422d8f4d217fd4c70",
+                "user": "bugra9"
+            },
+            {
+                "description": "fix: raster/vector type calculation",
+                "hash": "179ce0eb320469d22662af9422d8f4d217fd4c70",
+                "user": "bugra9"
+            },
+            {
+                "description": "fix: prevent app from terminating if a warning occurs",
+                "hash": "179ce0eb320469d22662af9422d8f4d217fd4c70",
+                "user": "bugra9"
+            },
+            {
+                "description": "feat: list all created files with all param in the outputs of ogr2ogr, gdal_translate, gdalwarp, gdal_rasterize",
+                "hash": "179ce0eb320469d22662af9422d8f4d217fd4c70",
+                "user": "bugra9"
+            },
+            {
+                "description": "feat: add outputName param to ogr2ogr, gdal_translate, gdalwarp, gdal_rasterize",
+                "hash": "179ce0eb320469d22662af9422d8f4d217fd4c70",
+                "user": "bugra9"
+            },
+            {
+                "description": "feat: add more info about dataset in gdal3.js gui",
+                "hash": "179ce0eb320469d22662af9422d8f4d217fd4c70",
+                "user": "bugra9"
+            }
+        ]
+    },
+    {
         "version": "v2.5.0",
         "date": "02.12.2023",
         "commits": [
