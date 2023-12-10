@@ -9,7 +9,7 @@
                 <div style="width: 50px;"></div>
                 <div style="flex: 1;">
                     <p class="title">{{dataset.path}}</p>
-                    <p class="desc">{{datasetsInfo[dataset.pointer].driverName}}</p>
+                    <p class="desc">{{datasetsInfo[dataset.pointer].driverLongName}} ({{datasetsInfo[dataset.pointer].type}})</p>
                 </div>
                 <div @click="deleteDataset(dataset)" class="fileAction"><v-icon style="color: red;" name="trash"/></div>
             </div>
@@ -177,7 +177,8 @@ pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; white-space: pre-wrap; 
             transform: rotate(90deg);
 }
 .opened .tab-content {
-    max-height: 100vh;
+    max-height: 90vh;
+    overflow: auto;
 }
 .fileAction {
     display: flex;

@@ -243,7 +243,7 @@ GNU Lesser General Public License v2.1 or later
 See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the full text.
 
 **Compiled with**
-- [Emscripten 3.1.7](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)
+- [Emscripten 3.1.50](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)
 - [Gdal 3.8.1](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
 - [Proj 9.3.1](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
 - [Geos 3.12.1](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)

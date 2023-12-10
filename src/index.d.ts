@@ -6,12 +6,14 @@ interface FileInfo {
 interface FilePath {
     local: string;
     real: string;
+    all?: FilePath;
 }
 
 interface Dataset {
     pointer: number;
     path: string;
     type: string;
+    info: object;
 }
 
 interface DatasetList {
@@ -50,11 +52,13 @@ interface Drivers {
 }
 
 interface Gdal {
-    ogr2ogr(dataset: Dataset, options: Array<string>): Promise<FilePath>;
-    gdal_translate(dataset: Dataset, options: Array<string>): Promise<FilePath>;
-    gdal_rasterize(dataset: Dataset, options: Array<string>): Promise<FilePath>;
-    gdalwarp(dataset: Dataset, options: Array<string>): Promise<FilePath>;
+    ogr2ogr(dataset: Dataset, options?: Array<string>, outputName?: string): Promise<FilePath>;
+    gdal_translate(dataset: Dataset, options?: Array<string>, outputName?: string): Promise<FilePath>;
+    gdal_rasterize(dataset: Dataset, options?: Array<string>, outputName?: string): Promise<FilePath>;
+    gdalwarp(dataset: Dataset, options?: Array<string>, outputName?: string): Promise<FilePath>;
     gdaltransform(coords: Array<Array<number>>, options: Array<string>): Promise<Array<Array<number>>>;
+    gdalinfo(dataset: Dataset, options?: Array<string>): Promise<object>;
+    ogrinfo(dataset: Dataset, options?: Array<string>): Promise<object>;
     open(fileOrFiles: FileList|File|Array<string>|string, options?: Array<string>, VFSHandlers?: Array<string>): Promise<DatasetList>;
     close(dataset: Dataset): Promise<void>;
     getInfo(dataset: Dataset): Promise<DatasetInfo>;
@@ -75,6 +79,9 @@ interface Config {
     paths?: GdalFilePaths
     dest?: string;
     useWorker?: boolean;
+    env?: object;
+    logHandler?: (message: string, type: string) => void;
+    errorHandler?: (message: string, type: string) => void;
 }
 
 declare module 'gdal3.js' {

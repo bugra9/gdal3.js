@@ -54,17 +54,21 @@ GDAL_SRC = $(SRC_DIR)/gdal-$(GDAL_VERSION)
 gdal3.js: $(DIST_DIR)/gdal3WebAssembly.js
 gdal: $(ROOT_DIR)/lib/libgdal.a
 
-$(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
+$(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a $(ROOT_DIR)/lib/gdalinfo_lib.cpp.o
 	mkdir -p $(DIST_DIR); \
 	cd $(DIST_DIR); \
-	EMCC_CORES=4 $(EMCC) $(ROOT_DIR)/lib/libgdal.a \
+	EMCC_CORES=4 $(EMCC) $(ROOT_DIR)/lib/libgdal.a $(ROOT_DIR)/lib/gdalinfo_lib.cpp.o $(ROOT_DIR)/lib/ogrinfo_lib.cpp.o \
 		$(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libspatialite.a \
-		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libwebpdemux.a \
-		$(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libgeotiff.a \
+		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libsharpyuv.a $(ROOT_DIR)/lib/libwebpdemux.a \
+		$(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libgeotiff.a \
         $(ROOT_DIR)/lib/libiconv.a \
 		-o $@ $(GDAL_EMCC_FLAGS) \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
 		--preload-file $(ROOT_DIR)/share/proj@/usr/share/proj;
+
+$(ROOT_DIR)/lib/gdalinfo_lib.cpp.o: $(ROOT_DIR)/lib/libgdal.a
+	cp "$(GDAL_SRC)/build/apps/CMakeFiles/appslib.dir/ogrinfo_lib.cpp.o" $(ROOT_DIR)/lib/ogrinfo_lib.cpp.o; \
+	cp "$(GDAL_SRC)/build/apps/CMakeFiles/appslib.dir/gdalinfo_lib.cpp.o" $(ROOT_DIR)/lib/gdalinfo_lib.cpp.o;
 
 $(ROOT_DIR)/lib/libgdal.a: $(GDAL_SRC)/build/Makefile
 	cd $(GDAL_SRC)/build; \
@@ -78,7 +82,7 @@ $(GDAL_SRC)/build/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj
 	rm -rf $(ROOT_DIR)/lib/cmake; \
 	mkdir build; \
 	cd build; \
-	$(EMCMAKE) cmake .. $(PREFIX_CMAKE) -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_APPS=OFF \
+	$(EMCMAKE) cmake .. $(PREFIX_CMAKE) -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_APPS=OFF -DGDAL_ENABLE_DRIVER_PDS=OFF \
         -DCMAKE_PREFIX_PATH=$(ROOT_DIR) -DCMAKE_FIND_ROOT_PATH=$(ROOT_DIR) \
         -DGDAL_USE_HDF5=OFF -DGDAL_USE_HDFS=OFF -DACCEPT_MISSING_SQLITE3_MUTEX_ALLOC=ON \
         -DSQLite3_INCLUDE_DIR=$(ROOT_DIR)/include -DSQLite3_LIBRARY=$(ROOT_DIR)/lib/libsqlite3.a \

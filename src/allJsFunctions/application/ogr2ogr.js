@@ -5,6 +5,7 @@ import { getGdalError } from '../helper/error';
 import { getOptions, clearOptions } from '../helper/options';
 import { OUTPUTPATH, getRealOutputPath } from '../helper/const';
 import { drivers } from '../helper/drivers';
+import { getFileListFromDataset } from '../helper/getFileList';
 
 /**
     * ogr2ogr function can be used to convert simple features data between file formats.
@@ -17,7 +18,8 @@ import { drivers } from '../helper/drivers';
     * @module a/ogr2ogr
     * @async
     * @param {TypeDefs.Dataset} dataset Dataset to be converted.
-    * @param {Array} options Options ({@link https://gdal.org/programs/ogr2ogr.html#description})
+    * @param {Array} [options] Options ({@link https://gdal.org/programs/ogr2ogr.html#description})
+    * @param {string} [outputName] Destination file name without extension.
     * @return {Promise<TypeDefs.FilePath>} "Promise" returns paths of created files.
     * @example
     * const Gdal = await initGdalJs();
@@ -29,7 +31,7 @@ import { drivers } from '../helper/drivers';
     * const filePath = await Gdal.ogr2ogr(dataset, options);
     *
 */
-export default function ogr2ogr(dataset, options = []) {
+export default function ogr2ogr(dataset, options = [], outputName = null) {
     return new Promise((resolve, reject) => {
         const optStr = getOptions(options);
         const config = optStr.config;
@@ -52,20 +54,26 @@ export default function ogr2ogr(dataset, options = []) {
             }
         }
 
-        const outputName = dataset.path.split('.', 1)[0];
-        const filePath = `${OUTPUTPATH}/${outputName}.${ext}`;
+        const finalOutputName = outputName || dataset.path.split('.', 1)[0];
+        const filePath = `${OUTPUTPATH}/${finalOutputName}.${ext}`;
         const datasetPtr = GDALFunctions.GDALVectorTranslate(filePath, null, 1, datasetList, translateOptionsPtr, null);
+        const outputFiles = getFileListFromDataset(datasetPtr);
+
         GDALFunctions.GDALVectorTranslateOptionsFree(translateOptionsPtr);
         clearOptions(optStr);
         GDALFunctions.GDALClose(datasetPtr);
 
-        if (GDALFunctions.CPLGetLastErrorNo() !== 0) {
+        if (GDALFunctions.CPLGetLastErrorNo() >= 3) {
             const error = getGdalError();
             reject(error);
         } else {
             resolve({
                 local: filePath,
-                real: `${getRealOutputPath()}/${outputName}.${ext}`,
+                real: `${getRealOutputPath()}/${finalOutputName}.${ext}`,
+                all: outputFiles.map((file) => ({
+                    local: file,
+                    real: file.replace(`${OUTPUTPATH}/`, `${getRealOutputPath()}/`),
+                })),
             });
         }
     });

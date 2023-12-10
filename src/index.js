@@ -12,6 +12,13 @@ import workerInsideSupport, { workerOutsideSupport } from './workerSupport';
 let gdalJsPromise;
 
 /**
+ *
+ * @callback LogHandler
+ * @param {string} message Log message
+ * @param {string} type Log type (e.g. stderr, stdout)
+ */
+
+/**
     * Asynchronously initializes gdal3.js
     * @async
     * @function initGdalJs
@@ -23,6 +30,9 @@ let gdalJsPromise;
     * @param      {string} config.paths.js Js file path for web worker. (Default: gdal3.js)
     * @param      {string} config.dest Destination path where the created files will be saved. (Node.js only)
     * @param      {boolean} config.useWorker=true Using [Web Workers]{@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers} on the browser. It doesn't work on Node.js.
+    * @param      {Object} config.env Set global Gdal configuration {@link https://gdal.org/user/configoptions.html#global-configuration-options}
+    * @param      {LogHandler} config.logHandler User-defined function to be called in case of log.
+    * @param      {LogHandler} config.errorHandler User-defined function to be called in case of error.
     * @return     {Promise<Gdal>} "Promise" returns Gdal namespace.
 */
 export default function initGdalJs(
@@ -43,11 +53,19 @@ export default function initGdalJs(
             };
 
             Module.print = function p(text) {
-                console.debug(`gdal stdout: ${text}`);
+                if (config.logHandler) {
+                    config.logHandler(text, 'stdout');
+                } else {
+                    console.debug(`gdal stdout: ${text}`);
+                }
             };
 
             Module.printErr = function p(text) {
-                console.error(`gdal stderr: ${text}`);
+                if (config.errorHandler) {
+                    config.errorHandler(text, 'stderr');
+                } else {
+                    console.error(`gdal stderr: ${text}`);
+                }
             };
 
             Module.preRun = [({ ENV }) => {
@@ -58,6 +76,12 @@ export default function initGdalJs(
                 ENV.GDAL_ENABLE_DEPRECATED_DRIVER_GTM = 'YES';
                 // ENV.CPL_DEBUG = 'ON';
                 ENV.CPL_LOG_ERRORS = 'ON';
+
+                if (config.env) {
+                    Object.entries(config.env).forEach(([key, value]) => {
+                        ENV[key] = value;
+                    });
+                }
             }];
 
             Module.onRuntimeInitialized = function onRuntimeInitialized() {

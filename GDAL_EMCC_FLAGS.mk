@@ -13,6 +13,8 @@ GDAL_EMCC_FLAGS += -s TOTAL_MEMORY=512MB -s ALLOW_MEMORY_GROWTH=1 -s DISABLE_EXC
 GDAL_EMCC_FLAGS += -s WASM=1 -s MODULARIZE=1 -s 'EXPORT_NAME="CModule"'
 GDAL_EMCC_FLAGS += -s RESERVED_FUNCTION_POINTERS=200
 GDAL_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
+  '_malloc',\
+  '_free',\
   '_CSLCount',\
   '_GDALSetCacheMax',\
   '_GDALAllRegister',\
@@ -102,7 +104,13 @@ GDAL_EMCC_FLAGS += -s EXPORTED_FUNCTIONS="[\
   '_GDALGetSpatialRef',\
   '_CPLAtof',\
   '_OSRSetAxisMappingStrategy',\
-  '_GDALInvGeoTransform'\
+  '_GDALInvGeoTransform',\
+  '_GDALInfo',\
+  '_GDALInfoOptionsNew',\
+  '_GDALInfoOptionsFree',\
+  '_GDALVectorInfo',\
+  '_GDALVectorInfoOptionsNew',\
+  '_GDALVectorInfoOptionsFree'\
 ]"
 
 GDAL_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\
@@ -111,6 +119,7 @@ GDAL_EMCC_FLAGS += -s EXPORTED_RUNTIME_METHODS="[\
   'ccall',\
   'cwrap',\
   'stringToUTF8',\
+  'UTF8ToString',\
   'lengthBytesUTF8',\
   'FS',\
   'ENV',\

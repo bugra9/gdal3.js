@@ -306,28 +306,23 @@ export default {
             this.isLoading = true;
             gdal.open(files).then(({datasets, errors}) => {
                 if (datasets && datasets.length > 0) {
-                    const promises = [];
                     datasets.forEach((d) => {
-                        const infoPromise = gdal.getInfo(d);
-                        infoPromise.then(info => this.datasetsInfo[d.pointer] = info);
-                        promises.push(infoPromise);
+                        this.datasetsInfo[d.pointer] = {type: d.type, ...d.info};
                     });
 
-                    Promise.all(promises).then(() => {
-                        this.datasets = this.datasets.concat(datasets);
+                    this.datasets = this.datasets.concat(datasets);
 
-                        let drivers = [];
-                        let type = this.datasets.reduce((out, obj) =>  (out === obj.type) ? out : '', this.datasets[0].type);
-                        if (type !== '') {
-                            drivers = Object.values(gdal.drivers[type]).filter(d => d.isWritable);
-                            drivers.sort((a, b) => a.shortName.localeCompare(b.shortName));
-                        }
-                        this.program = '';
-                        this.parameters = '';
-                        this.isLoading = false;
-                        this.drivers = drivers;
-                        this.clearTranslateParameters()
-                    });
+                    let drivers = [];
+                    let type = this.datasets.reduce((out, obj) =>  (out === obj.type) ? out : '', this.datasets[0].type);
+                    if (type !== '') {
+                        drivers = Object.values(gdal.drivers[type]).filter(d => d.isWritable);
+                        drivers.sort((a, b) => a.shortName.localeCompare(b.shortName));
+                    }
+                    this.program = '';
+                    this.parameters = '';
+                    this.isLoading = false;
+                    this.drivers = drivers;
+                    this.clearTranslateParameters();
                 } else {
                     this.isLoading = false;
                 }

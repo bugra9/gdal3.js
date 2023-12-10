@@ -124,5 +124,15 @@ export function initCFunctions() {
     GDALFunctions.GDALGetSpatialRef = Module.cwrap('GDALGetSpatialRef', 'number', ['number']);
     GDALFunctions.CPLAtof = Module.cwrap('CPLAtof', 'number', ['string']);
     GDALFunctions.OSRSetAxisMappingStrategy = Module.cwrap('OSRSetAxisMappingStrategy', null, ['number', 'number']);
+
+    GDALFunctions.GDALInfo = Module.cwrap('GDALInfo', 'string', ['number', 'number']);
+    GDALFunctions.GDALInfoOptionsNew = Module.cwrap('GDALInfoOptionsNew', 'number', ['number', 'number']);
+    GDALFunctions.GDALInfoOptionsFree = Module.cwrap('GDALInfoOptionsFree', null, ['number']);
+
+    GDALFunctions.GDALVectorInfo = Module.cwrap('GDALVectorInfo', 'string', ['number', 'number']);
+    GDALFunctions.GDALVectorInfoOptionsNew = Module.cwrap('GDALVectorInfoOptionsNew', 'number', ['number', 'number']);
+    GDALFunctions.GDALVectorInfoOptionsFree = Module.cwrap('GDALVectorInfoOptionsFree', null, ['number']);
+
+    GDALFunctions.GDALGetFileList = Module.cwrap('GDALGetFileList', 'number', ['number']);
     // GDALFunctions.CPLSetErrorHandler(cplQuietFnPtr);
 }

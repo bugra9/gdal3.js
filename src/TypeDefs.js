@@ -14,6 +14,7 @@
  * @memberof TypeDefs
  * @property {string} local Example: /output/polygon-line-point.mbtiles
  * @property {string} real Example: /tmp/gdaljsGClKZk/polygon-line-point.mbtiles
+ * @property {FilePath} [all] All file paths
  */
 
 /**
@@ -22,6 +23,7 @@
  * @property {number} pointer Memory address of this dataset allocated from the native code. It must be greater than zero.
  * @property {string} path Local path of the opened file.
  * @property {string} type Dataset type. (raster/vector)
+ * @property {Object} info Result of gdalinfo or ogrinfo.
  */
 
 /**

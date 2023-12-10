@@ -4,6 +4,8 @@ import { getGdalError } from '../helper/error';
 import { INPUTPATH, OUTPUTPATH } from '../helper/const';
 import { mount } from '../helper/filesystem';
 import { clearOptions, getOptions } from '../helper/options';
+import gdalinfo from '../application/gdalinfo';
+import ogrinfo from '../application/ogrinfo';
 
 /**
     * Opens files selected with HTML input element.
@@ -80,6 +82,7 @@ export default function open(fileOrFiles, openOptions = [], VFSHandlers = []) {
             const errors = [];
             GDALFunctions.CPLErrorReset();
             const inputResults = {};
+            const promises = [];
             for (let i = 0; i < mountedFiles.length; i += 1) {
                 const path = mountedFiles[i].name;
                 const name = path.split('.', 1)[0];
@@ -92,33 +95,56 @@ export default function open(fileOrFiles, openOptions = [], VFSHandlers = []) {
                 if (mountedFiles[i].internal) fileFullPath = `${OUTPUTPATH}/${path}`;
 
                 const datasetPtr = GDALFunctions.GDALOpenEx(fileFullPath, null, null, optStr.ptr, null);
-                if (GDALFunctions.CPLGetLastErrorNo() !== 0 || datasetPtr === 0) {
+                if (datasetPtr === 0) {
                     const error = getGdalError();
                     errors.push(error);
                     delete inputResults[name];
                     continue;
                 }
                 inputResults[name].pointer = datasetPtr;
-                const bandCount = GDALFunctions.GDALGetRasterCount(datasetPtr);
-                const layerCount = GDALFunctions.GDALDatasetGetLayerCount(datasetPtr);
-                if (bandCount > 0 && layerCount === 0) {
-                    inputResults[name].type = 'raster';
-                } else {
-                    inputResults[name].type = 'vector';
-                }
+
+                const setLegacyType = () => {
+                    const bandCount = GDALFunctions.GDALGetRasterCount(datasetPtr);
+                    const layerCount = GDALFunctions.GDALDatasetGetLayerCount(datasetPtr);
+
+                    if (bandCount > 0 && layerCount === 0) {
+                        inputResults[name].type = 'raster';
+                    } else {
+                        inputResults[name].type = 'vector';
+                    }
+                };
+
+                const infoPromise = gdalinfo(inputResults[name]).then((info) => {
+                    if (info && info.bands) {
+                        const hasSize = info.size && info.size.length >= 2 && (info.size[0] > 0 || info.size[1] > 0);
+                        inputResults[name].type = info.bands.length > 0 && hasSize ? 'raster' : 'vector';
+                        if (inputResults[name].type === 'vector') {
+                            return ogrinfo(inputResults[name]).then((vectorInfo) => {
+                                inputResults[name].info = vectorInfo;
+                            });
+                        }
+                        inputResults[name].info = info;
+                    } else {
+                        setLegacyType();
+                    }
+                    return true;
+                }).catch(() => setLegacyType());
+                promises.push(infoPromise);
             }
 
             clearOptions(optStr);
 
-            const datasets = Object.values(inputResults);
+            Promise.allSettled(promises).then(() => {
+                const datasets = Object.values(inputResults);
 
-            // unmount();
+                // unmount();
 
-            if (datasets.length > 0 || errors.length === 0) {
-                resolve({ datasets, errors });
-            } else {
-                reject(errors);
-            }
+                if (datasets.length > 0 || errors.length === 0) {
+                    resolve({ datasets, errors });
+                } else {
+                    reject(errors);
+                }
+            });
         });
     });
 }

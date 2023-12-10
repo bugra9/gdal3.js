@@ -24,7 +24,7 @@
     "coverageUrl": "https://gdal3.js.org/coverage",
     "nativeDependencies": [
         {
-            "name": "Emscripten 3.1.7",
+            "name": "Emscripten 3.1.50",
             "url": "https://github.com/emscripten-core/emscripten",
             "licenseUrl": "https://github.com/emscripten-core/emscripten/blob/main/LICENSE"
         },
