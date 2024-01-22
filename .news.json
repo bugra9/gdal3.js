@@ -1,5 +1,26 @@
 [
     {
+        "version": "v2.7.0",
+        "date": "22.01.2024",
+        "commits": [
+            {
+                "description": "Update Gdal version from 3.8.1 to 3.8.3",
+                "hash": "6be706e0977d186db633fffcfea2f4e8ae5feec9",
+                "user": "bugra9"
+            },
+            {
+                "description": "Update Emscripten version from 3.1.50 to 3.1.51",
+                "hash": "6be706e0977d186db633fffcfea2f4e8ae5feec9",
+                "user": "bugra9"
+            },
+            {
+                "description": "Move chai.js and mocha.js from cdn to local",
+                "hash": "6be706e0977d186db633fffcfea2f4e8ae5feec9",
+                "user": "bugra9"
+            }
+        ]
+    },
+    {
         "version": "v2.6.0",
         "date": "11.12.2023",
         "commits": [
