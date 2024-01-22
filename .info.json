@@ -24,12 +24,12 @@
     "coverageUrl": "https://gdal3.js.org/coverage",
     "nativeDependencies": [
         {
-            "name": "Emscripten 3.1.50",
+            "name": "Emscripten 3.1.51",
             "url": "https://github.com/emscripten-core/emscripten",
             "licenseUrl": "https://github.com/emscripten-core/emscripten/blob/main/LICENSE"
         },
         {
-            "name": "Gdal 3.8.1",
+            "name": "Gdal 3.8.3",
             "url": "https://github.com/OSGeo/gdal",
             "licenseUrl": "https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT"
         },
