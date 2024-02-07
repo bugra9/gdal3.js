@@ -1,5 +1,26 @@
 [
     {
+        "version": "v2.8.0",
+        "date": "07.02.2024",
+        "commits": [
+            {
+                "description": "Export Emscripten Module (FS, etc.)",
+                "hash": "9d084c66d24c027c40d2cba2e6bcc24c497ab81e",
+                "user": "bugra9"
+            },
+            {
+                "description": "Update Sqlite, Zlib and Expat versions",
+                "hash": "9d084c66d24c027c40d2cba2e6bcc24c497ab81e",
+                "user": "bugra9"
+            },
+            {
+                "description": "Disable OGR GPSBabel driver",
+                "hash": "7852e3099cff1b23c81d846c9aa34462046cfa23",
+                "user": "rouault"
+            }
+        ]
+    },
+    {
         "version": "v2.7.0",
         "date": "22.01.2024",
         "commits": [
