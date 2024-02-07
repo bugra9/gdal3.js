@@ -70,9 +70,9 @@ export default function open(fileOrFiles, openOptions = [], VFSHandlers = []) {
         const externalFiles = [];
         [...files].forEach((file) => {
             if ((typeof file === 'string' || file instanceof String) && (
-                file.substr(0, INPUTPATH.length + 1) === `${INPUTPATH}/` || file.substr(0, OUTPUTPATH.length + 1) === `${OUTPUTPATH}/`
+                file.substring(0, INPUTPATH.length + 1) === `${INPUTPATH}/` || file.substring(0, OUTPUTPATH.length + 1) === `${OUTPUTPATH}/`
             )) {
-                internalFiles.push({ name: file.substr(OUTPUTPATH.length + 1), internal: true });
+                internalFiles.push({ name: file.substring(file.indexOf('/', 1) + 1), internal: true, prefix: file.substring(0, file.indexOf('/', 1)) });
             } else {
                 externalFiles.push(file);
             }
@@ -92,7 +92,7 @@ export default function open(fileOrFiles, openOptions = [], VFSHandlers = []) {
                 inputResults[name].path = path;
                 const vfsHandlerStr = VFSHandlers && VFSHandlers.length ? `/${VFSHandlers.join('/')}/` : '';
                 let fileFullPath = `${vfsHandlerStr}${INPUTPATH}/${path}`;
-                if (mountedFiles[i].internal) fileFullPath = `${OUTPUTPATH}/${path}`;
+                if (mountedFiles[i].internal) fileFullPath = `${vfsHandlerStr}${mountedFiles[i].prefix}/${path}`;
 
                 const datasetPtr = GDALFunctions.GDALOpenEx(fileFullPath, null, null, optStr.ptr, null);
                 if (datasetPtr === 0) {

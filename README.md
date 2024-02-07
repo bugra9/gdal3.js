@@ -46,14 +46,14 @@ PDF, PGDUMP
 Note:  It doesn't work with web worker.
 ```html
 <script type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.7.0/dist/package/gdal3.js"
-    integrity="sha384-XCdiemXIuf5D00dVi5q7Zcjjwhk6EqRvhL7Em9LXc8DsDglRZic5wQZCLrVZQ9+f"
+    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.8.0/dist/package/gdal3.js"
+    integrity="sha384-BzpSb6YmxbpVPRLGih2K5JInaXNZXX57xLRYaXRMiIrBaLZGo2yATY2cAtQFg6eC"
     crossorigin="anonymous"
 ></script>
 ```
 
 ```js
-initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.7.0/dist/package', useWorker: false }).then((Gdal) => {});
+initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.8.0/dist/package', useWorker: false }).then((Gdal) => {});
 ```
 > Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser)
 
@@ -80,6 +80,8 @@ initGdalJs().then((Gdal) => {});
 
 **Builder such as Webpack (Vue, React, Angular, ...)**
 ```bash
+pnpm add gdal3.js
+# or
 yarn add gdal3.js
 # or
 npm install gdal3.js
@@ -105,6 +107,8 @@ plugins: [
 
 **Vite + Vue3**
 ```bash
+pnpm add gdal3.js
+# or
 yarn add gdal3.js
 # or
 npm install gdal3.js
@@ -137,6 +141,8 @@ initGdalJs({paths}).then((Gdal) => {
 
 **Node**
 ```bash
+pnpm add gdal3.js
+# or
 yarn add gdal3.js
 # or
 npm install gdal3.js
@@ -234,8 +240,8 @@ console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 ### Compiling
 - Install the EMSDK, [as described here](https://emscripten.org/docs/getting_started/downloads.html)
 - Install Sqlite3. ([#31](https://github.com/bugra9/gdal3.js/issues/31))
-- Run `yarn compile` or `make`. Run `make type=debug` for debug version.
-- Run `yarn build`. Run `yarn build-dev` for debug version.
+- Run `pnpm install`
+- Run `pnpm run build`
 
 ## License
 GNU Lesser General Public License v2.1 or later
@@ -248,12 +254,12 @@ See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the
 - [Proj 9.3.1](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
 - [Geos 3.12.1](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
 - [Spatialite 5.1.0](https://www.gaia-gis.it/fossil/libspatialite/index) [(License)](http://www.gnu.org/licenses/lgpl-2.1.html)
-- [Sqlite 3.44.2](https://www.sqlite.org/index.html) [(License)](https://www.sqlite.org/copyright.html)
+- [Sqlite 3.45.1](https://www.sqlite.org/index.html) [(License)](https://www.sqlite.org/copyright.html)
 - [GeoTIFF 1.7.1](https://github.com/OSGeo/libgeotiff) [(License)](https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE)
 - [Tiff 4.6.0](https://gitlab.com/libtiff/libtiff) [(License)](https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT)
 - [WebP 1.3.2](https://chromium.googlesource.com/webm/libwebp) [(License)](https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING)
-- [Expat 2.5.0](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
-- [Zlib 1.2.12](https://www.zlib.net/) [(License)](https://www.zlib.net/zlib_license.html)
+- [Expat 2.6.0](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
+- [Zlib 1.3.1](https://www.zlib.net/) [(License)](https://www.zlib.net/zlib_license.html)
 - [Iconv 1.17](https://www.gnu.org/software/libiconv/) [(License)](https://www.gnu.org/software/libiconv/)
 
 **Inspired by**

@@ -1,16 +1,16 @@
 GDAL_VERSION = 3.8.3
 SPATIALITE_VERSION = 5.1.0
-SQLITE_VERSION = 3440200
+SQLITE_VERSION = 3450100
 GEOS_VERSION = 3.12.1
 PROJ_VERSION = 9.3.1
-ZLIB_VERSION = 1.3
+ZLIB_VERSION = 1.3.1
 TIFF_VERSION = 4.6.0
 GEOTIFF_VERSION = 1.7.1
 WEBP_VERSION = 1.3.2
-EXPAT_VERSION = 2.5.0
+EXPAT_VERSION = 2.6.0
 ICONV_VERSION = 1.17
 
-SQLITE_URL = "https://www.sqlite.org/2023/sqlite-autoconf-$(SQLITE_VERSION).tar.gz"
+SQLITE_URL = "https://www.sqlite.org/2024/sqlite-autoconf-$(SQLITE_VERSION).tar.gz"
 PROJ_URL = "http://download.osgeo.org/proj/proj-$(PROJ_VERSION).tar.gz"
 GEOS_URL = "http://download.osgeo.org/geos/geos-$(GEOS_VERSION).tar.bz2"
 SPATIALITE_URL = "http://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-$(SPATIALITE_VERSION).tar.gz"
@@ -54,10 +54,10 @@ GDAL_SRC = $(SRC_DIR)/gdal-$(GDAL_VERSION)
 gdal3.js: $(DIST_DIR)/gdal3WebAssembly.js
 gdal: $(ROOT_DIR)/lib/libgdal.a
 
-$(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a $(ROOT_DIR)/lib/gdalinfo_lib.cpp.o
+$(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
 	mkdir -p $(DIST_DIR); \
 	cd $(DIST_DIR); \
-	EMCC_CORES=4 $(EMCC) $(ROOT_DIR)/lib/libgdal.a $(ROOT_DIR)/lib/gdalinfo_lib.cpp.o $(ROOT_DIR)/lib/ogrinfo_lib.cpp.o \
+	EMCC_CORES=4 $(EMCC) $(ROOT_DIR)/lib/libgdal.a \
 		$(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libspatialite.a \
 		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libsharpyuv.a $(ROOT_DIR)/lib/libwebpdemux.a \
 		$(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libgeotiff.a \
@@ -65,10 +65,6 @@ $(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a $(ROOT_DIR)/lib/gdali
 		-o $@ $(GDAL_EMCC_FLAGS) \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
 		--preload-file $(ROOT_DIR)/share/proj@/usr/share/proj;
-
-$(ROOT_DIR)/lib/gdalinfo_lib.cpp.o: $(ROOT_DIR)/lib/libgdal.a
-	cp "$(GDAL_SRC)/build/apps/CMakeFiles/appslib.dir/ogrinfo_lib.cpp.o" $(ROOT_DIR)/lib/ogrinfo_lib.cpp.o; \
-	cp "$(GDAL_SRC)/build/apps/CMakeFiles/appslib.dir/gdalinfo_lib.cpp.o" $(ROOT_DIR)/lib/gdalinfo_lib.cpp.o;
 
 $(ROOT_DIR)/lib/libgdal.a: $(GDAL_SRC)/build/Makefile
 	cd $(GDAL_SRC)/build; \

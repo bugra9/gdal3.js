@@ -15,6 +15,7 @@ import getOutputFiles from './allJsFunctions/function/getOutputFiles';
 import getFileBytes from './allJsFunctions/function/getFileBytes';
 
 import { drivers } from './allJsFunctions/helper/drivers';
+import { GDALFunctions } from './allCFunctions';
 
 export default {
     ogr2ogr,
@@ -31,4 +32,5 @@ export default {
     getOutputFiles,
     getFileBytes,
     drivers,
+    Module: GDALFunctions.Module,
 };

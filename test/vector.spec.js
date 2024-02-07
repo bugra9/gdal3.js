@@ -9,7 +9,7 @@ if (isNode) assert = require('chai').assert;
 else assert = chai.assert;
 
 const ignoredInputFormats = [''];
-const ignoredOutputFormats = ['GeoJSON', 'S57', 'PDS4', 'PDF', 'PGDUMP', 'GPSBabel', 'OpenFileGDB'];
+const ignoredOutputFormats = ['GeoJSON', 'S57', 'PDS4', 'PDF', 'PGDUMP', 'OpenFileGDB'];
 const ignoredParams = [
     'ESRI Shapefile-SHPT',
     'CSV',
