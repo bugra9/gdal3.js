@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="mocha.css" />
+    <style>
+      html {
+        box-sizing:border-box;
+        font-family:sans-serif;
+        -ms-text-size-adjust:100%;
+        -webkit-text-size-adjust:100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      ul.apps {
+        display: flex;
+        margin: 0;
+        padding: 10px 10px;
+        background-color: white;
+      }
+
+      ul.apps > li {
+        list-style-type: none;
+        margin: 0 20px;
+        color: #333;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      ul.apps > li > a:hover {
+        text-decoration: underline;
+      }
+
+      ul.apps > li.selected > a {
+        color: #3f51b5;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <ul class="apps">
+        <li><a href="https://gdal3.js.org/">gdal3.js</a></li>
+        <li class="selected"><a href="https://gdal3.js.org/test">Test</a></li>
+        <li><a href="https://gdal3.js.org/coverage">Coverage</a></li>
+      </ul>
+    </header>
+
+    <div id="mocha"></div>
+
+    <script src="./chai.js"></script>
+    <script src="./mocha.js"></script>
+
+    <script class="mocha-init">
+      mocha.setup('bdd');
+    </script>
+    <script src="../package/gdal3.js"></script>
+    <script type="module" src="./specs/vector.spec.js"></script>
+    <script type="module" src="./specs/raster.spec.js"></script>
+
+    <script type="module" src="./specs/gdal_rasterize.spec.js"></script>
+    <script type="module" src="./specs/gdal_translate.spec.js"></script>
+    <script type="module" src="./specs/gdaltransform.spec.js"></script>
+    <script type="module" src="./specs/gdalwarp.spec.js"></script>
+    <script type="module" src="./specs/ogr2ogr.spec.js"></script>
+    <script type="module" src="./specs/gdal_location_info.spec.js"></script>
+    <script type="module" src="./specs/gdalinfo.spec.js"></script>
+    <script type="module" src="./specs/ogrinfo.spec.js"></script>
+
+    <script type="module" src="./specs/close.spec.js"></script>
+    <script type="module" src="./specs/getFileBytes.spec.js"></script>
+    <script type="module" src="./specs/getInfo.spec.js"></script>
+    <script type="module" src="./specs/getOutputFiles.spec.js"></script>
+    <script type="module" src="./specs/open.spec.js"></script>
+
+    <script type="module" class="mocha-exec">
+      mocha.run();
+    </script>
+  </body>
+</html>
