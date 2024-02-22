@@ -1,5 +1,21 @@
 [
     {
+        "version": "v2.8.1",
+        "date": "23.02.2024",
+        "commits": [
+            {
+                "description": "Update Gdal version from 3.8.3 to 3.8.4",
+                "hash": "81711786e8f73e28d3d046db2261f9b491ddff83",
+                "user": "bugra9"
+            },
+            {
+                "description": "Enable PDS driver",
+                "hash": "81711786e8f73e28d3d046db2261f9b491ddff83",
+                "user": "bugra9"
+            }
+        ]
+    },
+    {
         "version": "v2.8.0",
         "date": "07.02.2024",
         "commits": [
