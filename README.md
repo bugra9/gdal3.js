@@ -1,18 +1,25 @@
-# gdal3.js - Gdal compiled to JavaScript
-[![npm](https://img.shields.io/npm/v/gdal3.js?style=for-the-badge)](https://www.npmjs.com/package/gdal3.js)
+<div align="center">
+  <h1>gdal3.js</h1>
+<p align="center">
+  <strong>Gdal compiled to JavaScript</strong><br>
+  WebAssembly & React Native
+</p>
 
-gdal3.js is a port of Gdal applications (**gdal_translate**, **ogr2ogr**, **gdal_rasterize**, **gdalwarp**, **gdaltransform**) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
+<a href="https://www.npmjs.com/package/gdal3.js"><img alt="gdal3.js npm version" src="https://img.shields.io/npm/v/gdal3.js?style=for-the-badge&label=gdal3.js" /></a>
+<a href="https://www.npmjs.com/package/@gdal3.js/prebuilt"><img alt="@gdal3.js/prebuilt npm version" src="https://img.shields.io/npm/v/@gdal3.js/prebuilt?style=for-the-badge&label=@gdal3.js/prebuilt" /></a>
+</div>
 
-gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, expat, zlib and iconv to webassembly.
+<h3 align="center">
+  <a href=".">Home Page</a>
+  <span> · </span>
+  <a href=".">Documentation</a>
+  <span> · </span>
+  <a href=".">Migrating from v2.x to v3.x</a>
+</h3>
 
-If you are building a native application in JavaScript (using Electron for instance), or are working in node.js, you will likely prefer to use a native binding of Gdal to JavaScript. A native binding will be faster because it will run native code.
+Gdal3.js is a port of Gdal to Webassembly and React Native. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.
 
-**gdal3.js GUI**
-
-gdal3.js GUI is a web application that provides a gui to gdal_translate, ogr2ogr and gdal_rasterize applications to be used online. Uses gdal3.js in the background.
-It runs on the browser and files are converted on the client side.
-
-[https://gdal3.js.org](https://gdal3.js.org)
+Gdal3.js includes Gdal, Proj, Geos, Spatialite, Sqlite, Geotiff, Tiff, Webp, Expat, Zlib and Iconv libraries.
 
 ## Supported Formats
 
@@ -37,100 +44,151 @@ AVCBin, AVCE00, CAD, EDIGEO, ESRIJSON, GTFS, Idrisi, LVBAG, OGR_PDS, OGR_SDTS, O
 **Write Only** \
 PDF, PGDUMP
 
+## Packages
+
+| Package | Description |
+| ------- | ----------- |
+| `gdal3.js` | package contains only the WebAssembly output, eliminating the need for compilation. It is compatible with both browser and Node.js environments. |
+| `@gdal3.js/prebuilt` | package includes precompiled libraries for Android, iOS, and WebAssembly. It is compatible with Browser, Node.js, and React Native environments. However, due to its dependencies, the download size is relatively large. If storage space and internet bandwidth are not a concern, this package is highly recommended for ease of use. |
+| &nbsp; | &nbsp; |
+| `@gdal3.js/app-web` | package is a web application that provides a user interface for using the gdal_translate, ogr2ogr, and gdal_rasterize tools online. It utilizes gdal3.js in the background to process files directly in the browser, ensuring all file conversions occur on the client side. <br /><br /> [https://gdal3.js.org](https://gdal3.js.org) |
+| `@gdal3.js/app-mobile` | package is a mobile application that also provides a user interface for the gdal_translate, ogr2ogr, and gdal_rasterize tools. Similar to the web application, it uses gdal3.js in the background to handle file conversions entirely on the client side, running directly on mobile devices. |
 
 ## Guide
 
-### Installation
+### Installation with Cpp.js Plugins (Web, Node.js, React Native, ...)
 
-**Script (CDN)** \
-Note:  It doesn't work with web worker.
+> [!TIP]  
+> The @gdal3.js/prebuilt package is fully compatible with **Cpp.js**. For more details, [click here](https://cpp.js.org/).
+
+> [!WARNING]  
+> Due to its dependencies, the download size is relatively large. If storage space and internet bandwidth are not a concern in the development environment, this package is highly recommended for ease of use.
+
+Add gdal3.js prebuilt library.
+
+```bash
+pnpm add @gdal3.js/prebuilt
+```
+
+Add the cpp.js plugin of the bundler you are using and intregrate it. [(Integration)](https://cpp.js.org/docs/guide/integrate-into-existing-project/overview)
+
+Cpp.js requires a configuration file to work. For a minimal setup, create a cppjs.config.js file and add the following content.
+```js
+export default {
+    paths: {
+        config: import.meta.url,
+    },
+};
+```
+<br />
+
+\# **To use directly gdal3.js header files in JavaScript**
+```js
+import { initCppJs, Gdal } from '@gdal3.js/prebuilt/Gdal.h';
+import '@gdal3.js/prebuilt/Driver.h';
+import '@gdal3.js/prebuilt/Dataset.h';
+
+await initCppJs();
+```
+<br />
+
+\# **Using gdal3.js in c++ file and calling it from JavaScript**  
+
+Create your C++ code to the src/native directory and import gdal3.js. For example;
+
+```c++
+// src/native/MySample.h
+#pragma once
+#include <gdal3js/Gdal.h>
+
+int getGdalDriverCount() {
+    return Gdal::getDriverCount();
+}
+```
+
+```js
+// src/index.js
+import { initCppJs, getGdalDriverCount } from './native/MySample.h';
+
+await initCppJs();
+console.log(getGdalDriverCount());
+```
+
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-sample-browser-vite-plugin](https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-sample-browser-vite-plugin)
+
+<br />
+
+### Installation with gdal3.js
+
+**Script (CDN)** 
 ```html
 <script type="text/javascript"
-    src="https://cdn.jsdelivr.net/npm/gdal3.js@2.8.1/dist/package/gdal3.js"
-    integrity="sha384-yW4c2Jx7lsREjJg58+ZI5U6gAso2bRAPw3LdzPWm7z8+rMJ24R7AS+EFyXDPxgYM"
+    src="https://cdn.jsdelivr.net/npm/gdal3.js@3.0.0-beta.1/dist/gdal3js.browser.js"
+    integrity="sha384-PfNA9w/SrHFWvTnW83HsR8YEdDSjyXzS0O228IO6XeaQLE/CO2xeCBe2h+/GQ43b"
     crossorigin="anonymous"
 ></script>
 ```
 
 ```js
-initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.8.1/dist/package', useWorker: false }).then((Gdal) => {});
+initCppJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@3.0.0-beta.1/dist' }).then(({ Gdal }) => {});
 ```
-> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser)
-
-**Script (Local)**
-```html
-<script type="text/javascript" src="gdal3.js"></script>
-```
-
-```js
-initGdalJs().then((Gdal) => {});
-```
-> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker](https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker)
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-sample-browser](https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-sample-browser)
 
 **ES Module**
 ```html
 <script type="module">
-    import 'gdal3.js'
+    import 'gdal3js.browser.js'
 
-    initGdalJs().then((Gdal) => {});
+    initCppJs().then(({ Gdal }) => {});
 </script>
 ```
-> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser-worker](https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser-worker) \
-> Example: [https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser](https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser)
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-sample-browser-module](https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-sample-browser-module)
 
 **Builder such as Webpack (Vue, React, Angular, ...)**
 ```bash
 pnpm add gdal3.js
-# or
-yarn add gdal3.js
-# or
-npm install gdal3.js
 ```
 
 ```js
-import initGdalJs from 'gdal3.js';
+import initCppJs from 'gdal3.js';
 
-initGdalJs({ path: 'static' }).then((Gdal) => {});
+initCppJs({ path: 'dist' }).then(({ Gdal }) => {});
 ```
 
 ```js
 plugins: [
     new CopyWebpackPlugin({
         patterns: [
-            { from: '../node_modules/gdal3.js/dist/package/gdal3WebAssembly.wasm', to: 'static' },
-            { from: '../node_modules/gdal3.js/dist/package/gdal3WebAssembly.data', to: 'static' }
+            { from: require.resolve('gdal3.js/dist/gdal3js.wasm'), to: 'dist' },
+            { from: require.resolve('gdal3.js/dist/gdal3js.data.txt'), to: 'dist' }
         ]
     })
 ]
 ```
-> Full working example: [https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/src/App.vue](https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/src/App.vue)
+> Full working example: [https://github.com/bugra9/gdal3.js/blob/master/packages/gdal3js-app-web/src/App.vue](https://github.com/bugra9/gdal3.js/blob/master/packages/gdal3js-app-web/src/App.vue)
 
 **Vite + Vue3**
 ```bash
 pnpm add gdal3.js
-# or
-yarn add gdal3.js
-# or
-npm install gdal3.js
 ```
 
 ```html
 <script setup>
 import { ref } from 'vue'
-import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'
-import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url'
-import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url'
-import initGdalJs from 'gdal3.js';
+import dataUrl from 'gdal3.js/dist/gdal3js.data.txt?url'
+import wasmUrl from 'gdal3.js/dist/gdal3js.wasm?url'
+import 'gdal3.js';
 
 const paths = {
   wasm: wasmUrl,
   data: dataUrl,
-  js: workerUrl,
 };
 
 const count = ref(0);
-initGdalJs({paths}).then((Gdal) => {
-    count.value = Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length;
+initCppJs({paths}).then(({ Gdal, toArray }) => {
+    Gdal.allRegister();
+    const drivers = toArray(Gdal.getDrivers());
+    count.value = drivers.length;
 });
 </script>
 
@@ -139,76 +197,87 @@ initGdalJs({paths}).then((Gdal) => {
 </template>
 ```
 
+> Example: [https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-sample-browser-vite](https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-sample-browser-vite)
+
 **Node**
 ```bash
 pnpm add gdal3.js
-# or
-yarn add gdal3.js
-# or
-npm install gdal3.js
 ```
 
 ```js
-const initGdalJs = require('gdal3.js/node');
+const initCppJs = require('gdal3.js/node.js');
 
-initGdalJs().then((Gdal) => {});
+initCppJs().then(({ Gdal }) => {});
 ```
-> Example: [https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/index.js](https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/index.js)
+> Example: [https://github.com/bugra9/gdal3.js/blob/master/packages/gdal3js-sample-nodejs/index.js](https://github.com/bugra9/gdal3.js/blob/master/packages/gdal3js-sample-nodejs/index.js)
 
 ### Basic Usage
 ```js
-const Gdal = await initGdalJs();
+import { initCppJs, Gdal, AllSymbols } from '@gdal3.js/prebuilt/Gdal.h';
+import '@gdal3.js/prebuilt/Driver.h';
+import '@gdal3.js/prebuilt/Dataset.h';
 
-const files = ['a.mbtiles', 'b.tif']; // [Vector, Raster]
-const result = await Gdal.open(files); // https://gdal3.js.org/docs/module-f_open.html
-const mbTilesDataset = result.datasets[0];
-const tifDataset = result.datasets[1];
+await initCppJs();
+const { autoMountFiles, toVector, VectorString, generateVirtualPath, getFileBytes } = AllSymbols;
+const virtualTempPath = generateVirtualPath();
 
+Gdal.allRegister();
+
+const files = autoMountFiles(['a.mbtiles', 'b.tif']); // [Vector, Raster]
+const mbTilesDataset = Gdal.openEx(files[0]);
+const tifDataset = Gdal.openEx(files[1]);
 
 /* ======== Dataset Info ======== */
-// https://gdal3.js.org/docs/module-f_getInfo.html
-const mbTilesDatasetInfo = await Gdal.getInfo(mbTilesDataset); // Vector
-const tifDatasetInfo = await Gdal.getInfo(tifDataset); // Raster
-
+let infoOptions = ['-json'];
+infoOptions = toVector(VectorString, infoOptions);
+const mbTilesDatasetInfo = JSON.parse(mbTilesDataset.info(infoOptions));
+const tifDatasetInfo = JSON.parse(tifDataset.info(infoOptions));
 
 /* ======== Vector translate (mbtiles -> geojson) ======== */
-const options = [ // https://gdal.org/programs/ogr2ogr.html#description
+let options = [
     '-f', 'GeoJSON',
     '-t_srs', 'EPSG:4326'
 ];
-const output = await Gdal.ogr2ogr(mbTilesDataset, options); // https://gdal3.js.org/docs/module-a_ogr2ogr.html
-const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
-
+options = toVector(VectorString, options);
+const outputPath = `${virtualTempPath}/a.geojson`;
+mbTilesDataset.vectorTranslate(outputPath, options);
+const bytes = getFileBytes(outputPath);
 
 /* ======== Raster translate (tif -> png) ======== */
-const options = [ // https://gdal.org/programs/gdal_translate.html#description
+let options = [
     '-of', 'PNG'
 ];
-const output = await Gdal.gdal_translate(tifDataset, options); // https://gdal3.js.org/docs/module-a_gdal_translate.html
-const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
-
+options = toVector(VectorString, options);
+const outputPath = `${virtualTempPath}/b.png`;
+tifDataset.translate(outputPath, options);
+const bytes = getFileBytes(outputPath);
 
 /* ======== Rasterize (mbtiles -> tif) ======== */
-const options = [ // https://gdal.org/programs/gdal_rasterize.html#description
+let options = [
     '-of', 'GTiff',
     '-co', 'alpha=yes'
 ];
-const output = await Gdal.gdal_rasterize(mbTilesDataset, options); // https://gdal3.js.org/docs/module-a_gdal_rasterize.html
-const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
-
+options = toVector(VectorString, options);
+const outputPath = `${virtualTempPath}/b.png`;
+mbTilesDataset.rasterize(outputPath, options);
+const bytes = getFileBytes(outputPath);
 
 /* ======== Warp (reprojection) ======== */
-const options = [ // https://gdal.org/programs/gdalwarp.html#description
+let options = [ // https://gdal.org/programs/gdalwarp.html#description
     '-of', 'GTiff',
     '-t_srs', 'EPSG:4326'
 ];
-const output = await Gdal.gdalwarp(tifDataset, options); // https://gdal3.js.org/docs/module-a_gdalwarp.html
-const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
+options = toVector(VectorString, options);
+const outputPath = `${virtualTempPath}/c.tif`;
+Gdal.warp(outputPath, tifDataset, options);
+const bytes = getFileBytes(outputPath);
 
+// Close all datasets.
+tifDataset.close();
+mbTilesDataset.close();
 
-// Close all datasets. // https://gdal3.js.org/docs/module-f_close.html
-Gdal.close(mbTilesDataset);
-Gdal.close(tifDataset);
+/* ======== Transform (Coordinate) ======== */
+
 
 
 /* ======== Transform (Coordinate) ======== */
@@ -224,24 +293,18 @@ const newCoords = await Gdal.gdaltransform(coords, options); // https://gdal3.js
 console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
 ```
 
-## API References
-[https://gdal3.js.org/docs](https://gdal3.js.org/docs)
-
-## Examples
-- Full working example with worker and Vue.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/), [Live](https://gdal3.js.org/)
-- Browser with Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser-worker/), [Live](https://gdal3.js.org/examples/example-browser-worker/)
-- Browser without Worker -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser/), [Live](https://gdal3.js.org/examples/example-browser/)
-- Browser with Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser-worker/), [Live](https://gdal3.js.org/examples/example-module-browser-worker/)
-- Browser without Worker (Module) -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser/), [Live](https://gdal3.js.org/examples/example-module-browser/)
-- Node.js -> [Code](https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/)
+## Documentation
+[https://gdal3.js.org/docs/](https://gdal3.js.org/docs/)
 
 ## Development
 
-### Compiling
-- Install the EMSDK, [as described here](https://emscripten.org/docs/getting_started/downloads.html)
-- Install Sqlite3. ([#31](https://github.com/bugra9/gdal3.js/issues/31))
-- Run `pnpm install`
-- Run `pnpm run build`
+Gdal3.js provides a high-level wrapper for GDAL, enabling easy and smooth usage. The project relies on Cpp.js for compilation and seamless integration.
+
+The source code for the Gdal3.js project is available at [packages/gdal3js-prebuilt/src/native](https://github.com/bugra9/gdal3.js/tree/master/packages/gdal3js-prebuilt/src/native). The WebAssembly output is automatically copied to the Gdal3.js package.
+
+The dependencies of Gdal3.js—GDAL, Proj, GEOS, SpatiaLite, SQLite, GeoTIFF, TIFF, WebP, Expat, zlib, and Iconv—are compiled using Cpp.js. Changes to these dependencies can be made via the [Cpp.js project](https://github.com/bugra9/cpp.js/tree/main/packages).
+
+For more information about the dependencies, refer to [Cpp.js Packages](https://cpp.js.org/docs/package/package/showcase).
 
 ## License
 GNU Lesser General Public License v2.1 or later
@@ -249,21 +312,16 @@ GNU Lesser General Public License v2.1 or later
 See [LICENSE](https://github.com/bugra9/gdal3.js/blob/master/LICENSE) to see the full text.
 
 **Compiled with**
+- [Cpp.js 1.0.4](https://cpp.js.org/) [(License)](https://github.com/bugra9/cpp.js/blob/main/LICENSE)
 - [Emscripten 3.1.51](https://github.com/emscripten-core/emscripten) [(License)](https://github.com/emscripten-core/emscripten/blob/main/LICENSE)
-- [Gdal 3.8.4](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT)
-- [Proj 9.3.1](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
-- [Geos 3.12.1](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
+- [Gdal 3.10.1](https://github.com/OSGeo/gdal) [(License)](https://github.com/OSGeo/gdal/blob/master/LICENSE.TXT)
+- [Proj 9.5.1](https://github.com/OSGeo/PROJ) [(License)](https://github.com/OSGeo/PROJ/blob/master/COPYING)
+- [Geos 3.13.0](https://github.com/libgeos/geos) [(License)](https://github.com/libgeos/geos/blob/master/COPYING)
 - [Spatialite 5.1.0](https://www.gaia-gis.it/fossil/libspatialite/index) [(License)](http://www.gnu.org/licenses/lgpl-2.1.html)
-- [Sqlite 3.45.1](https://www.sqlite.org/index.html) [(License)](https://www.sqlite.org/copyright.html)
-- [GeoTIFF 1.7.1](https://github.com/OSGeo/libgeotiff) [(License)](https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE)
-- [Tiff 4.6.0](https://gitlab.com/libtiff/libtiff) [(License)](https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT)
-- [WebP 1.3.2](https://chromium.googlesource.com/webm/libwebp) [(License)](https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING)
-- [Expat 2.6.0](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
+- [Sqlite 3.48.0](https://www.sqlite.org/index.html) [(License)](https://www.sqlite.org/copyright.html)
+- [GeoTIFF 1.7.3](https://github.com/OSGeo/libgeotiff) [(License)](https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE)
+- [Tiff 4.7.0](https://gitlab.com/libtiff/libtiff) [(License)](https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT)
+- [WebP 1.5.0](https://chromium.googlesource.com/webm/libwebp) [(License)](https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING)
+- [Expat 2.6.4](https://github.com/libexpat/libexpat) [(License)](https://github.com/libexpat/libexpat/blob/master/expat/COPYING)
 - [Zlib 1.3.1](https://www.zlib.net/) [(License)](https://www.zlib.net/zlib_license.html)
-- [Iconv 1.17](https://www.gnu.org/software/libiconv/) [(License)](https://www.gnu.org/software/libiconv/)
-
-**Inspired by**
-- [ddohler/gdal-js](https://github.com/ddohler/gdal-js)
-- [sql-js/sql.js](https://github.com/sql-js/sql.js)
-- [jvail/spatiasql.js](https://github.com/jvail/spatiasql.js)
-- [azavea/loam](https://github.com/azavea/loam)
+- [Iconv 1.18](https://www.gnu.org/software/libiconv/) [(License)](https://www.gnu.org/software/libiconv/)

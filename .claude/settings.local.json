@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm view *)",
+      "Bash(ls -1 ios/)",
+      "Bash(ls -1 ios/*/)",
+      "Bash(ls -1 android/app/src/main/)",
+      "Bash(find android/app/src/main/java -type f)",
+      "WebFetch(domain:react-native-community.github.io)",
+      "Bash(curl -sSL -o /tmp/rn-upgrade.diff \"https://raw.githubusercontent.com/react-native-community/rn-diff-purge/diffs/diffs/0.76.6..0.85.2.diff\")",
+      "Read(//tmp/**)",
+      "Bash(pnpm --version)",
+      "Bash(rm -rf node_modules package-lock.json)",
+      "Bash(npm install *)",
+      "Bash(tee /tmp/rn-upgrade-install.log)",
+      "Bash(npx react-native *)",
+      "Bash(echo \"=== exit=$? ===\")",
+      "Bash(npx tsc *)",
+      "Bash(echo \"=== tsc exit=$? ===\")",
+      "Bash(npx mocha *)",
+      "Bash(npx serve *)",
+      "Bash(curl -sS -I http://localhost:5173/test/)",
+      "mcp__plugin_everything-claude-code_playwright__browser_navigate",
+      "Bash(node -e ' *)",
+      "Bash(npm list *)",
+      "Bash(npm ls *)",
+      "Bash(grep -nA 5 \"GDAL_NUM_THREADS\\\\|ALL_CPUS\\\\|CPLGetNumCPUs\" /Users/bugra/Documents/backup/Documents/OtherProject/gdal-master/gdal/port/cpl_multiproc.cpp)"
+    ]
+  }
+}

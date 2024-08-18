@@ -28,16 +28,18 @@ const ignoredParams = [
 
 const suffixes = {
     'Leveller': { outputParams: ['-ot', 'Float32', '-co', 'MINUSERPIXELVALUE=1'] },
-    'Terragen': { outputParams: ['-ot', 'Float32','-co', 'MINUSERPIXELVALUE=1', '-co', 'MAXUSERPIXELVALUE=2'] },
-    'PDS4': { outputParams: [
-        '-co', 'VAR_TARGET_TYPE=Satellite',
-        '-co', 'VAR_TARGET=Moon',
-        '-co', 'VAR_OBSERVING_SYSTEM_NAME=LOLA',
-        '-co', 'VAR_LOGICAL_IDENTIFIER=Lunar_LRO_LOLA_DEM_Global_64ppd.tif',
-        '-co', 'VAR_TITLE="LRO LOLA Digital Elevation Model (DEM) 64ppd"',
-        '-co', 'VAR_INVESTIGATION_AREA_NAME="Lunar Reconnaissance Orbiter"',
-        '-co', 'VAR_INVESTIGATION_AREA_LID_REFERENCE="urn:nasa:pds:context:instrument_host:spacecraft.lro"',
-    ] },
+    'Terragen': { outputParams: ['-ot', 'Float32', '-co', 'MINUSERPIXELVALUE=1', '-co', 'MAXUSERPIXELVALUE=2'] },
+    'PDS4': {
+        outputParams: [
+            '-co', 'VAR_TARGET_TYPE=Satellite',
+            '-co', 'VAR_TARGET=Moon',
+            '-co', 'VAR_OBSERVING_SYSTEM_NAME=LOLA',
+            '-co', 'VAR_LOGICAL_IDENTIFIER=Lunar_LRO_LOLA_DEM_Global_64ppd.tif',
+            '-co', 'VAR_TITLE="LRO LOLA Digital Elevation Model (DEM) 64ppd"',
+            '-co', 'VAR_INVESTIGATION_AREA_NAME="Lunar Reconnaissance Orbiter"',
+            '-co', 'VAR_INVESTIGATION_AREA_LID_REFERENCE="urn:nasa:pds:context:instrument_host:spacecraft.lro"',
+        ]
+    },
     'BT': { outputParams: ['-ot', 'Float32'] },
     'GTX': { outputParams: ['-ot', 'Float32'] },
     'NTv2': { outputParams: ['-ot', 'Float32'], file: 'simple-polygon-line-point' },
@@ -52,7 +54,7 @@ async function createTest() {
         const initGdalJs = require('../build/package/gdal3.coverage');
         Gdal = await initGdalJs({ path: 'build/package', dest });
     } else {
-        Gdal = await initGdalJs({ path: '../package', useWorker: false });
+        Gdal = await initGdalJs({ path: '../packages/gdal3.js/dist', useWorker: false });
     }
 
     describe('Raster Drivers', async () => {
@@ -65,11 +67,11 @@ async function createTest() {
                 [],
                 ...getOptions(driver.creationOptionList).map(value => ['-co', value]),
             ]
-                .filter((s) => s.length != 2 || (!ignoredParams.includes(driver.shortName) && !ignoredParams.includes(driver.shortName+'-'+s[1].split('=')[0])))
+                .filter((s) => s.length != 2 || (!ignoredParams.includes(driver.shortName) && !ignoredParams.includes(driver.shortName + '-' + s[1].split('=')[0])))
                 .forEach((s) => {
                     const params = [...s, ...tempParams];
                     const p = ['-of', driver.shortName, ...params];
-                    const p2 = `[${params.map(s => "'"+s+"'").join(', ')}]`;
+                    const p2 = `[${params.map(s => "'" + s + "'").join(', ')}]`;
 
                     let firstDataset2;
 
@@ -82,20 +84,20 @@ async function createTest() {
 
                         const result = await Gdal.open(file);
                         const firstDataset = result.datasets[0];
-                        assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the tif file. (ptr == 0)');
+                        assert.strictEqual(!!firstDataset.pointer, true, 'An error occurred while opening the tif file. (ptr == 0)');
                         const outputPath = await Gdal.gdal_translate(firstDataset, p);
 
-                        const result2 = await Gdal.open(`${outputPath.real}${suffix.outputFile || ''}`);
+                        const result2 = await Gdal.open(`${outputPath.local}${suffix.outputFile || ''}`);
                         firstDataset2 = result2.datasets[0];
                         const info = await Gdal.getInfo(firstDataset2);
-                        assert.strictEqual(firstDataset2.pointer > 0, true, 'An error occurred while converting the file. (ptr == 0)');
+                        assert.strictEqual(!!firstDataset2.pointer, true, 'An error occurred while converting the file. (ptr == 0)');
                         assert.strictEqual(info.bandCount > 0, true, `${driver.shortName} file has no layer. (bandCount == 0)`);
                     };
 
                     const readFunc = async () => {
                         const outputPath2 = await Gdal.ogr2ogr(firstDataset2, ['-of', 'GTiff', ...(suffix.inputParams || [])]);
 
-                        const result3 = await Gdal.open(outputPath2.real);
+                        const result3 = await Gdal.open(outputPath2.local);
                         const firstDataset3 = result3.datasets[0];
                         const info3 = await Gdal.getInfo(firstDataset3);
                         assert.strictEqual(info3.bandCount > 0, true, `tif file has no layer. (bandCount == 0)`);

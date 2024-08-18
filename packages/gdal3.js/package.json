@@ -1,0 +1,65 @@
+{
+    "name": "gdal3.js",
+    "version": "3.0.0-beta.4",
+    "description": "gdal3.js is a port of Gdal to Webassembly and React Native. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
+    "homepage": "https://gdal3.js.org",
+    "repository": "https://github.com/bugra9/gdal3.js.git",
+    "license": "LGPL-2.1-or-later",
+    "exports": {
+        ".": {
+            "import": "./index.mjs",
+            "require": "./index.cjs"
+        },
+        "./browser/st/js": "./dist/gdal3js-wasm-wasm32-st-release.browser.js",
+        "./browser/st/wasm": "./dist/gdal3js-wasm-wasm32-st-release.browser.wasm",
+        "./browser/st/data.txt": "./dist/gdal3js-wasm-wasm32-st-release.browser.data.txt",
+        "./browser/mt/js": "./dist/gdal3js-wasm-wasm32-mt-release.browser.js",
+        "./browser/mt/wasm": "./dist/gdal3js-wasm-wasm32-mt-release.browser.wasm",
+        "./browser/mt/data.txt": "./dist/gdal3js-wasm-wasm32-mt-release.browser.data.txt",
+        "./node/st/js": "./dist/gdal3js-wasm-wasm32-st-release.node.js",
+        "./node/st/wasm": "./dist/gdal3js-wasm-wasm32-st-release.node.wasm",
+        "./node/st/data.txt": "./dist/gdal3js-wasm-wasm32-st-release.node.data.txt",
+        "./node/mt/js": "./dist/gdal3js-wasm-wasm32-mt-release.node.js",
+        "./node/mt/wasm": "./dist/gdal3js-wasm-wasm32-mt-release.node.wasm",
+        "./node/mt/data.txt": "./dist/gdal3js-wasm-wasm32-mt-release.node.data.txt",
+        "./edge/st/js": "./dist/gdal3js-wasm-wasm32-st-release.edge.js",
+        "./edge/st/wasm": "./dist/gdal3js-wasm-wasm32-st-release.edge.wasm",
+        "./edge/st/data.txt": "./dist/gdal3js-wasm-wasm32-st-release.edge.data.txt",
+        "./cppjs.config.mjs": "./cppjs.config.mjs",
+        "./config": "./cppjs.config.mjs"
+    },
+    "files": [
+        "dist",
+        "gdal3js.xcframework",
+        "src",
+        "node.js",
+        "cppjs.config.mjs",
+        "gdal3js.podspec"
+    ],
+    "scripts": {
+        "build": "cppjs build",
+        "build:wasm": "cppjs build -p wasm",
+        "build:wasm:browser": "cppjs build -p wasm -e browser",
+        "build:wasm:st": "cppjs build -p wasm -r st",
+        "build:wasm:st:browser": "cppjs build -p wasm -r st -e browser",
+        "build:wasm:st:node": "cppjs build -p wasm -r st -e node",
+        "build:wasm:mt:browser": "cppjs build -p wasm -r mt -e browser",
+        "build:android": "cppjs build -p android",
+        "build:ios": "cppjs build -p ios",
+        "clear": "rm -rf .cppjs dist *.xcframework",
+        "test": "pnpm run test:node && pnpm run test:browser",
+        "test:node": "mocha",
+        "test:browser": "karma start .karma.conf.js"
+    },
+    "dependencies": {
+        "@cpp.js/package-gdal": "^2.0.0-beta.16"
+    },
+    "devDependencies": {
+        "cpp.js": "^2.0.0-beta.16",
+        "chai": "^4.3.10",
+        "mocha": "^11.0.1",
+        "mocha-loader": "^5.1.5",
+        "xml-js": "^1.6.11"
+    },
+    "packageManager": "pnpm@8.15.4+sha1.c85a4305534f76d461407b59277b954bac97b5c4"
+}

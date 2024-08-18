@@ -25,12 +25,12 @@ const ignoredParams = [
 ];
 
 const suffixes = {
-    'GPX': {file: 'line', inputParams: ['routes']},
-    'ESRI Shapefile': {file: 'line'},
-    'WAsP': {file: 'line', outputParams: ['-lco', 'WASP_FIELDS=z']},
-    'Geoconcept': {file: 'line'},
-    'GPSTrackMaker': {file: 'point', inputParams: ['point_waypoints']},
-    'MVT': {outputFile: '/0/0/0.pbf'},
+    'GPX': { file: 'line', inputParams: ['routes'] },
+    'ESRI Shapefile': { file: 'line' },
+    'WAsP': { file: 'line', outputParams: ['-lco', 'WASP_FIELDS=z'] },
+    'Geoconcept': { file: 'line' },
+    'GPSTrackMaker': { file: 'point', inputParams: ['point_waypoints'] },
+    'MVT': { outputFile: '/0/0/0.pbf' },
 };
 
 createTest();
@@ -40,12 +40,14 @@ async function createTest() {
         const initGdalJs = require('../build/package/gdal3.coverage');
         Gdal = await initGdalJs({ path: 'build/package', dest });
     } else {
-        Gdal = await initGdalJs({ path: '../package', useWorker: false });
+        Gdal = await initGdalJs({ path: '../packages/gdal3.js/dist', useWorker: false });
     }
 
     describe('Vector Drivers', async () => {
+        console.log('vector drivers', Gdal.drivers.vector);
         Object.values(Gdal.drivers.vector).filter(v => (v.extension !== "" || v.extensions !== "")).forEach(driver => {
             if (ignoredOutputFormats.includes(driver.shortName)) return;
+            console.log('pppp');
             const suffix = suffixes[driver.shortName] || {};
             const tempParams = suffixes[driver.shortName] && suffixes[driver.shortName].outputParams ? suffixes[driver.shortName].outputParams : [];
 
@@ -54,11 +56,12 @@ async function createTest() {
                 ...getOptions(driver.layerCreationOptionList).map(value => ['-lco', value]),
                 ...getOptions(driver.creationOptionList).map(value => ['-dsco', value]),
             ]
-                .filter((s) => s.length != 2 || (!ignoredParams.includes(driver.shortName) && !ignoredParams.includes(driver.shortName+'-'+s[1].split('=')[0])))
+                .filter((s) => s.length != 2 || (!ignoredParams.includes(driver.shortName) && !ignoredParams.includes(driver.shortName + '-' + s[1].split('=')[0])))
                 .forEach((s) => {
                     const params = [...s, ...tempParams];
                     const p = ['-f', driver.shortName, ...params];
-                    const p2 = `[${params.map(s => "'"+s+"'").join(', ')}]`;
+                    const p2 = `[${params.map(s => "'" + s + "'").join(', ')}]`;
+                    console.log('rrr', `geojson -> ${driver.shortName} params: ${p2}`);
 
                     let firstDataset2;
 
@@ -71,39 +74,46 @@ async function createTest() {
 
                         const result = await Gdal.open(file);
                         const firstDataset = result.datasets[0];
-                        assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the geojson file. (ptr == 0)');
+                        assert.strictEqual(!!firstDataset.pointer, true, 'An error occurred while opening the geojson file. (ptr == 0)');
                         const outputPath = await Gdal.ogr2ogr(firstDataset, p);
 
-                        const result2 = await Gdal.open(`${outputPath.real}${suffix.outputFile || ''}`);
+                        const result2 = await Gdal.open(`${outputPath.local}${suffix.outputFile || ''}`);
                         firstDataset2 = result2.datasets[0];
                         const info = await Gdal.getInfo(firstDataset2);
-                        assert.strictEqual(firstDataset2.pointer > 0, true, 'An error occurred while converting the file. (ptr == 0)');
+                        assert.strictEqual(!!firstDataset2.pointer, true, 'An error occurred while converting the file. (ptr == 0)');
                         assert.strictEqual(info.featureCount > 0, true, `${driver.shortName} file has no feature. (featureCount == 0)`);
                     };
 
                     const readFunc = async () => {
                         const outputPath2 = await Gdal.ogr2ogr(firstDataset2, ['-f', 'GeoJSON', ...(suffix.inputParams || [])]);
 
-                        const result3 = await Gdal.open(outputPath2.real);
+                        const result3 = await Gdal.open(outputPath2.local);
                         const firstDataset3 = result3.datasets[0];
                         const info3 = await Gdal.getInfo(firstDataset3);
                         assert.strictEqual(info3.featureCount > 0, true, 'geojson file has no feature. (featureCount == 0)');
                     };
+                    console.log('aa');
                     if (driver.isReadable && driver.isWritable) {
+                        console.log(`geojson -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> geojson`);
                         it(`geojson -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> geojson`, async () => {
-                            console.log(`geojson -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> geojson`);
+                            console.log(`2geojson -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> geojson`);
                             await writeFunc();
                             await readFunc();
                         });
                     } else if (driver.isWritable) {
+                        console.log(`geojson -> ${driver.shortName} params: ${p2}`);
                         it(`geojson -> ${driver.shortName} params: ${p2}`, async () => {
-                            console.log(`geojson -> ${driver.shortName} params: ${p2}`);
+                            console.log(`3geojson -> ${driver.shortName} params: ${p2}`);
                             await writeFunc();
                         });
                     }
+                    console.log('rrr 2', `geojson -> ${driver.shortName} params: ${p2}`);
                 });
+            console.log('pppp2');
         });
+        console.log('end');
     });
+    console.log('end2');
 }
 
 function getOptions(optionList) {

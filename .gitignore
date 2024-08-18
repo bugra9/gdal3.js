@@ -1,8 +1,9 @@
+apps/app-mobile/android/app/src/main/assets/cppjs
 build
 build-dev
-
+.cppjs
 dist-dev
-
+*.xcframework
 test-dev
 
 TODO.md
