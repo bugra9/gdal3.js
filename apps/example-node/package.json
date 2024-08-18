@@ -1,5 +1,5 @@
 {
     "dependencies": {
-        "gdal3.js": "2.8.1"
+        "gdal3.js": "workspace:^"
     }
 }

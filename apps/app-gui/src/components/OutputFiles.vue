@@ -24,7 +24,16 @@ export default {
     },
     methods: {
         getFileTitle(file) {
-            return file.substring(8, file.length);
+            let output = '';
+            const fileArr = file.split('/');
+            fileArr.shift();
+            fileArr.shift();
+            if (file.startsWith('/virtual/automounted/')) {
+                fileArr.shift();
+                fileArr.shift();
+                output += '[input] ';
+            }
+            return output + fileArr.join('/');
         },
         getFileSize(size) {
             if (size > 1073741824) { // 1024 * 1024 * 1024

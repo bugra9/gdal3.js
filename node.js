@@ -1,1 +1,1 @@
-module.exports = require('./dist/package/gdal3.node.js');
+module.exports = require('./dist/gdal3js.node.js');

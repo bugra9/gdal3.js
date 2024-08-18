@@ -1,8 +1,9 @@
-import '../../package/gdal3.js';
+import '../../dist/gdal3js.browser.js';
 
 document.write("Loading...");
-initGdalJs({ path: '../../package', useWorker: false }).then((Gdal) => {
-    const count = Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length;
-    document.write("Number of drivers: " + count);
-    console.log(Gdal.drivers);
+initGdalJs({ path: '../../dist' }).then((Module) => {
+    Module.Gdal.allRegister();
+    const drivers = Module.toArray(Module.Gdal.getDrivers());
+    document.write("Number of drivers: " + drivers.length);
+    console.log(drivers.map((d) => d.getLongName()));
 });

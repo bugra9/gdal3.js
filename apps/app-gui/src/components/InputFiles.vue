@@ -8,8 +8,8 @@
             <div class="header tab-label" @click="value = dataset.pointer === value ? -1 : dataset.pointer">
                 <div style="width: 50px;"></div>
                 <div style="flex: 1;">
-                    <p class="title">{{dataset.path}}</p>
-                    <p class="desc">{{datasetsInfo[dataset.pointer].driverLongName}} ({{datasetsInfo[dataset.pointer].type}})</p>
+                    <p class="title">{{datasetsInfo[dataset].description.split('/').at(-1)}}</p>
+                    <p class="desc">{{datasetsInfo[dataset].driverLongName}} ({{datasetsInfo[dataset].type}})</p>
                 </div>
                 <div @click="deleteDataset(dataset)" class="fileAction"><v-icon style="color: red;" name="trash"/></div>
             </div>
@@ -40,7 +40,7 @@ export default {
     },
     methods: {
         getCode(dataset) {
-            const info = this.datasetsInfo ? this.datasetsInfo[dataset.pointer] : {};
+            const info = this.datasetsInfo ? this.datasetsInfo[dataset] : {};
             return syntaxHighlight(JSON.stringify(info, null, 2));
         },
         fileChange({ target }) {
