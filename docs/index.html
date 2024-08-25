@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Modules</li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-a_gdal_location_info.html">a/gdal_location_info</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-a_gdal_rasterize.html">a/gdal_rasterize</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-a_gdal_translate.html">a/gdal_translate</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-a_gdalinfo.html">a/gdalinfo</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-a_gdaltransform.html">a/gdaltransform</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-a_gdalwarp.html">a/gdalwarp</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-a_ogr2ogr.html">a/ogr2ogr</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-a_ogrinfo.html">a/ogrinfo</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-f_close.html">f/close</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-f_getFileBytes.html">f/getFileBytes</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-f_getInfo.html">f/getInfo</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-f_getOutputFiles.html">f/getOutputFiles</a></span></li><li class="nav-heading"><span class="nav-item-type type-module">M</span><span class="nav-item-name"><a href="module-f_open.html">f/open</a></span></li><li class="nav-heading">Namespaces</li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="TypeDefs.html">TypeDefs</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#initGdalJs">initGdalJs</a></span></li>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>gdal3.js - Gdal compiled to JavaScript</h1>
+<p><a href="https://www.npmjs.com/package/gdal3.js"><img src="https://img.shields.io/npm/v/gdal3.js?style=for-the-badge" alt="npm"></a></p>
+<p>gdal3.js is a port of Gdal applications (<strong>gdal_translate</strong>, <strong>ogr2ogr</strong>, <strong>gdal_rasterize</strong>, <strong>gdalwarp</strong>, <strong>gdaltransform</strong>) to Webassembly. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.</p>
+<p>gdal3.js uses emscripten to compile Gdal, proj, geos, spatialite, sqlite, geotiff, tiff, webp, expat, zlib and iconv to webassembly.</p>
+<p>If you are building a native application in JavaScript (using Electron for instance), or are working in node.js, you will likely prefer to use a native binding of Gdal to JavaScript. A native binding will be faster because it will run native code.</p>
+<p><strong>gdal3.js GUI</strong></p>
+<p>gdal3.js GUI is a web application that provides a gui to gdal_translate, ogr2ogr and gdal_rasterize applications to be used online. Uses gdal3.js in the background.
+It runs on the browser and files are converted on the client side.</p>
+<p><a href="https://gdal3.js.org">https://gdal3.js.org</a></p>
+<h2>Supported Formats</h2>
+<h3>Raster</h3>
+<p><strong>Read &amp; Write</strong> <br>
+AAIGrid, ADRG, ARG, BLX, BMP, BT, BYN, CALS, CTable2, DTED, EHdr, ELAS, ENVI, ERS, FIT, GIF, GPKG, GRIB, GS7BG, GSAG, GSBG, GTX, GTiff, HF2, HFA, ILWIS, ISCE, ISIS2, ISIS3, JPEG, KMLSUPEROVERLAY, KRO, LAN, LCP, Leveller, MBTiles, MEM, MFF, MFF2, MRF, NITF, NTv2, NWT_GRD, OpenFileGDB, PAux, PCIDSK, PCRaster, PDS4, PNG, PNM, R, RMF, ROI_PAC, RRASTER, RST, Rasterlite, SAGA, SGI, SIGDEM, SRTMHGT, Terragen, USGSDEM, VICAR, VRT, WEBP, WMTS, XPM, XYZ, ZMap, Zarr</p>
+<p><strong>Read Only</strong> <br>
+ACE2, AIG, AirSAR, BIGGIF, BSB, CAD, CEOS, COASP, COSAR, CPG, CTG, DERIVED, DIMAP, DIPEx, DOQ1, DOQ2, ECRGTOC, EIR, ESAT, ESRIC, FAST, GFF, GRASSASCIIGrid, GSC, GXF, GenBin, IRIS, ISG, JAXAPALSAR, JDEM, L1B, LOSLAS, MAP, MSGN, NDF, NGSGEOID, NOAA_B, NSIDCbin, NWT_GRC, OZI, PDS, PRF, RIK, RPFTOC, RS2, SAFE, SAR_CEOS, SDTS, SENTINEL2, SNODAS, SRP, STACIT, STACTA, TGA, TIL, TSX</p>
+<p><strong>Write Only</strong> <br>
+COG, PDF</p>
+<h3>Vector</h3>
+<p><strong>Read &amp; Write</strong> <br>
+CSV, DGN, DXF, ESRI Shapefile, FlatGeobuf, GML, GPKG, GPX, GeoJSON, GeoJSONSeq, GeoRSS, Geoconcept, JML, JSONFG, KML, MBTiles, MVT, MapInfo File, MapML, Memory, ODS, OGR_GMT, OpenFileGDB, PCIDSK, PDS4, PMTiles, S57, SQLite, Selafin, VDV, VICAR, WAsP, XLSX</p>
+<p><strong>Read Only</strong> <br>
+AVCBin, AVCE00, CAD, EDIGEO, ESRIJSON, GTFS, Idrisi, LVBAG, OGR_PDS, OGR_SDTS, OGR_VRT, OSM, SVG, SXF, TIGER, TopoJSON, UK .NTF, VFK</p>
+<p><strong>Write Only</strong> <br>
+PDF, PGDUMP</p>
+<h2>Guide</h2>
+<h3>Installation</h3>
+<p><strong>Script (CDN)</strong> <br>
+Note:  It doesn't work with web worker.</p>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;text/javascript&quot;
+    src=&quot;https://cdn.jsdelivr.net/npm/gdal3.js@2.8.1/dist/package/gdal3.js&quot;
+    integrity=&quot;sha384-yW4c2Jx7lsREjJg58+ZI5U6gAso2bRAPw3LdzPWm7z8+rMJ24R7AS+EFyXDPxgYM&quot;
+    crossorigin=&quot;anonymous&quot;
+>&lt;/script>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>initGdalJs({ path: 'https://cdn.jsdelivr.net/npm/gdal3.js@2.8.1/dist/package', useWorker: false }).then((Gdal) => {});
+</code></pre>
+<blockquote>
+<p>Example: <a href="https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser">https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser</a></p>
+</blockquote>
+<p><strong>Script (Local)</strong></p>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;text/javascript&quot; src=&quot;gdal3.js&quot;>&lt;/script>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>initGdalJs().then((Gdal) => {});
+</code></pre>
+<blockquote>
+<p>Example: <a href="https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker">https://github.com/bugra9/gdal3.js/tree/master/apps/example-browser-worker</a></p>
+</blockquote>
+<p><strong>ES Module</strong></p>
+<pre class="prettyprint source lang-html"><code>&lt;script type=&quot;module&quot;>
+    import 'gdal3.js'
+
+    initGdalJs().then((Gdal) => {});
+&lt;/script>
+</code></pre>
+<blockquote>
+<p>Example: <a href="https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser-worker">https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser-worker</a> <br>
+Example: <a href="https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser">https://github.com/bugra9/gdal3.js/tree/master/apps/example-module-browser</a></p>
+</blockquote>
+<p><strong>Builder such as Webpack (Vue, React, Angular, ...)</strong></p>
+<pre class="prettyprint source lang-bash"><code>pnpm add gdal3.js
+# or
+yarn add gdal3.js
+# or
+npm install gdal3.js
+</code></pre>
+<pre class="prettyprint source lang-js"><code>import initGdalJs from 'gdal3.js';
+
+initGdalJs({ path: 'static' }).then((Gdal) => {});
+</code></pre>
+<pre class="prettyprint source lang-js"><code>plugins: [
+    new CopyWebpackPlugin({
+        patterns: [
+            { from: '../node_modules/gdal3.js/dist/package/gdal3WebAssembly.wasm', to: 'static' },
+            { from: '../node_modules/gdal3.js/dist/package/gdal3WebAssembly.data', to: 'static' }
+        ]
+    })
+]
+</code></pre>
+<blockquote>
+<p>Full working example: <a href="https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/src/App.vue">https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/src/App.vue</a></p>
+</blockquote>
+<p><strong>Vite + Vue3</strong></p>
+<pre class="prettyprint source lang-bash"><code>pnpm add gdal3.js
+# or
+yarn add gdal3.js
+# or
+npm install gdal3.js
+</code></pre>
+<pre class="prettyprint source lang-html"><code>&lt;script setup>
+import { ref } from 'vue'
+import workerUrl from 'gdal3.js/dist/package/gdal3.js?url'
+import dataUrl from 'gdal3.js/dist/package/gdal3WebAssembly.data?url'
+import wasmUrl from 'gdal3.js/dist/package/gdal3WebAssembly.wasm?url'
+import initGdalJs from 'gdal3.js';
+
+const paths = {
+  wasm: wasmUrl,
+  data: dataUrl,
+  js: workerUrl,
+};
+
+const count = ref(0);
+initGdalJs({paths}).then((Gdal) => {
+    count.value = Object.keys(Gdal.drivers.raster).length + Object.keys(Gdal.drivers.vector).length;
+});
+&lt;/script>
+
+&lt;template>
+  &lt;div>Number of drivers: {{ count }}&lt;/div>
+&lt;/template>
+</code></pre>
+<p><strong>Node</strong></p>
+<pre class="prettyprint source lang-bash"><code>pnpm add gdal3.js
+# or
+yarn add gdal3.js
+# or
+npm install gdal3.js
+</code></pre>
+<pre class="prettyprint source lang-js"><code>const initGdalJs = require('gdal3.js/node');
+
+initGdalJs().then((Gdal) => {});
+</code></pre>
+<blockquote>
+<p>Example: <a href="https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/index.js">https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/index.js</a></p>
+</blockquote>
+<h3>Basic Usage</h3>
+<pre class="prettyprint source lang-js"><code>const Gdal = await initGdalJs();
+
+const files = ['a.mbtiles', 'b.tif']; // [Vector, Raster]
+const result = await Gdal.open(files); // https://gdal3.js.org/docs/module-f_open.html
+const mbTilesDataset = result.datasets[0];
+const tifDataset = result.datasets[1];
+
+
+/* ======== Dataset Info ======== */
+// https://gdal3.js.org/docs/module-f_getInfo.html
+const mbTilesDatasetInfo = await Gdal.getInfo(mbTilesDataset); // Vector
+const tifDatasetInfo = await Gdal.getInfo(tifDataset); // Raster
+
+
+/* ======== Vector translate (mbtiles -> geojson) ======== */
+const options = [ // https://gdal.org/programs/ogr2ogr.html#description
+    '-f', 'GeoJSON',
+    '-t_srs', 'EPSG:4326'
+];
+const output = await Gdal.ogr2ogr(mbTilesDataset, options); // https://gdal3.js.org/docs/module-a_ogr2ogr.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
+
+
+/* ======== Raster translate (tif -> png) ======== */
+const options = [ // https://gdal.org/programs/gdal_translate.html#description
+    '-of', 'PNG'
+];
+const output = await Gdal.gdal_translate(tifDataset, options); // https://gdal3.js.org/docs/module-a_gdal_translate.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
+
+
+/* ======== Rasterize (mbtiles -> tif) ======== */
+const options = [ // https://gdal.org/programs/gdal_rasterize.html#description
+    '-of', 'GTiff',
+    '-co', 'alpha=yes'
+];
+const output = await Gdal.gdal_rasterize(mbTilesDataset, options); // https://gdal3.js.org/docs/module-a_gdal_rasterize.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
+
+
+/* ======== Warp (reprojection) ======== */
+const options = [ // https://gdal.org/programs/gdalwarp.html#description
+    '-of', 'GTiff',
+    '-t_srs', 'EPSG:4326'
+];
+const output = await Gdal.gdalwarp(tifDataset, options); // https://gdal3.js.org/docs/module-a_gdalwarp.html
+const bytes = await Gdal.getFileBytes(output); // https://gdal3.js.org/docs/module-f_getFileBytes.html
+
+
+// Close all datasets. // https://gdal3.js.org/docs/module-f_close.html
+Gdal.close(mbTilesDataset);
+Gdal.close(tifDataset);
+
+
+/* ======== Transform (Coordinate) ======== */
+const coords = [
+    [27.143757, 38.4247972],
+];
+const options = [ // https://gdal.org/programs/gdaltransform.html#description
+    '-s_srs', 'EPSG:4326',
+    '-t_srs', 'EPSG:3857',
+    '-output_xy',
+];
+const newCoords = await Gdal.gdaltransform(coords, options); // https://gdal3.js.org/docs/module-a_gdaltransform.html
+console.log(newCoords); // [ [ 3021629.2074563554, 4639610.441991095 ] ]
+</code></pre>
+<h2>API References</h2>
+<p><a href="https://gdal3.js.org/docs">https://gdal3.js.org/docs</a></p>
+<h2>Examples</h2>
+<ul>
+<li>Full working example with worker and Vue.js -&gt; <a href="https://github.com/bugra9/gdal3.js/blob/master/apps/app-gui/">Code</a>, <a href="https://gdal3.js.org/">Live</a></li>
+<li>Browser with Worker -&gt; <a href="https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser-worker/">Code</a>, <a href="https://gdal3.js.org/examples/example-browser-worker/">Live</a></li>
+<li>Browser without Worker -&gt; <a href="https://github.com/bugra9/gdal3.js/blob/master/apps/example-browser/">Code</a>, <a href="https://gdal3.js.org/examples/example-browser/">Live</a></li>
+<li>Browser with Worker (Module) -&gt; <a href="https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser-worker/">Code</a>, <a href="https://gdal3.js.org/examples/example-module-browser-worker/">Live</a></li>
+<li>Browser without Worker (Module) -&gt; <a href="https://github.com/bugra9/gdal3.js/blob/master/apps/example-module-browser/">Code</a>, <a href="https://gdal3.js.org/examples/example-module-browser/">Live</a></li>
+<li>Node.js -&gt; <a href="https://github.com/bugra9/gdal3.js/blob/master/apps/example-node/">Code</a></li>
+</ul>
+<h2>Development</h2>
+<h3>Compiling</h3>
+<ul>
+<li>Install the EMSDK, <a href="https://emscripten.org/docs/getting_started/downloads.html">as described here</a></li>
+<li>Install Sqlite3. (<a href="https://github.com/bugra9/gdal3.js/issues/31">#31</a>)</li>
+<li>Run <code>pnpm install</code></li>
+<li>Run <code>pnpm run build</code></li>
+</ul>
+<h2>License</h2>
+<p>GNU Lesser General Public License v2.1 or later</p>
+<p>See <a href="https://github.com/bugra9/gdal3.js/blob/master/LICENSE">LICENSE</a> to see the full text.</p>
+<p><strong>Compiled with</strong></p>
+<ul>
+<li><a href="https://github.com/emscripten-core/emscripten">Emscripten 3.1.51</a> <a href="https://github.com/emscripten-core/emscripten/blob/main/LICENSE">(License)</a></li>
+<li><a href="https://github.com/OSGeo/gdal">Gdal 3.8.4</a> <a href="https://github.com/OSGeo/gdal/blob/master/gdal/LICENSE.TXT">(License)</a></li>
+<li><a href="https://github.com/OSGeo/PROJ">Proj 9.3.1</a> <a href="https://github.com/OSGeo/PROJ/blob/master/COPYING">(License)</a></li>
+<li><a href="https://github.com/libgeos/geos">Geos 3.12.1</a> <a href="https://github.com/libgeos/geos/blob/master/COPYING">(License)</a></li>
+<li><a href="https://www.gaia-gis.it/fossil/libspatialite/index">Spatialite 5.1.0</a> <a href="http://www.gnu.org/licenses/lgpl-2.1.html">(License)</a></li>
+<li><a href="https://www.sqlite.org/index.html">Sqlite 3.45.1</a> <a href="https://www.sqlite.org/copyright.html">(License)</a></li>
+<li><a href="https://github.com/OSGeo/libgeotiff">GeoTIFF 1.7.1</a> <a href="https://github.com/OSGeo/libgeotiff/blob/master/libgeotiff/LICENSE">(License)</a></li>
+<li><a href="https://gitlab.com/libtiff/libtiff">Tiff 4.6.0</a> <a href="https://gitlab.com/libtiff/libtiff/-/blob/master/COPYRIGHT">(License)</a></li>
+<li><a href="https://chromium.googlesource.com/webm/libwebp">WebP 1.3.2</a> <a href="https://chromium.googlesource.com/webm/libwebp/+/refs/heads/master/COPYING">(License)</a></li>
+<li><a href="https://github.com/libexpat/libexpat">Expat 2.6.0</a> <a href="https://github.com/libexpat/libexpat/blob/master/expat/COPYING">(License)</a></li>
+<li><a href="https://www.zlib.net/">Zlib 1.3.1</a> <a href="https://www.zlib.net/zlib_license.html">(License)</a></li>
+<li><a href="https://www.gnu.org/software/libiconv/">Iconv 1.17</a> <a href="https://www.gnu.org/software/libiconv/">(License)</a></li>
+</ul>
+<p><strong>Inspired by</strong></p>
+<ul>
+<li><a href="https://github.com/ddohler/gdal-js">ddohler/gdal-js</a></li>
+<li><a href="https://github.com/sql-js/sql.js">sql-js/sql.js</a></li>
+<li><a href="https://github.com/jvail/spatiasql.js">jvail/spatiasql.js</a></li>
+<li><a href="https://github.com/azavea/loam">azavea/loam</a></li>
+</ul></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Feb 23 2024 00:16:03 GMT+0300 (GMT+03:00) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
