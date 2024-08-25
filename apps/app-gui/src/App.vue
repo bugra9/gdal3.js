@@ -18,7 +18,7 @@
                         label="text" track-by="value" group-values="formats" group-label="name"
                     />
                 </div>
-                <div v-if="this.gdalProgram === 'ogr2ogr'">
+                <div v-if="this.gdalProgram === 'vectorTranslate'">
                     <label>Projection</label>
                     <MultiSelect
                         v-model="translateProj" :options="crs"
@@ -26,7 +26,7 @@
                         placeholder="Select one" label="text" track-by="value"
                     />
                 </div>
-                <div v-if="this.gdalProgram === 'ogr2ogr'">
+                <div v-if="this.gdalProgram === 'vectorTranslate'">
                     <label>Query</label>
                     <input placeholder="eg: SELECT * FROM CITIES" type="text" name="a" class="input" v-model="translateQuery" />
                 </div>
@@ -111,17 +111,17 @@
             <div class="middle-search desktop"><input type="text" v-model="driverSearchText" placeholder="Search" /></div>
             <h4>Supported Raster Drivers</h4>
             <div class="grid-list-auto">
-                <a v-for="driver in gdalRasterDriversFiltered" :key="'r-'+driver.longName+driver.shortName" :title="getDriverDesc(driver)">{{ driver.shortName }}</a>
+                <a v-for="driver in gdalRasterDriversFiltered" :key="'r-'+driver.getLongName()+driver.getShortName()" :title="getDriverDesc(driver)">{{ driver.getShortName() }}</a>
             </div>
             <h4>Supported Vector Drivers</h4>
             <div class="grid-list-auto">
-                <a v-for="driver in gdalVectorDriversFiltered" :key="'v-'+driver.longName+driver.shortName" :title="getDriverDesc(driver)">{{ driver.shortName }}</a>
+                <a v-for="driver in gdalVectorDriversFiltered" :key="'v-'+driver.getLongName()+driver.getShortName()" :title="getDriverDesc(driver)">{{ driver.getShortName() }}</a>
             </div>
         </modal>
         <modal  v-if="dsco" name="createoptions" class="light" adaptive scrollable height="auto">
             <div class="right"><button class="close" @click="$modal.hide('createoptions')">✖</button></div>
             <h4>Database/Dataset Creation Options <a v-if="selectedFormat && selectedFormat.helpUrl" :href="`https://gdal.org/${selectedFormat.helpUrl}`" class="info-color" target="_blank">🛈</a></h4>
-            <AppForm :inputs="dsco" :prefix="drivers[0].type === 'vector' ? '-dsco' : '-co'" :self="this" />
+            <AppForm :inputs="dsco" :prefix="drivers[0].isVector() ? '-dsco' : '-co'" :self="this" />
         </modal>
         <modal  v-if="lco" name="layercreateoptions" class="light" adaptive scrollable height="auto">
             <div class="right"><button class="close" @click="$modal.hide('layercreateoptions')">✖</button></div>
@@ -140,8 +140,8 @@ import TabRadio from './components/TabRadio.vue'
 import InputFiles from './components/InputFiles.vue'
 import OutputFiles from './components/OutputFiles.vue'
 import AppForm from './components/Form.vue'
-import { split } from './utils';
-import initGdalJs from '../../../build/package/gdal3';
+import { split, xmlToJs, getFileExtension } from './utils';
+import initGdalJs from '../../../dist/gdal3js.browser.js';
 import crs from './crs.json';
 import projectNews from '../../../.news.json';
 import projectInfo from '../../../.info.json';
@@ -149,7 +149,15 @@ import './App.css';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
 
-let gdal;
+let Module;
+let drivers;
+
+const programMapper = {
+    translate: 'gdal_translate',
+    vectorTranslate: 'ogr2ogr',
+    rasterize: 'gdal_rasterize',
+    polygonize: 'gdal_polygonize',
+}
 
 export default {
     name: 'App',
@@ -167,6 +175,7 @@ export default {
             datasets: [],
             datasetsInfo: {},
             drivers: [],
+            driversType: null,
             files: [],
             translateFormat: null,
             translateProj: null,
@@ -186,9 +195,12 @@ export default {
     },
     mounted() {
         initGdalJs({path: 'package'}).then((gdalInstance) => {
-            gdal = gdalInstance;
-            this.gdalRasterDrivers = Object.values(gdal.drivers.raster).sort((a, b) => a.shortName.localeCompare(b.shortName));
-            this.gdalVectorDrivers = Object.values(gdal.drivers.vector).sort((a, b) => a.shortName.localeCompare(b.shortName));
+            Module = gdalInstance;
+            Module.Gdal.allRegister();
+            drivers = Module.toArray(Module.Gdal.getDrivers()).sort((a, b) => a.getShortName().localeCompare(b.getShortName()));
+
+            this.gdalRasterDrivers = drivers.filter(d => d.isRaster());
+            this.gdalVectorDrivers = drivers.filter(d => d.isVector());
             this.isGdalLoaded = true;
             this.isLoading = false;
         }).catch(e => console.error(e));
@@ -201,25 +213,26 @@ export default {
             if (this.drivers.length === 0) return [];
 
             const out = [];
-            if (this.drivers[0].type === 'vector') {
+            if (this.drivers[0].isVector()) {
                 out.push({ name: 'raster', formats: [{ value: 'GTiff', text: 'GTiff - GeoTIFF' }] });
             }
 
             out.push({
-                name: this.drivers[0].type,
-                formats: this.drivers.map(d => ({ value: d.shortName, text: d.shortName + ' - ' + d.longName }))
+                name: this.driversType,
+                formats: this.drivers.map(d => ({ value: d.getShortName(), text: d.getShortName() + ' - ' + d.getLongName() }))
             });
 
             return out;
         },
         gdalProgram() {
+            console.log(this.drivers.length, this.translateFormat);
             if (this.drivers.length > 0 && this.translateFormat) {
-                if (this.drivers[0].type === 'vector') {
-                    if (this.translateFormat.value === 'GTiff') return 'gdal_rasterize';
-                    else if (this.translateFormat.value !== null) return 'ogr2ogr';
-                } else if (this.drivers[0].type === 'raster') {
-                    if (this.translateFormat.value === 'GML') return 'gdal_polygonize';
-                    else if (this.translateFormat.value !== null) return 'gdal_translate';
+                if (this.driversType === 'vector') {
+                    if (this.translateFormat.value === 'GTiff') return 'rasterize';
+                    else if (this.translateFormat.value !== null) return 'vectorTranslate';
+                } else if (this.driversType === 'raster') {
+                    if (this.translateFormat.value === 'GML') return 'polygonize';
+                    else if (this.translateFormat.value !== null) return 'translate';
                 }
             }
             return "";
@@ -230,15 +243,15 @@ export default {
         gdalParams() {
             const parameters = [];
             switch(this.gdalProgram) {
-                case 'ogr2ogr':
+                case 'vectorTranslate':
                     if (this.translateFormat !== null) parameters.push('-f', this.translateFormat.value);
                     if (this.translateProj !== null) parameters.push('-t_srs', this.translateProj.value);
                     if (this.translateQuery !== '') parameters.push('-sql', this.translateQuery);
                     break;
-                case 'gdal_translate':
+                case 'translate':
                     if (this.translateFormat !== null) parameters.push('-of', this.translateFormat.value);
                     break;
-                case 'gdal_rasterize':
+                case 'rasterize':
                     parameters.push('-of', 'GTiff');
                     break
             }
@@ -248,39 +261,48 @@ export default {
             return parameters;
         },
         preview() {
-            return this.gdalProgram + ' ' + this.gdalParams.map(p => p[0] === '-' ? p : `"${p}"`).join(' ');
+            if (!this.gdalProgram) return '';
+            return programMapper[this.gdalProgram] + ' ' + this.gdalParams.map(p => p[0] === '-' ? p : `"${p}"`).join(' ');
         },
         selectedFormat() {
-            const temp = this.drivers.filter(d => d.shortName === this.translateFormat.value);
+            const temp = this.drivers.filter(d => d.getShortName() === this.translateFormat.value);
             if (temp && temp.length === 1) return temp[0];
             return null;
         },
         dsco() {
-            if (this.translateFormat && this.selectedFormat && this.selectedFormat.creationOptionList) {
-                const temp = this.selectedFormat.creationOptionList.filter(o => !o.scope || o.scope === 'raster,vector' || o.scope === this.drivers[0].type);
+            if (this.translateFormat && this.selectedFormat) {
+                let creationOptionList = this.selectedFormat.getCreationOptions();
+                if (!creationOptionList) return null;
+                creationOptionList = xmlToJs(creationOptionList);
+
+                const temp = creationOptionList.filter(o => !o.scope || o.scope === 'raster,vector' || o.scope === this.driversType);
                 return temp;
             }
             return null;
         },
         lco() {
-            if (this.drivers && this.drivers.length > 0 && this.drivers[0].type === 'vector' && this.translateFormat && this.selectedFormat && this.selectedFormat.layerCreationOptionList) {
-                const temp = this.selectedFormat.layerCreationOptionList.filter(o => !o.scope || o.scope === 'raster,vector' || o.scope === this.drivers[0].type);
+            if (this.drivers && this.drivers.length > 0 && this.driversType === 'vector' && this.translateFormat && this.selectedFormat) {
+                let layerCreationOptionList = this.selectedFormat.getLayerCreationOptions();
+                if (!layerCreationOptionList) return null;
+                layerCreationOptionList = xmlToJs(layerCreationOptionList);
+
+                const temp = layerCreationOptionList.filter(o => !o.scope || o.scope === 'raster,vector' || o.scope === this.driversType);
                 return temp;
             }
             return null;
         },
         gdalRasterDriversFiltered() {
             if (!this.driverSearchText || this.driverSearchText.length < 1) return this.gdalRasterDrivers;
-            return this.gdalRasterDrivers.filter(d => d.longName.toLowerCase().search(this.driverSearchText.toLowerCase()) !== -1 || d.shortName.toLowerCase().search(this.driverSearchText.toLowerCase()) !== -1);
+            return this.gdalRasterDrivers.filter(d => d.getLongName().toLowerCase().search(this.driverSearchText.toLowerCase()) !== -1 || d.getShortName().toLowerCase().search(this.driverSearchText.toLowerCase()) !== -1);
         },
         gdalVectorDriversFiltered() {
             if (!this.driverSearchText || this.driverSearchText.length < 1) return this.gdalVectorDrivers;
-            return this.gdalVectorDrivers.filter(d => d.longName.toLowerCase().search(this.driverSearchText.toLowerCase()) !== -1 || d.shortName.toLowerCase().search(this.driverSearchText.toLowerCase()) !== -1);
+            return this.gdalVectorDrivers.filter(d => d.getLongName().toLowerCase().search(this.driverSearchText.toLowerCase()) !== -1 || d.getShortName().toLowerCase().search(this.driverSearchText.toLowerCase()) !== -1);
         },
     },
     watch: {
         gdalProgram(value) {
-            if (value === 'gdal_rasterize') this.translateOptions = '-co alpha=yes -burn 255 -burn 0 -burn 0 -burn 100 -ot Byte -ts 256 256';
+            if (value === 'rasterize') this.translateOptions = '-co alpha=yes -burn 255 -burn 0 -burn 0 -burn 100 -ot Byte -ts 256 256';
             else this.translateOptions = '';
         }
     },
@@ -289,22 +311,70 @@ export default {
             this.isLoading = true;
             let promises = [];
             let options = this.gdalParams;
-            this.datasets.forEach(d => promises.push(gdal[this.gdalFunction](d, options)));
+            console.log('options', options);
+            this.datasets.forEach(d => {
+                let ext = '';
+                if (this.gdalFunction === 'vectorTranslate' && this.translateFormat.value === 'MapInfo File' && options.indexOf('FORMAT=MIF') !== -1) {
+                    ext = 'mif';
+                } else {
+                    ext = getFileExtension(this.drivers.find(d => d.getShortName() === this.translateFormat.value));
+                }
+
+                let fileName = this.datasetsInfo[d].description.split('/').at(-1);
+                const fileNameArr = fileName.split('.');
+                fileNameArr.pop();
+                fileName = fileNameArr.join('.');
+
+                promises.push(d[this.gdalFunction](`/virtual/${fileName}.${ext}`, Module.toVector(Module.VectorString, options)));
+            });
             Promise.allSettled(promises).then((results) => {
-                gdal.getOutputFiles().then(files => {
-                    results.filter(r => r.status === 'rejected').forEach(({reason}) => {
-                        console.error(reason);
-                        this.$toast.error(reason.message);
-                    });
-                    this.files = files;
-                    this.isLoading = false;
-                    this.$refs.tab.value = 'Output';
+                console.log('results', results);
+                results.forEach(({value: d}) => d.close());
+                const files = Module.getFileList();
+                console.log('files', files);
+                results.filter(r => r.status === 'rejected').forEach(({reason}) => {
+                    console.error(reason);
+                    this.$toast.error(reason.message);
                 });
+                this.files = files;
+                this.isLoading = false;
+                this.$refs.tab.value = 'Output';
             });
         },
         onFileChange(files) {
             this.isLoading = true;
-            gdal.open(files).then(({datasets, errors}) => {
+            console.log(files);
+            Module.autoMountFiles(files).then(files => {
+                files.forEach(file => {
+                    const dataset = Module.Gdal.openEx(file);
+                    if (dataset) {
+                        let info = JSON.parse(dataset.info(Module.toVector(Module.VectorString, ['-json'])));
+                        const hasSize = info.size && info.size.length >= 2 && (info.size[0] > 0 || info.size[1] > 0);
+                        const type = info.bands.length > 0 && hasSize ? 'raster' : 'vector';
+                        if (type === 'vector') {
+                            info = JSON.parse(dataset.vectorInfo(Module.toVector(Module.VectorString, ['-json'])));
+                        }
+                        this.datasetsInfo[dataset] = {type, ...info};
+                        console.log('dataset', dataset, info);
+                        this.datasets.push(dataset);
+                    }
+                    this.isLoading = false;
+                });
+
+                let drivers = [];
+                let type = this.datasets.reduce((out, obj) =>  (out === this.datasetsInfo[obj].type) ? out : '', this.datasetsInfo[this.datasets[0]].type);
+                if (type !== '') {
+                    drivers = (type === 'raster' ? this.gdalRasterDrivers : this.gdalVectorDrivers).filter(d => d.isWritable());
+                }
+                this.program = '';
+                this.parameters = '';
+                this.isLoading = false;
+                this.drivers = drivers;
+                this.driversType = type;
+                this.clearTranslateParameters();
+            });
+
+            /* gdal.open(files).then(({datasets, errors}) => {
                 if (datasets && datasets.length > 0) {
                     datasets.forEach((d) => {
                         this.datasetsInfo[d.pointer] = {type: d.type, ...d.info};
@@ -315,8 +385,7 @@ export default {
                     let drivers = [];
                     let type = this.datasets.reduce((out, obj) =>  (out === obj.type) ? out : '', this.datasets[0].type);
                     if (type !== '') {
-                        drivers = Object.values(gdal.drivers[type]).filter(d => d.isWritable);
-                        drivers.sort((a, b) => a.shortName.localeCompare(b.shortName));
+                        drivers = (type === 'raster' ? this.gdalRasterDrivers : this.gdalVectorDrivers).filter(d => d.isWritable());
                     }
                     this.program = '';
                     this.parameters = '';
@@ -335,18 +404,18 @@ export default {
                 }
 
                 this.isLoading = false;
-            });
+            }); */
         },
         deleteDataset(dataset) {
-            gdal.close(dataset);
             let drivers = [];
             let datasets = this.datasets.filter(v => v !== dataset);
             if (datasets.length > 0) {
-                let type = datasets.reduce((out, obj) =>  (out === obj.type) ? out : '', datasets[0].type);
+                let type = datasets.reduce((out, obj) =>  (out === this.datasetsInfo[obj].type) ? out : '', this.datasetsInfo[datasets[0]].type);
                 if (type !== '') {
-                    drivers = Object.values(gdal.drivers[type]).filter(d => d.isWritable);
-                    drivers.sort((a, b) => a.shortName.localeCompare(b.shortName));
+                    drivers = (type === 'raster' ? this.gdalRasterDrivers : this.gdalVectorDrivers).filter(d => d.isWritable());
+                    drivers.sort((a, b) => a.getShortName().localeCompare(b.getShortName()));
                 }
+                this.driversType = type;
             }
 
             this.datasets = datasets;
@@ -362,10 +431,9 @@ export default {
         downloadFile(path) {
             const temp = path.split('/');
             const filename = temp[temp.length-1];
-            gdal.getFileBytes(path).then(bytes => {
-                const blob = new Blob([bytes]);
-                this.saveAs(blob, filename);
-            }).catch(e => console.error(e));
+            const bytes = Module.getFileBytes(path);
+            const blob = new Blob([bytes]);
+            this.saveAs(blob, filename);
         },
         saveAs(blob, fileName) {
             const link = document.createElement('a');
@@ -375,9 +443,9 @@ export default {
         },
         getDriverDesc(driver) {
             let info = [];
-            if (driver.isReadable) info.push('Read');
-            if (driver.isWritable) info.push('Write');
-            return `${driver.longName} (${info.join(', ')})`;
+            if (driver.isReadable()) info.push('Read');
+            if (driver.isWritable()) info.push('Write');
+            return `${driver.getLongName()} (${info.join(', ')})`;
         },
     },
 }

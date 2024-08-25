@@ -2,11 +2,19 @@
 /* eslint-disable func-names */
 const isNode = Object.prototype.toString.call(typeof process !== 'undefined' ? process : 0) === '[object process]'; // https://github.com/iliakan/detect-node/blob/master/index.js
 
+let Module;
 let Gdal;
+let dest;
 let assert;
+let xml2js;
 
-if (isNode) assert = require('chai').assert;
-else assert = chai.assert;
+if (isNode) {
+    assert = require('chai').assert;
+    xml2js = require('xml-js').xml2js;
+} else {
+    assert = chai.assert;
+    xml2js = window.xml2js;
+}
 
 const ignoredInputFormats = [''];
 const ignoredOutputFormats = [
@@ -45,51 +53,85 @@ const suffixes = {
     'NWT_GRD': { outputParams: ['-ot', 'Float32'] },
 };
 
-createTest();
-async function createTest() {
+init();
+async function init() {
     if (isNode) {
-        const dest = require('fs').mkdtempSync('/tmp/gdaljs');
-        const initGdalJs = require('../build/package/gdal3.coverage');
-        Gdal = await initGdalJs({ path: 'build/package', dest });
+        dest = require('fs').mkdtempSync('/tmp/gdal3js');
+        const initGdalJs = require('../node.js');
+        Module = await initGdalJs({ path: 'dist' });
+        Gdal = Module.Gdal;
+        Gdal.allRegister();
+        createTest();
     } else {
-        Gdal = await initGdalJs({ path: '../package', useWorker: false });
+        window.isGdalReadyToTest.then(() => {
+            Module = window.Module;
+            Gdal = window.Gdal;
+            dest = window.dest;
+            createTest();
+        });
     }
-
-    describe('Raster Drivers', async () => {
-        Object.values(Gdal.drivers.raster).filter(v => (v.extension !== "" || v.extensions !== "")).forEach(driver => {
-            if (ignoredOutputFormats.includes(driver.shortName)) return;
-            const suffix = suffixes[driver.shortName] || {};
-            const tempParams = suffixes[driver.shortName] && suffixes[driver.shortName].outputParams ? suffixes[driver.shortName].outputParams : [];
-
+}
+async function createTest() {
+    describe('Raster Drivers', () => {
+        const drivers = Module.toArray(Gdal.getDrivers());
+        drivers.filter(d => d.isRaster() && (d.getExtension() !== '' || d.getExtensions() !== '')).forEach((driver) => {
+            const driverShortName = driver.getShortName();
+            if (ignoredOutputFormats.includes(driverShortName)) return;
+            // if (driverShortName !== 'HFA') return;
+            const suffix = suffixes[driverShortName] || {};
+            const tempParams = suffixes[driverShortName] && suffixes[driverShortName].outputParams ? suffixes[driverShortName].outputParams : [];
             [
                 [],
-                ...getOptions(driver.creationOptionList).map(value => ['-co', value]),
+                ...getOptions(driver.getCreationOptions()).map(value => ['-co', value]),
             ]
-                .filter((s) => s.length != 2 || (!ignoredParams.includes(driver.shortName) && !ignoredParams.includes(driver.shortName+'-'+s[1].split('=')[0])))
+                .filter((s) => s.length != 2 || (!ignoredParams.includes(driverShortName) && !ignoredParams.includes(driverShortName+'-'+s[1].split('=')[0])))
                 .forEach((s) => {
+                    console.log('start', driverShortName);
                     const params = [...s, ...tempParams];
-                    const p = ['-of', driver.shortName, ...params];
+                    const p = ['-of', driverShortName, ...params];
+                    const pVector = new Module.VectorString();
+                    p.forEach((a) => pVector.push_back(a));
                     const p2 = `[${params.map(s => "'"+s+"'").join(', ')}]`;
+                    // if (p2 !== '[]') return;
 
                     let firstDataset2;
 
                     const writeFunc = async () => {
+                        console.log('2');
+                        const a = new Module.VectorString();
+                        a.push_back('-json');
+
                         let file = `data/${suffix.file || 'spaf27_epsg'}.tif`;
                         if (!isNode) {
                             const fileData = await fetch(file);
                             file = new File([await fileData.blob()], `${suffix.file || 'spaf27_epsg'}.tif`);
+                            file = (await Module.autoMountFiles([file]))[0];
                         } else file = `test/${file}`;
 
-                        const result = await Gdal.open(file);
-                        const firstDataset = result.datasets[0];
-                        assert.strictEqual(firstDataset.pointer > 0, true, 'An error occurred while opening the tif file. (ptr == 0)');
-                        const outputPath = await Gdal.gdal_translate(firstDataset, p);
+                        const firstDataset = Gdal.openEx(file);
+                        assert.strictEqual(firstDataset !== null, true, 'An error occurred while opening the tif file. (ptr == 0)');
+                        const r = Math.random();
 
-                        const result2 = await Gdal.open(`${outputPath.real}${suffix.outputFile || ''}`);
-                        firstDataset2 = result2.datasets[0];
-                        const info = await Gdal.getInfo(firstDataset2);
-                        assert.strictEqual(firstDataset2.pointer > 0, true, 'An error occurred while converting the file. (ptr == 0)');
-                        assert.strictEqual(info.bandCount > 0, true, `${driver.shortName} file has no layer. (bandCount == 0)`);
+                        const extensions = driver.getExtensions();
+                        let extension = driver.getExtension();
+                        if (extension === '' && extensions !== '') {
+                            extension = extensions.split(' ')[0];
+                        }
+                        if (extension !== '') {
+                            extension = extension.replace('.', '').replace('/', '');
+                        }
+
+                        const ext = extension || 'unknown';
+                        const abc = firstDataset.translate(dest + '/d' + r + '.' + ext, pVector);
+                        assert.strictEqual(abc !== null, true, 'An error occurred while converting the file2. (ptr == 0)');
+                        console.log('f2', abc);
+                        abc.close();
+                        firstDataset2 = Gdal.openEx(dest + '/d' + r + '.' + ext);
+                        assert.strictEqual(firstDataset2 !== null, true, 'An error occurred while converting the file. (ptr == 0)');
+
+                        const info = JSON.parse(firstDataset2.info(a));
+                        // console.log('z', info);
+                        assert.strictEqual(info.bands.length > 0, true, `${driverShortName} file has no layer. (bandCount == 0)`);
                     };
 
                     const readFunc = async () => {
@@ -100,24 +142,29 @@ async function createTest() {
                         const info3 = await Gdal.getInfo(firstDataset3);
                         assert.strictEqual(info3.bandCount > 0, true, `tif file has no layer. (bandCount == 0)`);
                     };
-                    if (driver.isReadable && driver.isWritable) {
-                        it(`tif -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> tif`, async () => {
-                            console.log(`tif -> ${driver.shortName} params: ${p2} && ${driver.shortName} -> tif`);
+                    if (driver.isReadable() && driver.isWritable()) {
+                        console.log(`tif -> ${driverShortName} params: ${p2} && ${driverShortName} -> tif`);
+                        it(`tif -> ${driverShortName} params: ${p2} && ${driverShortName} -> tif`, async () => {
+                            console.log('4');
+                            console.log(`tif -> ${driverShortName} params: ${p2} && ${driverShortName} -> tif`);
                             await writeFunc();
                             // await readFunc();
                         });
-                    } else if (driver.isWritable) {
-                        it(`tif -> ${driver.shortName} params: ${p2}`, async () => {
-                            console.log(`tif -> ${driver.shortName} params: ${p2}`);
+                        console.log('=================');
+                    } else if (driver.isWritable()) {
+                        it(`tif -> ${driverShortName} params: ${p2}`, async () => {
+                            console.log(`tif -> ${driverShortName} params: ${p2}`);
                             await writeFunc();
                         });
                     }
+                    console.log('end', driverShortName);
                 });
         });
     });
 }
 
-function getOptions(optionList) {
+function getOptions(optionList2) {
+    const optionList = xmlToJs(optionList2);
     const output = [];
     const list = (optionList || []).filter(o => (o.type === 'string-select' || o.type === 'boolean') && o.scope !== 'raster');
     list.forEach(o => {
@@ -131,4 +178,23 @@ function getOptions(optionList) {
         }
     });
     return output;
+}
+
+function xmlToJs(data) {
+    if (data) {
+        const tempJs = xml2js(data);
+        if (tempJs.elements && tempJs.elements.length > 0) {
+            if (tempJs.elements.length !== 1) console.warn('invalid xml!');
+            if (tempJs.elements[0] && tempJs.elements[0].elements) {
+                return tempJs.elements[0].elements.map((o) => {
+                    const temp = o.attributes;
+                    if (o.elements && o.elements.length > 0) {
+                        temp.options = o.elements.map((o2) => o2.elements[0].text);
+                    }
+                    return temp;
+                });
+            }
+        }
+    }
+    return null;
 }

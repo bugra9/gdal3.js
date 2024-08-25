@@ -69,27 +69,21 @@
     <script class="mocha-init">
       mocha.setup('bdd');
     </script>
-    <script src="../package/gdal3.js"></script>
-    <script type="module" src="./specs/vector.spec.js"></script>
-    <script type="module" src="./specs/raster.spec.js"></script>
-
-    <script type="module" src="./specs/gdal_rasterize.spec.js"></script>
-    <script type="module" src="./specs/gdal_translate.spec.js"></script>
-    <script type="module" src="./specs/gdaltransform.spec.js"></script>
-    <script type="module" src="./specs/gdalwarp.spec.js"></script>
-    <script type="module" src="./specs/ogr2ogr.spec.js"></script>
-    <script type="module" src="./specs/gdal_location_info.spec.js"></script>
-    <script type="module" src="./specs/gdalinfo.spec.js"></script>
-    <script type="module" src="./specs/ogrinfo.spec.js"></script>
-
-    <script type="module" src="./specs/close.spec.js"></script>
-    <script type="module" src="./specs/getFileBytes.spec.js"></script>
-    <script type="module" src="./specs/getInfo.spec.js"></script>
-    <script type="module" src="./specs/getOutputFiles.spec.js"></script>
-    <script type="module" src="./specs/open.spec.js"></script>
+    <script src="../node_modules/xml-js/dist/xml-js.min.js"></script>
+    <script src="../dist/gdal3js.browser.js"></script>
+    <script type="module">
+        window.isGdalReadyToTest = initGdalJs({ path: '../dist' }).then((data) => {
+            window.Module = data;
+            window.Gdal = Module.Gdal;
+            window.dest = Module.generateVirtualPath();
+            window.Gdal.allRegister();
+        });
+    </script>
+    <script type="module" src="./raster.spec.js"></script>
+    <script type="module" src="./vector.spec.js"></script>
 
     <script type="module" class="mocha-exec">
-      mocha.run();
+      window.isGdalReadyToTest.then(() => mocha.run());
     </script>
   </body>
 </html>
