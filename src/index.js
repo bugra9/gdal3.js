@@ -120,8 +120,9 @@ export default function initGdalJs(
 
             if (isNode) {
                 Module.getPreloadedPackage = function getPreloadedPackage(packageName) {
+                    const path = packageName.startsWith('/') ? packageName : `./${packageName}`;
                     // eslint-disable-next-line global-require
-                    return require('fs').readFileSync(`./${packageName}`, { flag: 'r' }).buffer;
+                    return require('fs').readFileSync(path, { flag: 'r' }).buffer;
                 };
             }
 
