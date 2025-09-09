@@ -14,6 +14,19 @@ It runs on the browser and files are converted on the client side.
 
 [https://gdal3.js.org](https://gdal3.js.org)
 
+## Update 09 Sep 2025
+Dear gdal3.js community
+
+Excited to announce that [https://cpp.js.org](https://cpp.js.org) has appeared in React Universe Conf by CallStack
+
+gdal3.js is migrating to cpp.js architecture.
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=TjrZIrgKQWM" target="_blank">
+ <img src="http://img.youtube.com/vi/TjrZIrgKQWM/mqdefault.jpg" alt="Watch the video" width="480" height="360" border="10" />
+</a>
+
+Open issues will be resolved and the project will be maintained.
+
 ## Supported Formats
 
 ### Raster
