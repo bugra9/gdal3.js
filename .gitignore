@@ -317,7 +317,7 @@ $RECYCLE.BIN/
 *.lnk
 
 apps/app-gui/node_modules
-pnpm-lock.*
+**/pnpm-lock.yaml
 .pnpm-store/
 
 # End of https://www.gitignore.io/api/node,linux,macos,windows,webstorm,sublimetext,visualstudiocode
