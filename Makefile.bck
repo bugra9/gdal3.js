@@ -203,7 +203,6 @@ $(PROJ_SRC)/Makefile: $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libsqlite3.a $(P
 	$(EMCMAKE) cmake . $(PREFIX_CMAKE)  \
     -DSQLITE3_INCLUDE_DIR=${ROOT_DIR}/include \
     -DSQLITE3_LIBRARY=${ROOT_DIR}/lib/libsqlite3.a \
-	-DEXE_SQLITE3=/usr/local/bin/sqlite3 \
     -DTIFF_INCLUDE_DIR=${ROOT_DIR}/include \
     -DTIFF_LIBRARY_RELEASE=${ROOT_DIR}/lib/libtiff.a \
     -DENABLE_CURL=OFF \
@@ -223,8 +222,7 @@ $(PROJ_SRC)/CMakeLists.txt:
 ###########
 SQLITE3_SRC = $(SRC_DIR)/sqlite-autoconf-$(SQLITE_VERSION)
 
-sqlite3wasm: $(ROOT_DIR)/lib/libsqlite3.a
-
+sqlite3: $(ROOT_DIR)/lib/libsqlite3.a
 
 $(ROOT_DIR)/lib/libsqlite3.a: $(SQLITE3_SRC)/Makefile
 	cd $(SQLITE3_SRC); \
