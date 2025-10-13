@@ -137,7 +137,7 @@ importers:
         version: 15.1.0
       puppeteer:
         specifier: ^21.5.2
-        version: 21.11.0
+        version: 21.11.0(typescript@5.9.3)
       push-dir:
         specifier: ^0.4.1
         version: 0.4.1
@@ -150,6 +150,9 @@ importers:
       rollup-plugin-uglify:
         specifier: ^6.0.4
         version: 6.0.4(rollup@4.52.4)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
 packages:
 
@@ -3988,6 +3991,11 @@ packages:
   typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
 
+  typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   ua-parser-js@0.7.41:
     resolution: {integrity: sha512-O3oYyCMPYgNNHuO7Jjk3uacJWZF8loBgwrfd/5LE/HyZ3lUIOdniQ7DNXJcIgZbwioZxk0fLfI4EVnetdiX5jg==}
     hasBin: true
@@ -5949,12 +5957,14 @@ snapshots:
 
   corser@2.0.1: {}
 
-  cosmiconfig@9.0.0:
+  cosmiconfig@9.0.0(typescript@5.9.3):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
       js-yaml: 4.1.0
       parse-json: 5.2.0
+    optionalDependencies:
+      typescript: 5.9.3
 
   coverage-istanbul-loader@3.0.5:
     dependencies:
@@ -8133,10 +8143,10 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  puppeteer@21.11.0:
+  puppeteer@21.11.0(typescript@5.9.3):
     dependencies:
       '@puppeteer/browsers': 1.9.1
-      cosmiconfig: 9.0.0
+      cosmiconfig: 9.0.0(typescript@5.9.3)
       puppeteer-core: 21.11.0
     transitivePeerDependencies:
       - bare-abort-controller
@@ -8887,6 +8897,8 @@ snapshots:
       is-typedarray: 1.0.0
 
   typedarray@0.0.6: {}
+
+  typescript@5.9.3: {}
 
   ua-parser-js@0.7.41: {}
 

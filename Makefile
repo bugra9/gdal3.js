@@ -62,7 +62,7 @@ $(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
 		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libsharpyuv.a $(ROOT_DIR)/lib/libwebpdemux.a \
 		$(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libgeotiff.a \
         $(ROOT_DIR)/lib/libiconv.a \
-		-o $@ $(GDAL_EMCC_FLAGS) \
+		-o $@ $(GDAL_EMCC_FLAGS) --emit-tsd ${DIST_DIR}/gdal.d.ts  \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
 		--preload-file $(ROOT_DIR)/share/proj@/usr/share/proj;
 
