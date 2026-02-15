@@ -1,46 +1,8 @@
 {
-    "name": "gdal3.js",
-    "version": "3.0.0-alpha.5",
-    "description": "gdal3.js is a port of Gdal to Webassembly and React Native. It allows you to convert raster and vector geospatial data to various formats and coordinate systems.",
-    "homepage": "https://gdal3.js.org",
-    "license": "LGPL-2.1-or-later",
-    "main": "dist/gdal3js.browser.js",
-    "files": [
-        "dist",
-        "src",
-        "node.js",
-        "cppjs.config.mjs",
-        "gdal3.js.podspec"
-    ],
+    "private": "true",
     "scripts": {
-        "build": "cpp.js generate lib",
-        "build:wasm": "cpp.js generate lib -p wasm",
-        "build:android": "cpp.js generate lib -p android",
-        "build:ios": "cpp.js generate lib -p ios",
-        "clear": "rm -rf .cppjs dist *.xcframework",
-        "test": "pnpm run test:node && pnpm run test:browser",
-        "test:node": "mocha",
-        "test:browser": "karma start .karma.conf.js",
-        "postinstall": "cpp.js postinstall"
+        "build:web": "pnpm --filter=@gdal3.js/app-web run build",
+        "build": "pnpm run build:web && node scripts/createGithubPages.mjs"
     },
-    "dependencies": {
-        "cpp.js": "^1.0.0-alpha.4",
-        "cppjs-package-gdal": "^1.0.0-alpha.4"
-    },
-    "devDependencies": {
-        "browserify": "^17.0.0",
-        "chai": "^4.3.10",
-        "karma": "^6.4.2",
-        "karma-chai": "^0.1.0",
-        "karma-chrome-launcher": "^3.2.0",
-        "karma-coverage": "^2.2.1",
-        "karma-firefox-launcher": "^2.1.2",
-        "karma-mocha": "^2.0.1",
-        "karma-phantomjs-launcher": "^1.0.4",
-        "karma-sourcemap-loader": "^0.4.0",
-        "karma-webpack": "^5.0.0",
-        "mocha": "^10.2.0",
-        "mocha-loader": "^5.1.5",
-        "xml-js": "^1.6.11"
-    }
+    "packageManager": "pnpm@8.15.4+sha1.c85a4305534f76d461407b59277b954bac97b5c4"
 }

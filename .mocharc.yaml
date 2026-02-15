@@ -1,3 +1,0 @@
-spec:
-  - 'src/**/*.spec.js'
-  - 'test/*.spec.js'

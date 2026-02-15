@@ -1,0 +1,7 @@
+{
+    "name": "@gdal3.js/sample-nodejs",
+    "private": "true",
+    "dependencies": {
+        "gdal3.js": "workspace:^"
+    }
+}

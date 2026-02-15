@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/test/mocha.css" />
+    <style>
+      html {
+        box-sizing:border-box;
+        font-family:sans-serif;
+        -ms-text-size-adjust:100%;
+        -webkit-text-size-adjust:100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      ul.apps {
+        display: flex;
+        margin: 0;
+        padding: 10px 10px;
+        background-color: white;
+      }
+
+      ul.apps > li {
+        list-style-type: none;
+        margin: 0 20px;
+        color: #333;
+        font-size: 15px;
+        cursor: pointer;
+      }
+
+      ul.apps > li > a:hover {
+        text-decoration: underline;
+      }
+
+      ul.apps > li.selected > a {
+        color: #3f51b5;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <ul class="apps">
+        <li><a href="/">gdal3.js</a></li>
+        <li><a href="/docs">Documentation</a></li>
+        <li class="selected"><a href="https://gdal3.js.org/test">Test</a></li>
+      </ul>
+    </header>
+
+    <div id="mocha"></div>
+
+    <script src="/test/chai.js"></script>
+    <script src="/test/mocha.js"></script>
+
+    <script class="mocha-init">
+      mocha.setup('bdd');
+    </script>
+    <script src="/test/xml-js.min.js"></script>
+    <script src="../dist/gdal3js.browser.js"></script>
+    <script type="module">
+        window.isGdalReadyToTest = initCppJs({ path: '../dist' }).then((data) => {
+            window.Module = data;
+            window.Gdal = Module.Gdal;
+            window.dest = Module.generateVirtualPath();
+            window.Gdal.allRegister();
+        });
+    </script>
+    <script type="module" src="/test/raster.spec.js"></script>
+    <script type="module" src="/test/vector.spec.js"></script>
+
+    <script type="module" class="mocha-exec">
+      window.isGdalReadyToTest.then(() => mocha.run());
+    </script>
+  </body>
+</html>
