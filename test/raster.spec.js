@@ -115,6 +115,37 @@ async function createTest() {
                 });
         });
     });
+
+    describe('JPEG-compressed GeoTIFF', () => {
+        it('decodes TIFF with JPEG compression without missing-codec error', async () => {
+            const name = 'testGeoTiff_withJpeg';
+            let file = `data/${name}.tif`;
+            if (!isNode) {
+                const fileData = await fetch(file);
+                file = new File([await fileData.blob()], `${name}.tif`);
+            } else {
+                file = `test/${file}`;
+            }
+            const result = await Gdal.open(file);
+            const dataset = result.datasets[0];
+            assert.strictEqual(dataset.pointer > 0, true, 'open() failed (ptr == 0)');
+
+            const info = await Gdal.getInfo(dataset);
+            assert.strictEqual(info.bandCount > 0, true, 'bandCount must be > 0');
+            assert.strictEqual(info.width > 0, true, 'width must be > 0');
+            assert.strictEqual(info.height > 0, true, 'height must be > 0');
+
+            // Force a full pixel decode via translate. Without the JPEG codec
+            // linked into libtiff, this path emits "Cannot open TIFF file due
+            // to missing codec JPEG" and the resulting file is invalid.
+            const out = await Gdal.gdal_translate(dataset, ['-of', 'GTiff', '-co', 'COMPRESS=NONE']);
+            const result2 = await Gdal.open(out.real);
+            const dataset2 = result2.datasets[0];
+            assert.strictEqual(dataset2.pointer > 0, true, 'decoded output invalid (ptr == 0)');
+            const info2 = await Gdal.getInfo(dataset2);
+            assert.strictEqual(info2.bandCount, info.bandCount, 'bandCount mismatch after decode');
+        });
+    });
 }
 
 function getOptions(optionList) {
