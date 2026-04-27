@@ -377,12 +377,12 @@ ZLIB_SRC = $(SRC_DIR)/zlib-$(ZLIB_VERSION)
 zlib: $(ROOT_DIR)/lib/libz.a
 
 $(ROOT_DIR)/lib/libz.a: $(ZLIB_SRC)/Makefile
-	export PATH="$(ROOT_DIR)/bin:$$PATH"; \
+	export PATH=$(ROOT_DIR)/bin:$(PATH); \
 	cd $(ZLIB_SRC); \
 	$(EMMAKE) make install;
 
 $(ZLIB_SRC)/Makefile: $(ZLIB_SRC)/configure
-	export PATH="$(ROOT_DIR)/bin:$$PATH"; \
+	export PATH=$(ROOT_DIR)/bin:$(PATH); \
 	cd $(ZLIB_SRC); \
 	$(EMCONFIGURE) ./configure $(PREFIX) --static;
 
