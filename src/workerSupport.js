@@ -47,6 +47,9 @@ class WorkerWrapper {
             if (evt.data && evt.data.id && this.promises[evt.data.id]) {
                 if (evt.data.success) this.promises[evt.data.id].resolve(evt.data.data);
                 else this.promises[evt.data.id].reject(evt.data.data);
+
+                // Fix for memory leak: Clean up the resolved/rejected promise to prevent memory accumulation in the WorkerWrapper
+                delete this.promises[evt.data.id];
             }
         };
         this.gdalWorker.postMessage({ func: 'constructor', params: { config } });
