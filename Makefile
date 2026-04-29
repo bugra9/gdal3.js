@@ -8,6 +8,7 @@ TIFF_VERSION = 4.6.0
 JPEG_VERSION = 3.1.4.1
 GEOTIFF_VERSION = 1.7.1
 ZSTD_VERSION = 1.5.7
+LERC_VERSION = 4.1.0
 WEBP_VERSION = 1.3.2
 EXPAT_VERSION = 2.6.0
 ICONV_VERSION = 1.17
@@ -22,6 +23,7 @@ TIFF_URL = "http://download.osgeo.org/libtiff/tiff-$(TIFF_VERSION).tar.gz"
 JPEG_URL = "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/$(JPEG_VERSION)/libjpeg-turbo-$(JPEG_VERSION).tar.gz"
 GEOTIFF_URL = "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-$(GEOTIFF_VERSION).tar.gz"
 ZSTD_URL = "https://github.com/facebook/zstd/releases/download/v$(ZSTD_VERSION)/zstd-$(ZSTD_VERSION).tar.gz"
+LERC_URL = "https://github.com/Esri/lerc/archive/refs/tags/v$(LERC_VERSION).tar.gz"
 WEBP_URL = "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-${WEBP_VERSION}.tar.gz"
 EXPAT_URL = "https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))/expat-${EXPAT_VERSION}.tar.gz"
 ICONV_URL = "https://ftp.gnu.org/pub/gnu/libiconv/libiconv-${ICONV_VERSION}.tar.gz"
@@ -64,7 +66,7 @@ $(DIST_DIR)/gdal3WebAssembly.js: $(ROOT_DIR)/lib/libgdal.a
 	EMCC_CORES=4 $(EMCC) $(ROOT_DIR)/lib/libgdal.a \
 		$(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libspatialite.a \
 		$(ROOT_DIR)/lib/libgeos.a $(ROOT_DIR)/lib/libgeos_c.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libsharpyuv.a $(ROOT_DIR)/lib/libwebpdemux.a \
-		$(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libzstd.a $(ROOT_DIR)/lib/libgeotiff.a \
+		$(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libtiffxx.a $(ROOT_DIR)/lib/libtiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libzstd.a $(ROOT_DIR)/lib/libLerc.a $(ROOT_DIR)/lib/libgeotiff.a \
         $(ROOT_DIR)/lib/libiconv.a \
 		-o $@ $(GDAL_EMCC_FLAGS) \
 		--preload-file $(ROOT_DIR)/share/gdal@/usr/share/gdal \
@@ -74,7 +76,7 @@ $(ROOT_DIR)/lib/libgdal.a: $(GDAL_SRC)/build/Makefile
 	cd $(GDAL_SRC)/build; \
 	$(EMMAKE) make -j4 install;
 
-$(GDAL_SRC)/build/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libgeotiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libzstd.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libspatialite.a $(ROOT_DIR)/lib/libiconv.a $(ROOT_DIR)/include/linux/fs.h $(GDAL_SRC)/CMakeLists.txt
+$(GDAL_SRC)/build/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj.a $(ROOT_DIR)/lib/libgeotiff.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libzstd.a $(ROOT_DIR)/lib/libLerc.a $(ROOT_DIR)/lib/libwebp.a $(ROOT_DIR)/lib/libexpat.a $(ROOT_DIR)/lib/libspatialite.a $(ROOT_DIR)/lib/libiconv.a $(ROOT_DIR)/include/linux/fs.h $(GDAL_SRC)/CMakeLists.txt
 	cd $(GDAL_SRC); \
 	sed -i 's/ iconv_open/ libiconv_open/g' ./port/cpl_recode_iconv.cpp; \
     sed -i 's/        iconv/        libiconv/g' ./port/cpl_recode_iconv.cpp; \
@@ -92,6 +94,7 @@ $(GDAL_SRC)/build/Makefile: $(ROOT_DIR)/lib/libsqlite3.a $(ROOT_DIR)/lib/libproj
         -DTIFF_INCLUDE_DIR=$(ROOT_DIR)/include -DTIFF_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libtiff.a \
         -DGDAL_USE_JPEG=ON -DJPEG_INCLUDE_DIR=$(ROOT_DIR)/include -DJPEG_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libjpeg.a \
         -DGDAL_USE_ZSTD=ON -DZSTD_INCLUDE_DIR=$(ROOT_DIR)/include -DZSTD_LIBRARY=$(ROOT_DIR)/lib/libzstd.a \
+        -DGDAL_USE_LERC=ON -DLERC_INCLUDE_DIR=$(ROOT_DIR)/include -DLERC_LIBRARY=$(ROOT_DIR)/lib/libLerc.a \
         -DGEOTIFF_INCLUDE_DIR=$(ROOT_DIR)/include -DGEOTIFF_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libgeotiff.a \
         -DZLIB_INCLUDE_DIR=$(ROOT_DIR)/include -DZLIB_LIBRARY_RELEASE=$(ROOT_DIR)/lib/libz.a \
         -DSPATIALITE_INCLUDE_DIR=$(ROOT_DIR)/include -DSPATIALITE_LIBRARY=$(ROOT_DIR)/lib/libspatialite.a \
@@ -258,7 +261,7 @@ $(ROOT_DIR)/lib/libtiff.a: $(TIFF_SRC)/Makefile
 	cd $(TIFF_SRC); \
 	$(EMMAKE) make install;
 
-$(TIFF_SRC)/Makefile: $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libzstd.a $(TIFF_SRC)/configure
+$(TIFF_SRC)/Makefile: $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DIR)/lib/libzstd.a $(ROOT_DIR)/lib/libLerc.a $(TIFF_SRC)/configure
 	cd $(TIFF_SRC); \
 	$(EMCONFIGURE) ./configure $(PREFIX) --enable-shared=no --disable-docs \
 	--with-zlib-include-dir=${ROOT_DIR}/include \
@@ -266,7 +269,9 @@ $(TIFF_SRC)/Makefile: $(ROOT_DIR)/lib/libz.a $(ROOT_DIR)/lib/libjpeg.a $(ROOT_DI
 	--with-jpeg-include-dir=${ROOT_DIR}/include \
 	--with-jpeg-lib-dir=${ROOT_DIR}/lib \
 	--with-zstd-include-dir=${ROOT_DIR}/include \
-	--with-zstd-lib-dir=${ROOT_DIR}/lib;
+	--with-zstd-lib-dir=${ROOT_DIR}/lib \
+	--with-lerc-include-dir=${ROOT_DIR}/include \
+	--with-lerc-lib-dir=${ROOT_DIR}/lib;
 
 $(TIFF_SRC)/configure:
 	mkdir -p $(SRC_DIR); \
@@ -325,6 +330,30 @@ $(ZSTD_SRC)/build/cmake/CMakeLists.txt:
 	cd $(SRC_DIR); \
 	wget -nc $(ZSTD_URL); \
 	tar -xf zstd-$(ZSTD_VERSION).tar.gz;
+
+###########
+# LERC #
+###########
+LERC_SRC = $(SRC_DIR)/lerc-$(LERC_VERSION)
+
+lerc: $(ROOT_DIR)/lib/libLerc.a
+
+$(ROOT_DIR)/lib/libLerc.a: $(LERC_SRC)/_build/Makefile
+	cd $(LERC_SRC)/_build; \
+	$(EMMAKE) make -j4 install;
+
+$(LERC_SRC)/_build/Makefile: $(LERC_SRC)/CMakeLists.txt
+	cd $(LERC_SRC); \
+	mkdir -p _build; \
+	cd _build; \
+	$(EMCMAKE) cmake .. $(PREFIX_CMAKE) -DCMAKE_BUILD_TYPE=Release \
+		-DBUILD_SHARED_LIBS=OFF;
+
+$(LERC_SRC)/CMakeLists.txt:
+	mkdir -p $(SRC_DIR); \
+	cd $(SRC_DIR); \
+	wget -nc -O lerc-$(LERC_VERSION).tar.gz $(LERC_URL); \
+	tar -xf lerc-$(LERC_VERSION).tar.gz;
 
 ###########
 # WEBP #
