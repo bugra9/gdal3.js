@@ -316,4 +316,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+apps/app-gui/node_modules
+**/pnpm-lock.yaml
+.pnpm-store/
+
 # End of https://www.gitignore.io/api/node,linux,macos,windows,webstorm,sublimetext,visualstudiocode
