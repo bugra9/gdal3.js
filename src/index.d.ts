@@ -61,6 +61,7 @@ interface Gdal {
     ogrinfo(dataset: Dataset, options?: Array<string>): Promise<object>;
     open(fileOrFiles: FileList|File|Array<string>|string, options?: Array<string>, VFSHandlers?: Array<string>): Promise<DatasetList>;
     close(dataset: Dataset): Promise<void>;
+    clearFS(): Promise<void>;
     getInfo(dataset: Dataset): Promise<DatasetInfo>;
     getOutputFiles(): Promise<Array<FileInfo>>;
     getFileBytes(filePath: string|FilePath): Promise<Uint8Array>;

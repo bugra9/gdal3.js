@@ -10,6 +10,7 @@ import ogrinfo from './allJsFunctions/application/ogrinfo';
 
 import open from './allJsFunctions/function/open';
 import close from './allJsFunctions/function/close';
+import clearFS from './allJsFunctions/function/clearFS';
 import getInfo from './allJsFunctions/function/getInfo';
 import getOutputFiles from './allJsFunctions/function/getOutputFiles';
 import getFileBytes from './allJsFunctions/function/getFileBytes';
@@ -28,6 +29,7 @@ export default {
     ogrinfo,
     open,
     close,
+    clearFS,
     getInfo,
     getOutputFiles,
     getFileBytes,
