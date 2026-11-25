@@ -77,4 +77,26 @@ describe('application / ogr2ogr', function () {
         const firstDataset2 = result2.datasets[0];
         assert.strictEqual(firstDataset2.pointer > 0, true, 'An error occurred while converting the file. (ptr == 0)');
     });
+    it('ogr2ogr to the same name after the output was deleted outside gdal3.js', async function () {
+        // Only Node.js writes the output to a real folder (config.dest), where others can delete it.
+        if (!isNode) this.skip();
+        const fs = require('fs');
+        const result = await Gdal.open('test/data/polygon-line-point.geojson');
+        const firstDataset = result.datasets[0];
+        // A shapefile holds one geometry type, and its sidecar files (.shx, .dbf, .prj) are deleted too.
+        const outputs = [
+            [['-f', 'GeoJSON'], 'deleted-outside'],
+            [['-f', 'ESRI Shapefile', '-where', "OGR_GEOMETRY='POLYGON'"], 'deleted-outside-shp'],
+        ];
+        for (let i = 0; i < outputs.length; i += 1) {
+            const [options, name] = outputs[i];
+            // eslint-disable-next-line no-await-in-loop
+            const first = await Gdal.ogr2ogr(firstDataset, options, name);
+            first.all.forEach((file) => fs.rmSync(file.real, { recursive: true, force: true }));
+            // eslint-disable-next-line no-await-in-loop
+            const second = await Gdal.ogr2ogr(firstDataset, options, name);
+            assert.strictEqual(second.local, first.local, 'An error occurred while converting the file.');
+            assert.strictEqual(second.all.every((file) => fs.existsSync(file.real)), true, `${options[1]}: the output was not written again.`);
+        }
+    });
 });
