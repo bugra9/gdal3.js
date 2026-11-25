@@ -36,6 +36,8 @@ export default function gdaltransform(coords, options) {
         GDALFunctions.Module.HEAPF64.set(xCoords, xCoordOffset / xCoords.BYTES_PER_ELEMENT);
         GDALFunctions.Module.HEAPF64.set(yCoords, yCoordOffset / yCoords.BYTES_PER_ELEMENT);
         GDALFunctions.Module.HEAPF64.set(zCoords, zCoordOffset / zCoords.BYTES_PER_ELEMENT);
+        // GDAL writes a success flag for every point, so it needs an array to write them in.
+        const successOffset = GDALFunctions.Module._malloc(coords.length * Int32Array.BYTES_PER_ELEMENT);
 
         let bInverse = false;
         let bOutputXY = false;
@@ -86,7 +88,7 @@ export default function gdaltransform(coords, options) {
 
         const hTransformArg = GDALFunctions.GDALCreateGenImgProjTransformer2(null, null, optStr.ptr);
         GDALFunctions.GDALGenImgProjTransform(
-            hTransformArg, bInverse, coords.length, xCoordOffset, yCoordOffset, zCoordOffset, null,
+            hTransformArg, bInverse, coords.length, xCoordOffset, yCoordOffset, zCoordOffset, successOffset,
         );
 
         const convertedCoords = [
@@ -112,6 +114,7 @@ export default function gdaltransform(coords, options) {
         GDALFunctions.Module._free(xCoordOffset);
         GDALFunctions.Module._free(yCoordOffset);
         GDALFunctions.Module._free(zCoordOffset);
+        GDALFunctions.Module._free(successOffset);
         clearOptions(optStr);
         GDALFunctions.GDALDestroyGenImgProjTransformer(hTransformArg);
 
