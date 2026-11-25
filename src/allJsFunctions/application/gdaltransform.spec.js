@@ -55,4 +55,23 @@ describe('application / gdaltransform', function () {
         assert.closeTo(newCoords[0][0], 27.143757, 0.000000001, 'An error occurred while transforming the coordinates.');
         assert.closeTo(newCoords[0][1], 38.4247972, 0.000000001, 'An error occurred while transforming the coordinates.');
     });
+    it('gdaltransform with more than 256 points', async function () {
+        const coords = [];
+        for (let i = 0; i < 1000; i += 1) coords.push([27.143757 + (i / 10000), 38.4247972 + (i / 10000)]);
+        const options = [
+            '-s_srs', 'EPSG:4326',
+            '-t_srs', 'EPSG:3857',
+            '-output_xy',
+        ];
+        // GDAL writes a success flag for each point. The first 1024 bytes of the wasm memory are unused, and the
+        // static data starts after them: no flag may land there.
+        const staticData = () => Gdal.Module.HEAPU8.slice(1024, 1024 + (4 * coords.length));
+        const before = staticData();
+        const newCoords = await Gdal.gdaltransform(coords, options);
+        assert.deepEqual(staticData(), before, 'The transformation wrote outside its buffers.');
+        assert.strictEqual(newCoords.length, coords.length, 'An error occurred while transforming the coordinates.');
+        const [lastAlone] = await Gdal.gdaltransform([coords[coords.length - 1]], options);
+        assert.closeTo(newCoords[coords.length - 1][0], lastAlone[0], 0.00000001, 'An error occurred while transforming the coordinates.');
+        assert.closeTo(newCoords[coords.length - 1][1], lastAlone[1], 0.00000001, 'An error occurred while transforming the coordinates.');
+    });
 });
