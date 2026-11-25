@@ -10,6 +10,33 @@ export function unmount() {
     }
 }
 
+/**
+ * On Node.js with config.dest, /output is a NODEFS mount of that folder, and Emscripten keeps a node for every file it
+ * has seen there.
+ * When a file is deleted outside gdal3.js, its node stays, and GDAL can't create a file with that name again.
+ * Forget the nodes whose files are gone, so GDAL looks at the folder again.
+ */
+export function forgetDeletedOutputFiles() {
+    if (!isNode) return;
+    const { FS, NODEFS } = GDALFunctions.Module;
+    const output = FS.lookupPath(OUTPUTPATH).node;
+    if (output.mount.type !== NODEFS) return;
+    FS.nameTable.forEach((firstNode) => {
+        let node = firstNode;
+        while (node) {
+            const next = node.name_next;
+            if (node.mount === output.mount && node !== output) {
+                try {
+                    node.node_ops.getattr(node);
+                } catch (e) {
+                    FS.hashRemoveNode(node);
+                }
+            }
+            node = next;
+        }
+    });
+}
+
 export function mountDest(path) {
     if (isNode) {
         GDALFunctions.Module.FS.mount(GDALFunctions.Module.NODEFS, { root: path }, OUTPUTPATH);

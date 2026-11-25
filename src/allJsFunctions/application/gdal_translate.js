@@ -5,6 +5,7 @@ import { drivers } from '../helper/drivers';
 import { getOptions, clearOptions } from '../helper/options';
 import { OUTPUTPATH, getRealOutputPath } from '../helper/const';
 import { getFileListFromDataset } from '../helper/getFileList';
+import { forgetDeletedOutputFiles } from '../helper/filesystem';
 
 /**
     * gdal_translate function can be used to convert raster data between different formats,
@@ -47,6 +48,7 @@ export default function gdal_translate(dataset, options = [], outputName = null)
 
         const finalOutputName = outputName || dataset.path.split('.', 1)[0];
         const filePath = `${OUTPUTPATH}/${finalOutputName}.${ext}`;
+        forgetDeletedOutputFiles();
         const datasetPtr = GDALFunctions.GDALTranslate(filePath, dataset.pointer, translateOptionsPtr, null);
         const outputFiles = getFileListFromDataset(datasetPtr);
         GDALFunctions.GDALTranslateOptionsFree(translateOptionsPtr);

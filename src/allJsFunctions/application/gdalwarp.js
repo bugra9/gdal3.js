@@ -5,6 +5,7 @@ import { getOptions, clearOptions } from '../helper/options';
 import { OUTPUTPATH, getRealOutputPath } from '../helper/const';
 import { drivers } from '../helper/drivers';
 import { getFileListFromDataset } from '../helper/getFileList';
+import { forgetDeletedOutputFiles } from '../helper/filesystem';
 
 /**
     * gdalwarp function is an image mosaicing, reprojection and warping utility.
@@ -51,6 +52,7 @@ export default function gdalwarp(dataset, options = [], outputName = null) {
 
         const finalOutputName = outputName || dataset.path.split('.', 1)[0];
         const filePath = `${OUTPUTPATH}/${finalOutputName}.${ext}`;
+        forgetDeletedOutputFiles();
         const datasetPtr = GDALFunctions.GDALWarp(filePath, null, 1, datasetList, translateOptionsPtr, null);
         const outputFiles = getFileListFromDataset(datasetPtr);
         GDALFunctions.GDALWarpAppOptionsFree(translateOptionsPtr);

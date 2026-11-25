@@ -6,6 +6,7 @@ import { getOptions, clearOptions } from '../helper/options';
 import { OUTPUTPATH, getRealOutputPath } from '../helper/const';
 import { drivers } from '../helper/drivers';
 import { getFileListFromDataset } from '../helper/getFileList';
+import { forgetDeletedOutputFiles } from '../helper/filesystem';
 
 /**
     * ogr2ogr function can be used to convert simple features data between file formats.
@@ -56,6 +57,7 @@ export default function ogr2ogr(dataset, options = [], outputName = null) {
 
         const finalOutputName = outputName || dataset.path.split('.', 1)[0];
         const filePath = `${OUTPUTPATH}/${finalOutputName}.${ext}`;
+        forgetDeletedOutputFiles();
         const datasetPtr = GDALFunctions.GDALVectorTranslate(filePath, null, 1, datasetList, translateOptionsPtr, null);
         const outputFiles = getFileListFromDataset(datasetPtr);
 

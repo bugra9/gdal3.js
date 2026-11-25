@@ -5,6 +5,7 @@ import { drivers } from '../helper/drivers';
 import { getOptions, clearOptions } from '../helper/options';
 import { OUTPUTPATH, getRealOutputPath } from '../helper/const';
 import { getFileListFromDataset } from '../helper/getFileList';
+import { forgetDeletedOutputFiles } from '../helper/filesystem';
 
 /**
     * gdal_rasterize function burns vector geometries (points, lines, and polygons)
@@ -47,6 +48,7 @@ export default function gdal_rasterize(dataset, options = [], outputName = null)
 
         const finalOutputName = outputName || dataset.path.split('.', 1)[0];
         const filePath = `${OUTPUTPATH}/${finalOutputName}.${ext}`;
+        forgetDeletedOutputFiles();
         const datasetPtr = GDALFunctions.GDALRasterize(filePath, null, dataset.pointer, optionsPtr, null);
         const outputFiles = getFileListFromDataset(datasetPtr);
         GDALFunctions.GDALRasterizeOptionsFree(optionsPtr);
